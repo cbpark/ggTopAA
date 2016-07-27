@@ -1,9 +1,9 @@
-SRCDIR		:= src
-BINDIR		:= bin
-CXX			:= c++
-CXXFLAGS	:= -g -O2 -Wall -Wextra -std=c++14 -I$(SRCDIR)
-MKDIR		:= mkdir -p
-RM			:= rm
+SRCDIR      := src
+BINDIR      := bin
+CXX         := c++
+CXXFLAGS    := -g -O2 -Wall -Wextra -std=c++14 -I$(SRCDIR)
+MKDIR       := mkdir -p
+RM          := rm
 UNAME       := $(shell uname -s)
 
 # ROOT
