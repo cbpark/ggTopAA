@@ -3,7 +3,7 @@ BINDIR      := bin
 CXX         := c++
 CXXFLAGS    := -g -O2 -Wall -Wextra -std=c++14 -I$(SRCDIR)
 MKDIR       := mkdir -p
-RM          := rm
+RM          := rm -f
 UNAME       := $(shell uname -s)
 
 # ROOT
