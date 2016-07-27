@@ -1,0 +1,10 @@
+data:
+  diphox:
+    sigma: data/Sigma.dat
+    direct:
+    - data/direct.dat
+    - data/direct.dat2
+    onefrag:
+    - data/OneF.dat
+    - data/TwoF.dat
+  signal: Tab_173.0_1.50.dat
