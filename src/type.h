@@ -1,4 +1,4 @@
-#ifndef SRC_TYPE_H_
-#define SRC_TYPE_H_
+#ifndef GGTOPAA_SRC_TYPE_H_
+#define GGTOPAA_SRC_TYPE_H_
 
-#endif  // SRC_TYPE_H_
+#endif  // GGTOPAA_SRC_TYPE_H_

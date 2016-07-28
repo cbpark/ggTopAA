@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-// #include "type.h"
+#include "type.h"
 
 using FileName   = std::string;
 using InputFiles = std::vector<FileName>;
