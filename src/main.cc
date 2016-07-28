@@ -1,31 +1,50 @@
 #include "main.h"
 
 #include <algorithm>
-#include <cctype>
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <sstream>
 #include <string>
+#include <vector>
 
-int numInitSpaces(const std::string& str) {
-    int num = 0;
-    for (const auto& c : str) {
-        if (std::isblank(c)) {
-            ++num;
+// #include "type.h"
+
+using FileName   = std::string;
+using InputFiles = std::vector<FileName>;
+
+InputFiles split(const std::string& str, char c) {
+    InputFiles fnames;
+    auto i   = 0;
+    auto pos = str.find(c);
+    if (pos == std::string::npos) {
+        fnames.push_back(str);
+    }
+    while (pos != std::string::npos) {
+        fnames.push_back(str.substr(i, pos - i));
+        i   = ++pos;
+        pos = str.find(c, pos);
+
+        if (pos == std::string::npos) {
+            fnames.push_back(str.substr(i, str.length()));
         }
     }
-    return num;
+    return fnames;
 }
 
-std::string stripSpaces(const std::string& str) {
-    std::string result;
-    for (const auto& c : str) {
-        if (!std::isblank(c) && !(c == '-')) {
-            result += c;
-        }
+InputFiles removeSpaces(const InputFiles& fnames) {
+    auto fs = fnames;
+    for (auto& f : fs) {
+        f.erase(std::remove(f.begin(), f.end(), ' '), f.end());
     }
-    return result;
+    return fs;
+}
+
+FileName removeInitDash(const FileName& fname) {
+    if (fname.front() == '-') {
+        return fname.substr(1, fname.length());
+    }
+    return fname;
 }
 
 int main(int argc, char* argv[]) {
@@ -48,24 +67,54 @@ int main(int argc, char* argv[]) {
     }
     infile.close();
 
-    // std::istringstream test_str1("sigma: data/Sigma.dat");
+    std::istringstream test_str1("sigma: data/Sigma.dat");
     std::string parsed;
-    // while (std::getline(test_str1, parsed, ':')) {
-    //     parsed.erase(std::remove(parsed.begin(), parsed.end(), ' '),
-    //                  parsed.end());
-    //     std::cout << parsed << '\n';
-    // }
+    bool isSigma = false;
+    while (std::getline(test_str1, parsed)) {
+        auto parsed_s = removeSpaces(split(parsed, ':'));
+        if (parsed_s.front() == "sigma") {
+            isSigma = true;
+            std::cout << "-- test_str1: " << parsed_s.back() << '\n';
+        }
+    }
 
     std::istringstream test_str2("sigma:\n  data/Sigma.dat");
     std::map<std::string, std::string> data2;
-    bool isSigma = false;
+    isSigma = false;
     while (std::getline(test_str2, parsed)) {
-        if (stripSpaces(parsed) == "sigma:") {
+        auto parsed_s = removeSpaces(split(parsed, ':'));
+        if (parsed_s.front() == "sigma") {
             isSigma = true;
-            continue;
-        } else if (isSigma == true) {
-            data2["sigma"] = stripSpaces(parsed);
+            if (parsed_s.back().empty()) {
+                continue;
+            }
+        }
+        if (isSigma) {
+            data2["sigma"] = parsed_s.front();
         }
     }
-    std::cout << data2["sigma"] << '\n';
+    std::cout << "-- test_str2: " << data2["sigma"] << '\n';
+
+    bool isDirect = false;
+    std::map<std::string, InputFiles> data3;
+    std::istringstream test_str3(
+        "  direct:\n    - data/direct.dat\n    - data/direct.dat2");
+    while (std::getline(test_str3, parsed)) {
+        auto parsed_s = removeSpaces(split(parsed, ':'));
+        if (parsed_s.front() == "direct") {
+            isDirect = true;
+            if (parsed_s.back().empty()) {
+                continue;
+            }
+        }
+        if (isDirect) {
+            auto fname = parsed_s.front();
+            if (fname.front() == '-') {
+                data3["direct"].push_back(fname.substr(1, fname.length()));
+            }
+        }
+    }
+    for (const auto& e : data3["direct"]) {
+        std::cout << "-- test_str3: " << e << '\n';
+    }
 }
