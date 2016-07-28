@@ -13,7 +13,7 @@
 using FileName   = std::string;
 using InputFiles = std::vector<FileName>;
 
-InputFiles split(const std::string& str, char c) {
+InputFiles split(const std::string &str, char c) {
     InputFiles fnames;
     auto i   = 0;
     auto pos = str.find(c);
@@ -32,22 +32,22 @@ InputFiles split(const std::string& str, char c) {
     return fnames;
 }
 
-InputFiles removeSpaces(const InputFiles& fnames) {
+InputFiles removeSpaces(const InputFiles &fnames) {
     auto fs = fnames;
-    for (auto& f : fs) {
+    for (auto &f : fs) {
         f.erase(std::remove(f.begin(), f.end(), ' '), f.end());
     }
     return fs;
 }
 
-FileName removeInitDash(const FileName& fname) {
+FileName removeInitDash(const FileName &fname) {
     if (fname.front() == '-') {
         return fname.substr(1, fname.length());
     }
     return fname;
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     std::string appname = "test";
     if (argc != 2) {
         std::cerr << " Usage: " << appname << " input\n"
@@ -114,7 +114,7 @@ int main(int argc, char* argv[]) {
             }
         }
     }
-    for (const auto& e : data3["direct"]) {
+    for (const auto &e : data3["direct"]) {
         std::cout << "-- test_str3: " << e << '\n';
     }
 }
