@@ -1,3 +1,5 @@
+PKGNAME     := ggTopAA
+VERSION     := 0.1.0
 SRCDIR      := src
 BINDIR      := bin
 LIBDIR      := lib
@@ -18,20 +20,20 @@ endif
 # LIBS      = $(shell root-config --libs)
 
 # Targets
-EXESRC  := $(SRCDIR)/main.cc
+EXE     := $(BINDIR)/main
+EXESRC  := $(patsubst $(BINDIR)/%,$(SRCDIR)/%.cc,$(EXE))
 EXEOBJ  := $(EXESRC:.cc=.o)
-EXE     := $(patsubst $(SRCDIR)/%.o,$(BINDIR)/%,$(EXEOBJ))
+LIB     := $(LIBDIR)/lib$(PKGNAME).a
 LIBSRC  := $(filter-out $(EXESRC),$(wildcard $(SRCDIR)/*.cc))
 LIBOBJ  := $(LIBSRC:.cc=.o)
-LIB     := $(LIBDIR)/libggTopAA.a
 HEAD    := $(filter-out $(EXESRC:.cc=.h),$(wildcard $(SRCDIR)/*.h))
 
 .PHONY: all build show clean
 
-all: $(EXE)
+all: $(BINDIR)/main
 
-$(EXE): build $(LIB) $(EXEOBJ)
-	$(CXX) $(LDFLAGS) $(LIBS) $(LIB) -o $@ $(EXEOBJ)
+$(BINDIR)/main: build $(LIB) $(SRCDIR)/main.o
+	$(CXX) $(LDFLAGS) $(LIBS) $(LIB) -o $@ $(SRCDIR)/main.o
 
 $(LIB): CXXFLAGS += -fPIC
 $(LIB): $(LIBOBJ)
@@ -44,17 +46,19 @@ build:
 
 show:
 	@echo -- Summary of the current environment and setting:
+	@echo "PKGNAME  = $(PKGNAME)"
+	@echo "VERSION  = $(VERSION)"
 	@echo "UNAME    = $(UNAME)"
 	@echo "CXX      = $(CXX)"
 	@echo "CXXFLAGS = $(CXXFLAGS)"
 	@echo "LDFLAGS  = $(LDFLAGS)"
 	@echo "LIBS     = $(LIBS)"
+	@echo "EXE      = $(EXE)"
 	@echo "EXESRC   = $(EXESRC)"
 	@echo "EXEOBJ   = $(EXEOBJ)"
-	@echo "EXE      = $(EXE)"
+	@echo "LIB      = $(LIB)"
 	@echo "LIBSRC   = $(LIBSRC)"
 	@echo "LIBOBJ   = $(LIBOBJ)"
-	@echo "LIB      = $(LIB)"
 	@echo "HEAD     = $(HEAD)"
 
 clean:
