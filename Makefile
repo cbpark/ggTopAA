@@ -33,7 +33,7 @@ HEAD    := $(filter-out $(EXESRC:.cc=.h),$(wildcard $(SRCDIR)/*.h))
 all: $(BINDIR)/gg2aa
 
 $(BINDIR)/gg2aa: build $(LIB) $(SRCDIR)/gg2aa.o
-	$(CXX) $(LDFLAGS) $(LIBS) $(LIB) -o $@ $(SRCDIR)/gg2aa.o
+	$(CXX) $(LDFLAGS) -o $@ $(SRCDIR)/gg2aa.o $(LIB) $(LIBS)
 
 $(LIB): CXXFLAGS += -fPIC
 $(LIB): $(LIBOBJ)
