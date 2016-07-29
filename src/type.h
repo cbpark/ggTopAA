@@ -28,9 +28,12 @@ public:
     }
     const std::string show_background(std::string k) const;
 
+    const std::string show() const;
+
     InputStatus get_status() const { return status_; }
     void set_status(InputStatus s) { status_ = s; }
     void reset_status() { status_ = InputStatus::NONE; }
+    const std::string show_status() const;
 
 private:
     InputFiles signal_;

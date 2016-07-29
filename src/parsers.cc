@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "type.h"
+#include <iostream>
 
 using std::string;
 using std::vector;
@@ -29,19 +30,19 @@ vector<string> split(const string &str, char c) {
     return str_;
 }
 
-vector<string> removeSpaces(const vector<string> &ss) {
-    auto ss_ = ss;
-    for (auto &s : ss_) {
-        s.erase(std::remove(s.begin(), s.end(), ' '), s.end());
-    }
-    return ss_;
+string removeSpace(string str) {
+    str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
+    return str;
 }
 
-string removeInitDash(const string &str) {
-    if (str.front() == '-') {
-        return str.substr(1, str.length());
+vector<string> removeSpaces(const vector<string>& ss) {
+    vector<string> ss_;
+    for (const auto &s : ss) {
+        if (!s.empty()) {
+            ss_.push_back(removeSpace(s));
+        }
     }
-    return str;
+    return ss_;
 }
 
 void setStatus(string str, InputData *data) {
@@ -54,8 +55,23 @@ void setStatus(string str, InputData *data) {
         data->set_status(InputStatus::DIRECT);
     } else if (str == "fragment") {
         data->set_status(InputStatus::FRAGMENT);
-    } else {
-        data->set_status(InputStatus::NONE);
+    }
+}
+
+void addData(FileName fname, InputData *data) {
+    if (fname.front() == '-') {
+        fname = fname.substr(1, fname.length());
+    }
+
+    const InputStatus s = data->get_status();
+    if (s == InputStatus::SIGNAL) {
+        data->add_signal(fname);
+    } else if (s == InputStatus::SIGMA) {
+        data->add_background("sigma", fname);
+    } else if (s == InputStatus::DIRECT) {
+        data->add_background("direct", fname);
+    } else if (s == InputStatus::FRAGMENT) {
+        data->add_background("fragment", fname);
     }
 }
 
@@ -67,7 +83,21 @@ InputData parseInputData(std::istream *is) {
     while (getline(*is, line)) {
         if (line.find("#") == string::npos && !(line.empty())) {
             parsed = removeSpaces(split(line, ':'));
-            setStatus(parsed.front(), &data);
+            auto parsed_size = parsed.size();
+
+            auto pos = line.find(":");
+            if (pos != string::npos) {  // field found.
+                setStatus(removeSpace(line.substr(0, pos)), &data);
+                if (parsed_size == 1) {
+                    continue;
+                }
+            }
+
+            if (parsed_size == 2) {
+                addData(parsed.back(), &data);
+            } else if (parsed_size == 1) {
+                addData(parsed.front(), &data);
+            }
         } else {  // comment or empty line
             continue;
         }
