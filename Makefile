@@ -20,7 +20,7 @@ endif
 # LIBS      = $(shell root-config --libs)
 
 # Targets
-EXE     := $(BINDIR)/main
+EXE     := $(BINDIR)/gg2aa
 EXESRC  := $(patsubst $(BINDIR)/%,$(SRCDIR)/%.cc,$(EXE))
 EXEOBJ  := $(EXESRC:.cc=.o)
 LIB     := $(LIBDIR)/lib$(PKGNAME).a
@@ -30,10 +30,10 @@ HEAD    := $(filter-out $(EXESRC:.cc=.h),$(wildcard $(SRCDIR)/*.h))
 
 .PHONY: all build show clean
 
-all: $(BINDIR)/main
+all: $(BINDIR)/gg2aa
 
-$(BINDIR)/main: build $(LIB) $(SRCDIR)/main.o
-	$(CXX) $(LDFLAGS) $(LIBS) $(LIB) -o $@ $(SRCDIR)/main.o
+$(BINDIR)/gg2aa: build $(LIB) $(SRCDIR)/gg2aa.o
+	$(CXX) $(LDFLAGS) $(LIBS) $(LIB) -o $@ $(SRCDIR)/gg2aa.o
 
 $(LIB): CXXFLAGS += -fPIC
 $(LIB): $(LIBOBJ)

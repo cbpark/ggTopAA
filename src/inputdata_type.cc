@@ -15,9 +15,7 @@ const string InputData::show_signal() const {
         } else {
             data += std::to_string(n) + " files):\n";
         }
-        for (const auto &d : signal_) {
-            data += "  " + d + '\n';
-        }
+        for (const auto &d : signal_) { data += "  " + d + '\n'; }
     }
     return data;
 }
@@ -33,9 +31,7 @@ const string InputData::show_background(string k) const {
         } else {
             data += ", " + std::to_string(n) + " files):\n";
         }
-        for (const auto &d : background_.at(k)) {
-            data += "  " + d + '\n';
-        }
+        for (const auto &d : background_.at(k)) { data += "  " + d + '\n'; }
     }
     return data;
 }
