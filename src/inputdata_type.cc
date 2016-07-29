@@ -1,4 +1,4 @@
-#include "type.h"
+#include "inputdata_type.h"
 #include <string>
 
 using std::string;

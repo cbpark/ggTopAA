@@ -2,7 +2,7 @@
 #define GGTOPAA_SRC_PARSERS_H_
 
 #include <istream>
-#include "type.h"
+#include "inputdata_type.h"
 
 namespace gg2aa {
 InputData parseInputData(std::istream *is);

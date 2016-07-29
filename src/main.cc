@@ -5,8 +5,8 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include "inputdata_type.h"
 #include "parsers.h"
-#include "type.h"
 
 int main(int argc, char *argv[]) {
     std::string appname = "test";

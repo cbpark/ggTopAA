@@ -1,5 +1,5 @@
-#ifndef GGTOPAA_SRC_TYPE_H_
-#define GGTOPAA_SRC_TYPE_H_
+#ifndef GGTOPAA_SRC_INPUTDATA_TYPE_H_
+#define GGTOPAA_SRC_INPUTDATA_TYPE_H_
 
 #include <string>
 #include <unordered_map>
@@ -42,4 +42,4 @@ private:
 };
 }  // namespace gg2aa
 
-#endif  // GGTOPAA_SRC_TYPE_H_
+#endif  // GGTOPAA_SRC_INPUTDATA_TYPE_H_

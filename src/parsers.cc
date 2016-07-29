@@ -4,8 +4,7 @@
 #include <istream>
 #include <string>
 #include <vector>
-#include "type.h"
-#include <iostream>
+#include "inputdata_type.h"
 
 using std::string;
 using std::vector;
@@ -35,7 +34,7 @@ string removeSpace(string str) {
     return str;
 }
 
-vector<string> removeSpaces(const vector<string>& ss) {
+vector<string> removeSpaces(const vector<string> &ss) {
     vector<string> ss_;
     for (const auto &s : ss) {
         if (!s.empty()) {
@@ -82,7 +81,7 @@ InputData parseInputData(std::istream *is) {
 
     while (getline(*is, line)) {
         if (line.find("#") == string::npos && !(line.empty())) {
-            parsed = removeSpaces(split(line, ':'));
+            parsed           = removeSpaces(split(line, ':'));
             auto parsed_size = parsed.size();
 
             auto pos = line.find(":");
