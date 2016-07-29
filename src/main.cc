@@ -1,17 +1,15 @@
 #include "main.h"
-
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <sstream>
 #include <string>
-#include <vector>
-
 #include "type.h"
+#include "parsers.h"
 
-using FileName   = std::string;
-using InputFiles = std::vector<FileName>;
+using gg2aa::InputFiles;
+using gg2aa::FileName;
 
 InputFiles split(const std::string &str, char c) {
     InputFiles fnames;
@@ -95,26 +93,25 @@ int main(int argc, char *argv[]) {
     }
     std::cout << "-- test_str2: " << data2["sigma"] << '\n';
 
-    bool isDirect = false;
-    std::map<std::string, InputFiles> data3;
+    gg2aa::InputData data3;
     std::istringstream test_str3(
         "  direct:\n    - data/direct.dat\n    - data/direct.dat2");
     while (std::getline(test_str3, parsed)) {
         auto parsed_s = removeSpaces(split(parsed, ':'));
         if (parsed_s.front() == "direct") {
-            isDirect = true;
+            data3.set_status(gg2aa::InputStatus::DIRECT);
             if (parsed_s.back().empty()) {
                 continue;
             }
         }
-        if (isDirect) {
+        if (data3.get_status() == gg2aa::InputStatus::DIRECT) {
             auto fname = parsed_s.front();
             if (fname.front() == '-') {
-                data3["direct"].push_back(fname.substr(1, fname.length()));
+                data3.add_background("direct", fname.substr(1, fname.length()));
             }
         }
     }
-    for (const auto &e : data3["direct"]) {
+    for (const auto &e : data3.background("direct")) {
         std::cout << "-- test_str3: " << e << '\n';
     }
 }
