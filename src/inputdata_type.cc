@@ -37,7 +37,7 @@ const string InputData::show_background(string k) const {
 }
 
 const string InputData::show() const {
-    return show_signal() + show_background("sigma") +
+    return "--- Input data ---\n" + show_signal() + show_background("sigma") +
            show_background("direct") + show_background("fragment");
 }
 
