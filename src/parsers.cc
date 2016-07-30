@@ -63,7 +63,7 @@ void setInputStatus(string str, InputData *data) {
 void addInputData(FileName fname, InputData *data) {
     if (fname.front() == '-') { fname = fname.substr(1, fname.length()); }
 
-    const InputStatus s = data->get_status();
+    const auto s = data->get_status();
     if (s == InputStatus::SIGNAL) {
         data->add_signal(fname);
     } else if (s == InputStatus::SIGMA) {
@@ -104,7 +104,7 @@ InputData parseInputData(unique_ptr<std::istream> is) {
 
 Sigma getSigma(const InputData &data) {
     Sigma sigma;
-    auto infiles = data.background("sigma");
+    const auto infiles = data.background("sigma");
     if (infiles.empty()) {
         sigma.status = -1;
         return sigma;

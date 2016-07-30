@@ -14,7 +14,7 @@ string InputData::show_signal() const {
     if (signal_.empty()) {
         data += "):\n  No files.\n";
     } else {
-        auto n = signal_.size();
+        const auto n = signal_.size();
         if (n == 1) {
             data += "1 file):\n";
         } else {
@@ -30,7 +30,7 @@ string InputData::show_background(string k) const {
     if (background_.find(k) == background_.end()) {
         data += "):\n  No files.\n";
     } else {
-        auto n = background_.at(k).size();
+        const auto n = background_.at(k).size();
         if (n == 1) {
             data += ", 1 file):\n";
         } else {
