@@ -1,9 +1,11 @@
 #include "gg2aa.h"
 #include <fstream>
+#include <iostream>
 #include <memory>
 #include <string>
 #include "inputdata_type.h"
 #include "parsers.h"
+#include "type.h"
 
 int main(int argc, char *argv[]) {
     std::string appname = "gg2aa";
@@ -25,8 +27,16 @@ int main(int argc, char *argv[]) {
 
     // Check the input files.
     auto check = data.check_input();
-    if (check.first != 0) {
-        for (const auto &f : check.second) { failedToRead(appname, f); }
+    // if (check.first != 0) {
+    //     for (const auto &f : check.second) { failedToRead(appname, f); }
+    //     return 1;
+    // }
+
+    // Get sigma.
+    auto sigma = getSigma(data);
+    if (sigma.status != 0) {
+        errMsg(appname, "sigma cannot be found.");
         return 1;
     }
+    std::cout << sigma.show();
 }

@@ -1,14 +1,18 @@
 #include "parsers.h"
 #include <algorithm>
 #include <cctype>
+#include <fstream>
 #include <istream>
 #include <memory>
 #include <string>
 #include <vector>
 #include "inputdata_type.h"
+#include "type.h"
 
+using std::ifstream;
 using std::string;
 using std::vector;
+using std::unique_ptr;
 
 namespace gg2aa {
 vector<string> split(const string &str, char c) {
@@ -71,7 +75,7 @@ void addInputData(FileName fname, InputData *data) {
     }
 }
 
-InputData parseInputData(std::unique_ptr<std::istream> is) {
+InputData parseInputData(unique_ptr<std::istream> is) {
     string line;
     vector<string> parsed;
     InputData data;
@@ -96,5 +100,25 @@ InputData parseInputData(std::unique_ptr<std::istream> is) {
         }
     }
     return data;
+}
+
+Sigma getSigma(const InputData &data) {
+    Sigma sigma;
+    auto infiles = data.background("sigma");
+    if (infiles.empty()) {
+        sigma.status = -1;
+        return sigma;
+    }
+    unique_ptr<ifstream> f(new ifstream(infiles.front()));
+    if (!f->good()) {
+        sigma.status = -2;
+        return sigma;
+    }
+
+    *f >> sigma.rs >> sigma.lum >> sigma.eff >> sigma.kg;
+    *f >> sigma.sig_direct >> sigma.sig_one_frag >> sigma.sig_two_frag;
+    *f >> sigma.bin_size >> sigma.minbin >> sigma.maxbin;
+    *f >> sigma.a1in >> sigma.a2in >> sigma.bin;
+    return sigma;
 }
 }  // namespace gg2aa
