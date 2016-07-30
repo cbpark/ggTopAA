@@ -1,7 +1,12 @@
 #include "inputdata_type.h"
+#include <fstream>  // ifstream
+#include <memory>   // unique_ptr
 #include <string>
+#include <utility>  // pair
+#include <vector>
 
 using std::string;
+using std::vector;
 
 namespace gg2aa {
 const string InputData::show_signal() const {
@@ -53,5 +58,33 @@ const string InputData::show_status() const {
     } else {
         return "none";
     }
+}
+
+const std::pair<int, vector<string>> InputData::check_input() const {
+    using std::unique_ptr;
+    using std::ifstream;
+
+    int bad = 0;
+    vector<string> failed;
+
+    for (const auto &s : signal_) {
+        unique_ptr<ifstream> f(new ifstream(s));
+        if (!f->good()) {
+            ++bad;
+            failed.push_back(s);
+        }
+    }
+
+    for (const auto &bs : background_) {
+        for (const auto &b : bs.second) {
+            unique_ptr<ifstream> f(new ifstream(b));
+            if (!f->good()) {
+                ++bad;
+                failed.push_back(b);
+            }
+        }
+    }
+
+    return std::make_pair(bad, failed);
 }
 }  // namespace gg2aa

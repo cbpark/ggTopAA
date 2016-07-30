@@ -1,5 +1,5 @@
+#include "gg2aa.h"
 #include <fstream>
-#include <iostream>
 #include <memory>
 #include <string>
 #include "inputdata_type.h"
@@ -13,13 +13,20 @@ int main(int argc, char *argv[]) {
                   << "    ex) " << appname << " input.yml\n";
         return 1;
     }
-
     std::unique_ptr<std::ifstream> infile(new std::ifstream(argv[1]));
     if (!infile->good()) {
-        std::cerr << appname << ": failed to read `" << argv[1] << "'.\n";
+        failedToRead(appname, argv[1]);
         return 1;
     }
 
+    // Parse the list of input data.
     gg2aa::InputData data = gg2aa::parseInputData(std::move(infile));
     std::cout << data.show();
+
+    // Check the input files.
+    auto check = data.check_input();
+    if (check.first != 0) {
+        for (const auto &f : check.second) { failedToRead(appname, f); }
+        return 1;
+    }
 }

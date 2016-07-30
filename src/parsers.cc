@@ -75,7 +75,6 @@ InputData parseInputData(std::unique_ptr<std::istream> is) {
     string line;
     vector<string> parsed;
     InputData data;
-
     while (getline(*is, line)) {
         if (line.find("#") == string::npos && !line.empty()) {
             parsed = removeSpaces(split(line, ':'));
@@ -96,7 +95,6 @@ InputData parseInputData(std::unique_ptr<std::istream> is) {
             continue;
         }
     }
-
     return data;
 }
 }  // namespace gg2aa

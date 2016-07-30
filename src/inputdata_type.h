@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace gg2aa {
@@ -34,6 +35,8 @@ public:
     void set_status(InputStatus s) { status_ = s; }
     void reset_status() { status_ = InputStatus::NONE; }
     const std::string show_status() const;
+
+    const std::pair<int, std::vector<std::string>> check_input() const;
 
 private:
     InputFiles signal_;
