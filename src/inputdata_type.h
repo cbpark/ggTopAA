@@ -34,7 +34,7 @@ public:
     void reset_status() { status_ = InputStatus::NONE; }
     std::string show_status() const;
 
-    std::pair<int, std::vector<std::string>> check_input() const;
+    std::pair<int, InputFiles> check_input() const;
 
 private:
     InputFiles signal_;

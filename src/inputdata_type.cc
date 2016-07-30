@@ -3,10 +3,8 @@
 #include <memory>   // unique_ptr
 #include <string>
 #include <utility>  // pair
-#include <vector>
 
 using std::string;
-using std::vector;
 
 namespace gg2aa {
 string InputData::show_signal() const {
@@ -60,12 +58,12 @@ string InputData::show_status() const {
     }
 }
 
-std::pair<int, vector<string>> InputData::check_input() const {
+std::pair<int, InputFiles> InputData::check_input() const {
     using std::unique_ptr;
     using std::ifstream;
 
     int bad = 0;
-    vector<string> failed;
+    InputFiles failed;
 
     for (const auto &s : signal_) {
         unique_ptr<ifstream> f(new ifstream(s));
