@@ -2,11 +2,11 @@
 #include <string>
 
 namespace gg2aa {
-const std::string get_string(std::string name, double x) {
+std::string get_string(std::string name, double x) {
     return name + " = " + std::to_string(x);
 }
 
-const std::string Sigma::show() const {
+std::string Sigma::show() const {
     std::string str = "--- Sigma ---\n";
     str += "  " + get_string("Rs", rs) + ", " + get_string("Lum", lum) + ", " +
            get_string("Eff", eff) + ", " + get_string("Kg", kg) + "\n";

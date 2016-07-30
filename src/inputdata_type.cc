@@ -9,7 +9,7 @@ using std::string;
 using std::vector;
 
 namespace gg2aa {
-const string InputData::show_signal() const {
+string InputData::show_signal() const {
     string data = "signal (";
     if (signal_.empty()) {
         data += "):\n  No files.\n";
@@ -25,7 +25,7 @@ const string InputData::show_signal() const {
     return data;
 }
 
-const string InputData::show_background(string k) const {
+string InputData::show_background(string k) const {
     string data = "backgrounds (" + k;
     if (background_.find(k) == background_.end()) {
         data += "):\n  No files.\n";
@@ -41,12 +41,12 @@ const string InputData::show_background(string k) const {
     return data;
 }
 
-const string InputData::show() const {
+string InputData::show() const {
     return "--- Input data ---\n" + show_signal() + show_background("sigma") +
            show_background("direct") + show_background("fragment");
 }
 
-const string InputData::show_status() const {
+string InputData::show_status() const {
     if (status_ == InputStatus::SIGNAL) {
         return "signal";
     } else if (status_ == InputStatus::SIGMA) {
@@ -60,7 +60,7 @@ const string InputData::show_status() const {
     }
 }
 
-const std::pair<int, vector<string>> InputData::check_input() const {
+std::pair<int, vector<string>> InputData::check_input() const {
     using std::unique_ptr;
     using std::ifstream;
 
