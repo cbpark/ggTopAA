@@ -2,6 +2,8 @@
 #define GGTOPAA_SRC_TYPE_H_
 
 #include <string>
+//
+#include <TH1D.h>
 
 namespace gg2aa {
 struct Sigma {
@@ -12,6 +14,17 @@ struct Sigma {
     int status = 0;
 
     std::string show() const;
+    int nbin() const { return static_cast<int>((maxbin - minbin) / bin_size); }
+};
+
+class Histograms {
+public:
+    Histograms() {}
+    ~Histograms() {}
+
+private:
+    TH1D bg_hist_;
+    TH1D sig_hist_;
 };
 }  // namespace gg2aa
 

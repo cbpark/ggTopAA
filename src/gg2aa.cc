@@ -27,10 +27,10 @@ int main(int argc, char *argv[]) {
 
     // Check the input files.
     auto check = data.check_input();
-    // if (check.first != 0) {
-    //     for (const auto &f : check.second) { failedToRead(appname, f); }
-    //     return 1;
-    // }
+    if (check.first != 0) {
+        for (const auto &f : check.second) { failedToRead(appname, f); }
+        return 1;
+    }
 
     // Get sigma.
     auto sigma = getSigma(data);

@@ -15,9 +15,9 @@ ifeq ($(UNAME), Darwin)
 endif
 
 # ROOT
-# CXXFLAGS += $(shell root-config --cflags)
-# LDFLAGS  += $(shell root-config --ldflags)
-# LIBS      = $(shell root-config --libs)
+CXXFLAGS += $(shell root-config --cflags)
+LDFLAGS  += $(shell root-config --ldflags)
+LIBS      = $(shell root-config --libs)
 
 # Targets
 EXE     := $(BINDIR)/gg2aa

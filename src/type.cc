@@ -14,7 +14,8 @@ std::string Sigma::show() const {
            get_string("sigOne", sig_one_frag) + ", " +
            get_string("sigTwo", sig_two_frag) + "\n";
     str += "  " + get_string("mbin", bin_size) + ", " +
-           get_string("min", minbin) + ", " + get_string("max", maxbin) + "\n";
+           get_string("min", minbin) + ", " + get_string("max", maxbin) + ", " +
+           get_string("nbin", nbin()) + "\n";
     str += "  " + get_string("a1in", a1in) + ", " + get_string("a2in", a2in) +
            ", " + get_string("bin", bin) + "\n";
     return str;
