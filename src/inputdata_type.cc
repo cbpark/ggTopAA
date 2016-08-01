@@ -41,7 +41,8 @@ string InputData::show_background(string k) const {
 
 string InputData::show() const {
     return "--- Input data ---\n" + show_signal() + show_background("sigma") +
-           show_background("direct") + show_background("fragment");
+           show_background("direct") + show_background("one-fragment") +
+           show_background("two-fragment");
 }
 
 string InputData::show_status() const {
@@ -51,8 +52,10 @@ string InputData::show_status() const {
         return "sigma";
     } else if (status_ == InputStatus::DIRECT) {
         return "direct";
-    } else if (status_ == InputStatus::FRAGMENT) {
-        return "fragment";
+    } else if (status_ == InputStatus::FRAGMENT1) {
+        return "one-fragment";
+    } else if (status_ == InputStatus::FRAGMENT2) {
+        return "two-fragment";
     } else {
         return "none";
     }

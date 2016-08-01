@@ -55,8 +55,10 @@ void setInputStatus(string str, InputData *data) {
         data->set_status(InputStatus::SIGMA);
     } else if (str == "direct") {
         data->set_status(InputStatus::DIRECT);
-    } else if (str == "fragment") {
-        data->set_status(InputStatus::FRAGMENT);
+    } else if (str == "one-fragment") {
+        data->set_status(InputStatus::FRAGMENT1);
+    } else if (str == "two-fragment") {
+        data->set_status(InputStatus::FRAGMENT2);
     }
 }
 
@@ -70,8 +72,10 @@ void addInputData(FileName fname, InputData *data) {
         data->add_background("sigma", fname);
     } else if (s == InputStatus::DIRECT) {
         data->add_background("direct", fname);
-    } else if (s == InputStatus::FRAGMENT) {
-        data->add_background("fragment", fname);
+    } else if (s == InputStatus::FRAGMENT1) {
+        data->add_background("one-fragment", fname);
+    } else if (s == InputStatus::FRAGMENT2) {
+        data->add_background("two-fragment", fname);
     }
 }
 

@@ -3,7 +3,6 @@
 #include <iostream>
 #include <memory>
 #include <string>
-#include "inputdata_type.h"
 #include "parsers.h"
 #include "type.h"
 
@@ -22,7 +21,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Parse the list of input data.
-    gg2aa::InputData data = gg2aa::parseInputData(std::move(infile));
+    auto data = gg2aa::parseInputData(std::move(infile));
     std::cout << data.show();
 
     // Check the input files.
@@ -33,10 +32,16 @@ int main(int argc, char *argv[]) {
     }
 
     // Get sigma.
-    auto sigma = getSigma(data);
-    if (sigma.status != 0) {
+    auto sigma = std::make_shared<gg2aa::Sigma>(getSigma(data));
+    if (sigma->status != 0) {
         errMsg(appname, "sigma cannot be found.");
         return 1;
     }
-    std::cout << sigma.show();
+    std::cout << sigma->show();
+
+    gg2aa::Histograms hists(*sigma);
+    hists.set_bg_hist(data, sigma);
+    std::cout << sigma->show_sig() << sigma->show_bg_summary();
+
+    std::cout << appname << ": done.\n";
 }

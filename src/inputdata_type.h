@@ -9,8 +9,9 @@
 namespace gg2aa {
 using FileName   = std::string;
 using InputFiles = std::vector<FileName>;
+using Backgrounds = std::unordered_map<std::string, InputFiles>;
 
-enum class InputStatus { NONE, SIGMA, DIRECT, FRAGMENT, SIGNAL };
+enum class InputStatus { NONE, SIGMA, DIRECT, FRAGMENT1, FRAGMENT2, SIGNAL };
 
 class InputData {
 public:
@@ -21,6 +22,7 @@ public:
     void add_signal(FileName fname) { signal_.push_back(fname); }
     std::string show_signal() const;
 
+    Backgrounds background() const { return background_; }
     InputFiles background(std::string k) const { return background_.at(k); }
     void add_background(std::string k, const FileName &fname) {
         background_[k].push_back(fname);
@@ -38,7 +40,7 @@ public:
 
 private:
     InputFiles signal_;
-    std::unordered_map<std::string, InputFiles> background_;
+    Backgrounds background_;
     InputStatus status_ = InputStatus::NONE;
 };
 }  // namespace gg2aa

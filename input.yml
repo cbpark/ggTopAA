@@ -4,7 +4,6 @@ data:
     direct:
     - data/Direct.dat
     - data/Direct.dat2
-    fragment:
-    - data/OneF.dat
-    - data/TwoF.dat
+    one-fragment: data/OneF.dat
+    two-fragment: data/TwoF.dat
   signal: data/Tab_173.0_1.50.dat
