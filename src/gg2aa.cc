@@ -31,17 +31,17 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // Get sigma.
-    auto sigma = std::make_shared<gg2aa::Sigma>(getSigma(data));
-    if (sigma->status != 0) {
-        errMsg(appname, "sigma cannot be found.");
+    // Get info.
+    auto info = std::make_shared<gg2aa::InputInfo>(getInputInfo(data));
+    if (info->status != 0) {
+        errMsg(appname, "info cannot be found.");
         return 1;
     }
-    std::cout << sigma->show();
+    std::cout << info->show();
 
-    gg2aa::Histograms hists(*sigma);
-    hists.set_bg_hist(data, sigma);
-    std::cout << sigma->show_sig() << sigma->show_bg_summary();
+    gg2aa::Histograms hists(*info);
+    hists.set_bg_hist(data, info);
+    std::cout << info->show_sigma() << info->show_bg_summary();
 
     std::cout << appname << ": done.\n";
 }

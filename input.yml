@@ -1,6 +1,6 @@
 data:
   background:
-    sigma: data/Sigma.dat
+    info: data/Sigma.dat
     direct:
     - data/Direct.dat
     - data/Direct.dat2

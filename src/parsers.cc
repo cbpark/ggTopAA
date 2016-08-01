@@ -51,8 +51,8 @@ void setInputStatus(string str, InputData *data) {
     std::transform(str.begin(), str.end(), str.begin(), ::tolower);
     if (str == "signal") {
         data->set_status(InputStatus::SIGNAL);
-    } else if (str == "sigma") {
-        data->set_status(InputStatus::SIGMA);
+    } else if (str == "info") {
+        data->set_status(InputStatus::INFO);
     } else if (str == "direct") {
         data->set_status(InputStatus::DIRECT);
     } else if (str == "one-fragment") {
@@ -68,8 +68,8 @@ void addInputData(FileName fname, InputData *data) {
     const auto s = data->get_status();
     if (s == InputStatus::SIGNAL) {
         data->add_signal(fname);
-    } else if (s == InputStatus::SIGMA) {
-        data->add_background("sigma", fname);
+    } else if (s == InputStatus::INFO) {
+        data->add_background("info", fname);
     } else if (s == InputStatus::DIRECT) {
         data->add_background("direct", fname);
     } else if (s == InputStatus::FRAGMENT1) {
@@ -106,23 +106,23 @@ InputData parseInputData(unique_ptr<std::istream> is) {
     return data;
 }
 
-Sigma getSigma(const InputData &data) {
-    Sigma sigma;
-    const auto infiles = data.background("sigma");
+InputInfo getInputInfo(const InputData &data) {
+    InputInfo info;
+    const auto infiles = data.background("info");
     if (infiles.empty()) {
-        sigma.status = -1;
-        return sigma;
+        info.status = -1;
+        return info;
     }
     unique_ptr<ifstream> f(new ifstream(infiles.front()));
     if (!f->good()) {
-        sigma.status = -2;
-        return sigma;
+        info.status = -2;
+        return info;
     }
 
-    *f >> sigma.rs >> sigma.lum >> sigma.eff >> sigma.kg;
-    *f >> sigma.sig_direct >> sigma.sig_one_frag >> sigma.sig_two_frag;
-    *f >> sigma.bin_size >> sigma.minbin >> sigma.maxbin;
-    *f >> sigma.a1in >> sigma.a2in >> sigma.bin;
-    return sigma;
+    *f >> info.rs >> info.lum >> info.eff >> info.kg;
+    *f >> info.sig_direct >> info.sig_one_frag >> info.sig_two_frag;
+    *f >> info.bins.size >> info.bins.xlow >> info.bins.xup;
+    *f >> info.a1in >> info.a2in >> info.bin;
+    return info;
 }
 }  // namespace gg2aa

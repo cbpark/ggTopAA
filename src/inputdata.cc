@@ -40,7 +40,7 @@ string InputData::show_background(string k) const {
 }
 
 string InputData::show() const {
-    return "--- Input data ---\n" + show_signal() + show_background("sigma") +
+    return "--- Input data ---\n" + show_signal() + show_background("info") +
            show_background("direct") + show_background("one-fragment") +
            show_background("two-fragment");
 }
@@ -48,8 +48,8 @@ string InputData::show() const {
 string InputData::show_status() const {
     if (status_ == InputStatus::SIGNAL) {
         return "signal";
-    } else if (status_ == InputStatus::SIGMA) {
-        return "sigma";
+    } else if (status_ == InputStatus::INFO) {
+        return "info";
     } else if (status_ == InputStatus::DIRECT) {
         return "direct";
     } else if (status_ == InputStatus::FRAGMENT1) {
@@ -94,7 +94,12 @@ string get_string(string name, T x) {
     return name + " = " + std::to_string(x);
 }
 
-string Sigma::show() const {
+string HistBin::show() const {
+    return "  " + get_string("mbin", size) + ", " + get_string("min", xlow) +
+           ", " + get_string("max", xup) + "\n";
+}
+
+string InputInfo::show() const {
     string str = "--- Input info ---\n";
     str += "  " + get_string("Rs", rs * 1.0e-3) + " TeV, " +
            get_string("Lum", lum * 1.0e-3) + " ab^{-1}, " +
@@ -102,23 +107,21 @@ string Sigma::show() const {
     str += "  " + get_string("sigDir", sig_direct) + ", " +
            get_string("sigOne", sig_one_frag) + ", " +
            get_string("sigTwo", sig_two_frag) + "\n";
-    str += "  " + get_string("mbin", bin_size) + ", " +
-           get_string("min", minbin) + ", " + get_string("max", maxbin) + ", " +
-           get_string("nbin", nbin()) + "\n";
+    str += bins.show();
     str += "  " + get_string("a1in", a1in) + ", " + get_string("a2in", a2in) +
            ", " + get_string("bin", bin) + "\n";
     return str;
 }
 
-string Sigma::show_sig() const {
-    string str = "--- Sig (pb) --- \n";
+string InputInfo::show_sigma() const {
+    string str = "--- Sigma (pb) --- \n";
     str += "  " + get_string("Direct", sig_direct) + ", " +
            get_string("One fragment", sig_one_frag) + ", " +
            get_string("Two fragment", sig_two_frag) + "\n";
     return str;
 }
 
-string Sigma::show_bg_summary() const {
+string InputInfo::show_bg_summary() const {
     const double sig_bg = sig_direct + sig_one_frag + sig_two_frag;
 
     const int n_bg  = static_cast<int>(sig_bg * lum * eff * 1.0e3);

@@ -8,8 +8,8 @@
 namespace gg2aa {
 class Histograms {
 public:
-    explicit Histograms(const Sigma &sigma)
-        : nbin_(sigma.nbin()), xlow_(sigma.minbin), xup_(sigma.maxbin) {
+    explicit Histograms(const InputInfo &info)
+        : nbin_(info.nbin()), xlow_(info.bins.xlow), xup_(info.bins.xup) {
         bg_hist_  = TH1D("background", "", nbin_, xlow_, xup_);
         sig_hist_ = TH1D("signal", "", nbin_, xlow_, xup_);
     }
@@ -20,7 +20,7 @@ public:
     }
     ~Histograms() {}
 
-    void set_bg_hist(const InputData &data, std::shared_ptr<Sigma> sigma);
+    void set_bg_hist(const InputData &data, std::shared_ptr<InputInfo> info);
 
 private:
     TH1D bg_hist_;

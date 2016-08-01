@@ -7,11 +7,11 @@
 #include <vector>
 
 namespace gg2aa {
-using FileName   = std::string;
-using InputFiles = std::vector<FileName>;
+using FileName    = std::string;
+using InputFiles  = std::vector<FileName>;
 using Backgrounds = std::unordered_map<std::string, InputFiles>;
 
-enum class InputStatus { NONE, SIGMA, DIRECT, FRAGMENT1, FRAGMENT2, SIGNAL };
+enum class InputStatus { NONE, INFO, DIRECT, FRAGMENT1, FRAGMENT2, SIGNAL };
 
 class InputData {
 public:
@@ -44,16 +44,25 @@ private:
     InputStatus status_ = InputStatus::NONE;
 };
 
-struct Sigma {
+struct HistBin {
+    double size;
+    double xlow;
+    double xup;
+
+    std::string show() const;
+    int num_bin() const { return static_cast<int>((xup - xlow) / size); }
+};
+
+struct InputInfo {
     double rs, lum, eff, kg;
     double sig_direct, sig_one_frag, sig_two_frag;
-    double bin_size, minbin, maxbin;
+    HistBin bins;
     double a1in, a2in, bin;
     int status = 0;
 
     std::string show() const;
-    int nbin() const { return static_cast<int>((maxbin - minbin) / bin_size); }
-    std::string show_sig() const;
+    int nbin() const { return bins.num_bin(); }
+    std::string show_sigma() const;
     std::string show_bg_summary() const;
 };
 }  // namespace gg2aa

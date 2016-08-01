@@ -9,7 +9,7 @@
 namespace gg2aa {
 InputData parseInputData(std::unique_ptr<std::istream> is);
 
-Sigma getSigma(const InputData &data);
+InputInfo getInputInfo(const InputData &data);
 }  // namespace gg2aa
 
 #endif  // GGTOPAA_SRC_PARSERS_H_
