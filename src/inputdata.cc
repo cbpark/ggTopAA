@@ -88,4 +88,46 @@ std::pair<int, InputFiles> InputData::check_input() const {
 
     return std::make_pair(bad, failed);
 }
+
+template <typename T>
+string get_string(string name, T x) {
+    return name + " = " + std::to_string(x);
+}
+
+string Sigma::show() const {
+    string str = "--- Input info ---\n";
+    str += "  " + get_string("Rs", rs * 1.0e-3) + " TeV, " +
+           get_string("Lum", lum * 1.0e-3) + " ab^{-1}, " +
+           get_string("Eff", eff) + ", " + get_string("Kg", kg) + "\n";
+    str += "  " + get_string("sigDir", sig_direct) + ", " +
+           get_string("sigOne", sig_one_frag) + ", " +
+           get_string("sigTwo", sig_two_frag) + "\n";
+    str += "  " + get_string("mbin", bin_size) + ", " +
+           get_string("min", minbin) + ", " + get_string("max", maxbin) + ", " +
+           get_string("nbin", nbin()) + "\n";
+    str += "  " + get_string("a1in", a1in) + ", " + get_string("a2in", a2in) +
+           ", " + get_string("bin", bin) + "\n";
+    return str;
+}
+
+string Sigma::show_sig() const {
+    string str = "--- Sig (pb) --- \n";
+    str += "  " + get_string("Direct", sig_direct) + ", " +
+           get_string("One fragment", sig_one_frag) + ", " +
+           get_string("Two fragment", sig_two_frag) + "\n";
+    return str;
+}
+
+string Sigma::show_bg_summary() const {
+    const double sig_bg = sig_direct + sig_one_frag + sig_two_frag;
+
+    const int n_bg  = static_cast<int>(sig_bg * lum * eff * 1.0e3);
+    const int n_gg  = static_cast<int>(n_bg * kg / (1.0 - kg));
+    const int n_evt = n_bg + n_gg;
+
+    string str = "--- Info: backgrounds ---\n";
+    str += "  " + get_string("Nevt", n_evt) + ", " + get_string("Nbg", n_bg) +
+           ", " + get_string("Ngg", n_gg) + "\n";
+    return str;
+}
 }  // namespace gg2aa

@@ -43,6 +43,19 @@ private:
     Backgrounds background_;
     InputStatus status_ = InputStatus::NONE;
 };
+
+struct Sigma {
+    double rs, lum, eff, kg;
+    double sig_direct, sig_one_frag, sig_two_frag;
+    double bin_size, minbin, maxbin;
+    double a1in, a2in, bin;
+    int status = 0;
+
+    std::string show() const;
+    int nbin() const { return static_cast<int>((maxbin - minbin) / bin_size); }
+    std::string show_sig() const;
+    std::string show_bg_summary() const;
+};
 }  // namespace gg2aa
 
 #endif  // GGTOPAA_SRC_INPUTDATA_H_
