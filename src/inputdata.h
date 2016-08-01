@@ -64,6 +64,11 @@ struct InputInfo {
     int nbin() const { return bins.num_bin(); }
     std::string show_sigma() const;
     std::string show_bg_summary() const;
+
+    double sig_bg() const { return sig_direct + sig_one_frag + sig_two_frag; }
+    int n_bg() const { return static_cast<int>(sig_bg() * lum * eff * 1.0e3); }
+    int n_sig() const { return static_cast<int>(n_bg() * kg / (1.0 - kg)); }
+    int nev() const { return n_bg() + n_sig(); }
 };
 }  // namespace gg2aa
 

@@ -122,15 +122,9 @@ string InputInfo::show_sigma() const {
 }
 
 string InputInfo::show_bg_summary() const {
-    const double sig_bg = sig_direct + sig_one_frag + sig_two_frag;
-
-    const int n_bg  = static_cast<int>(sig_bg * lum * eff * 1.0e3);
-    const int n_gg  = static_cast<int>(n_bg * kg / (1.0 - kg));
-    const int n_evt = n_bg + n_gg;
-
     string str = "--- Info: backgrounds ---\n";
-    str += "  " + get_string("Nevt", n_evt) + ", " + get_string("Nbg", n_bg) +
-           ", " + get_string("Ngg", n_gg) + "\n";
+    str += "  " + get_string("Nevt", nev()) + ", " + get_string("Nbg", n_bg()) +
+           ", " + get_string("Ngg", n_sig()) + "\n";
     return str;
 }
 }  // namespace gg2aa

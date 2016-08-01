@@ -42,8 +42,8 @@ int main(int argc, char *argv[]) {
 
     // Fill histograms.
     gg2aa::Histograms hists(*info);
-    // backgrounds will be merged into one histogram.
     hists.set_bg_hist(data, info);
+    hists.set_sig_hist(data);
     // Print out information of backgrounds.
     std::cout << info->show_sigma() << info->show_bg_summary();
 
