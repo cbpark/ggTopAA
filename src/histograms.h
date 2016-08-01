@@ -20,8 +20,7 @@ public:
     }
     ~Histograms() {}
 
-    void set_bg_hist(const InputData &data, std::shared_ptr<InputInfo> info);
-    void set_sig_hist(const InputData &data);
+    void set_hist(const InputData &data, std::shared_ptr<InputInfo> info);
 
 private:
     TH1D bg_hist_;
@@ -29,6 +28,9 @@ private:
 
     int nbin_;
     double xlow_, xup_;
+
+    void set_bg_hist(const InputData &data, std::shared_ptr<InputInfo> info);
+    void set_sig_hist(const InputData &data);
 };
 }  // namespace gg2aa
 

@@ -20,10 +20,11 @@ int main(int argc, char *argv[]) {
         failedToRead(appname, argv[1]);
         return 1;
     }
+    auto fout = &std::cout;
 
     // Parse the list of input data.
     const auto data = gg2aa::parseInputData(std::move(infile));
-    std::cout << data.show();
+    data.show(fout);
 
     // Check the input files.
     const auto check = data.check_input();
@@ -35,14 +36,11 @@ int main(int argc, char *argv[]) {
     // Get info.
     auto info = std::make_shared<gg2aa::InputInfo>(getInputInfo(data));
     if (info->status != 0) { return errMsg(appname, "info cannot be found."); }
-    std::cout << info->show();
+    info->show(fout);
 
-    // Fill histograms.
     gg2aa::Histograms hists(*info);
-    hists.set_bg_hist(data, info);
-    hists.set_sig_hist(data);
-    // Print out information of backgrounds.
-    std::cout << info->show_sigma() << info->show_bg_summary();
+    hists.set_hist(data, info);   // Fill histograms.
+    info->show_bg_summary(fout);  // Print out information of backgrounds.
 
     std::cout << appname << ": gracefully done.\n";
 }
