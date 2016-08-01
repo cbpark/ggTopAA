@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 #include "inputdata_type.h"
-#include "type.h"
+#include "types.h"
 
 using std::ifstream;
 using std::string;

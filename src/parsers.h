@@ -4,7 +4,7 @@
 #include <istream>
 #include <memory>
 #include "inputdata_type.h"
-#include "type.h"
+#include "types.h"
 
 namespace gg2aa {
 InputData parseInputData(std::unique_ptr<std::istream> is);

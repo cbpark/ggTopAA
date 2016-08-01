@@ -1,5 +1,5 @@
-#ifndef GGTOPAA_SRC_TYPE_H_
-#define GGTOPAA_SRC_TYPE_H_
+#ifndef GGTOPAA_SRC_TYPES_H_
+#define GGTOPAA_SRC_TYPES_H_
 
 #include <memory>
 #include <string>
@@ -45,4 +45,4 @@ private:
 };
 }  // namespace gg2aa
 
-#endif  // GGTOPAA_SRC_TYPE_H_
+#endif  // GGTOPAA_SRC_TYPES_H_
