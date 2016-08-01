@@ -8,7 +8,7 @@
 #include "parsers.h"
 
 int main(int argc, char *argv[]) {
-    std::string appname = "gg2aa";
+    const std::string appname = "gg2aa";
     if (argc != 2) {
         std::cerr << "Usage: " << appname << " input\n"
                   << "    input - input file\n"
@@ -22,11 +22,11 @@ int main(int argc, char *argv[]) {
     }
 
     // Parse the list of input data.
-    auto data = gg2aa::parseInputData(std::move(infile));
+    const auto data = gg2aa::parseInputData(std::move(infile));
     std::cout << data.show();
 
     // Check the input files.
-    auto check = data.check_input();
+    const auto check = data.check_input();
     if (check.first != 0) {
         for (const auto &f : check.second) { failedToRead(appname, f); }
         return 1;
@@ -34,10 +34,7 @@ int main(int argc, char *argv[]) {
 
     // Get info.
     auto info = std::make_shared<gg2aa::InputInfo>(getInputInfo(data));
-    if (info->status != 0) {
-        errMsg(appname, "info cannot be found.");
-        return 1;
-    }
+    if (info->status != 0) { return errMsg(appname, "info cannot be found."); }
     std::cout << info->show();
 
     // Fill histograms.
@@ -47,5 +44,5 @@ int main(int argc, char *argv[]) {
     // Print out information of backgrounds.
     std::cout << info->show_sigma() << info->show_bg_summary();
 
-    std::cout << appname << ": done.\n";
+    std::cout << appname << ": gracefully done.\n";
 }

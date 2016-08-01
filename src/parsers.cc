@@ -17,11 +17,10 @@ using std::unique_ptr;
 namespace gg2aa {
 vector<string> split(const string &str, char c) {
     vector<string> str_;
-    auto i   = 0;
     auto pos = str.find(c);
-
     if (pos == string::npos) { str_.push_back(str); }
 
+    auto i = 0;
     while (pos != string::npos) {
         str_.push_back(str.substr(i, pos - i));
         i   = ++pos;
