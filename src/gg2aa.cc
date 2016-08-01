@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include "histograms.h"
+#include "inputdata.h"
 #include "parsers.h"
 
 int main(int argc, char *argv[]) {
@@ -39,8 +40,11 @@ int main(int argc, char *argv[]) {
     }
     std::cout << info->show();
 
+    // Fill histograms.
     gg2aa::Histograms hists(*info);
+    // backgrounds will be merged into one histogram.
     hists.set_bg_hist(data, info);
+    // Print out information of backgrounds.
     std::cout << info->show_sigma() << info->show_bg_summary();
 
     std::cout << appname << ": done.\n";
