@@ -4,7 +4,7 @@ SRCDIR      := src
 BINDIR      := bin
 LIBDIR      := lib
 CXX         := c++
-CXXFLAGS    := -g -O2 -Wall -Wextra -std=c++14 -pedantic -I$(SRCDIR)
+CXXFLAGS    := -g -O2 -Wall -Wextra -I$(SRCDIR)
 LDFLAGS     := -g
 MKDIR       := mkdir -p
 RM          := rm -f
@@ -16,6 +16,7 @@ endif
 
 # ROOT
 CXXFLAGS += $(shell root-config --cflags)
+CXXFLAGS += -std=c++14 -pedantic
 LDFLAGS  += $(shell root-config --ldflags)
 LIBS      = $(shell root-config --libs)
 
