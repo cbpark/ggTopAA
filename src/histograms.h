@@ -1,10 +1,10 @@
-#ifndef GGTOPAA_SRC_TYPES_H_
-#define GGTOPAA_SRC_TYPES_H_
+#ifndef GGTOPAA_SRC_HISTOGRAMS_H_
+#define GGTOPAA_SRC_HISTOGRAMS_H_
 
 #include <memory>
 #include <string>
 #include "TH1D.h"
-#include "inputdata_type.h"
+#include "inputdata.h"
 
 namespace gg2aa {
 struct Sigma {
@@ -45,4 +45,4 @@ private:
 };
 }  // namespace gg2aa
 
-#endif  // GGTOPAA_SRC_TYPES_H_
+#endif  // GGTOPAA_SRC_HISTOGRAMS_H_

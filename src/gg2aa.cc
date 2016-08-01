@@ -3,8 +3,8 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include "histograms.h"
 #include "parsers.h"
-#include "types.h"
 
 int main(int argc, char *argv[]) {
     std::string appname = "gg2aa";

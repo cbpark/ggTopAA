@@ -1,9 +1,9 @@
-#include "types.h"
+#include "histograms.h"
 #include <fstream>
 #include <memory>
 #include <string>
 #include "TH1D.h"
-#include "inputdata_type.h"
+#include "inputdata.h"
 
 using std::ifstream;
 

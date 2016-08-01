@@ -1,4 +1,4 @@
-#include "inputdata_type.h"
+#include "inputdata.h"
 #include <fstream>  // ifstream
 #include <memory>   // unique_ptr
 #include <string>

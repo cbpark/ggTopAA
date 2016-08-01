@@ -6,8 +6,8 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "inputdata_type.h"
-#include "types.h"
+#include "histograms.h"
+#include "inputdata.h"
 
 using std::ifstream;
 using std::string;
