@@ -2,6 +2,7 @@
 #define GGTOPAA_SRC_HISTOGRAMS_H_
 
 #include <memory>
+#include <vector>
 #include "TH1D.h"
 #include "inputdata.h"
 
@@ -21,6 +22,10 @@ public:
     ~Histograms() {}
 
     void set_hist(const InputData &data, std::shared_ptr<InputInfo> info);
+    double sfnc(double maa) const {
+        const int i = 10.0 * (maa - 299.95);
+        return y_maa[i];
+    }
 
 private:
     TH1D bg_hist_;
@@ -28,6 +33,8 @@ private:
 
     int nbin_;
     double xlow_, xup_;
+
+    std::vector<double> y_maa;
 
     void set_bg_hist(const InputData &data, std::shared_ptr<InputInfo> info);
     void set_sig_hist(const InputData &data);

@@ -43,11 +43,15 @@ void Histograms::set_sig_hist(const InputData &data) {
     double x, y, z;
     for (const auto &s : data.signal()) {
         std::unique_ptr<std::ifstream> f(new std::ifstream(s));
-        while (*f >> x >> y >> z) { sig_hist_.Fill(x, y); }
+        while (*f >> x >> y >> z) {
+            sig_hist_.Fill(x, y);
+            y_maa.push_back(y);
+        }
     }
 }
 
-void Histograms::set_hist(const InputData &data, std::shared_ptr<InputInfo> info) {
+void Histograms::set_hist(const InputData &data,
+                          std::shared_ptr<InputInfo> info) {
     set_bg_hist(data, info);
     set_sig_hist(data);
 }
