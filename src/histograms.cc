@@ -45,14 +45,19 @@ void Histograms::set_sig_hist(const InputData &data) {
         std::unique_ptr<std::ifstream> f(new std::ifstream(s));
         while (*f >> x >> y >> z) {
             sig_hist_.Fill(x, y);
-            y_maa.push_back(y);
+            if (x >= xlow_ && x <= xup_) { m_aa_.emplace(x, y); }
         }
     }
 }
 
-void Histograms::set_hist(const InputData &data,
-                          std::shared_ptr<InputInfo> info) {
+void Histograms::set(const InputData &data, std::shared_ptr<InputInfo> info) {
     set_bg_hist(data, info);
     set_sig_hist(data);
+    maa_interval_ = (xup_ - xlow_) / (m_aa_.size() - 1);
+}
+
+double Histograms::f_maa(double m) const {
+    if (m < xlow_ || m > xup_) { return 0.0; }
+    return m_aa_.lower_bound(m)->second;
 }
 }  // namespace gg2aa

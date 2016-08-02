@@ -1,8 +1,8 @@
 #ifndef GGTOPAA_SRC_HISTOGRAMS_H_
 #define GGTOPAA_SRC_HISTOGRAMS_H_
 
+#include <map>
 #include <memory>
-#include <vector>
 #include "TH1D.h"
 #include "inputdata.h"
 
@@ -21,20 +21,23 @@ public:
     }
     ~Histograms() {}
 
-    void set_hist(const InputData &data, std::shared_ptr<InputInfo> info);
-    double sfnc(double maa) const {
-        const int i = 10.0 * (maa - 299.95);
-        return y_maa[i];
-    }
+    /**
+     *  Fills histogram contents and set the interval of m_aa
+     *  in the signal data.
+     */
+    void set(const InputData &data, std::shared_ptr<InputInfo> info);
+    /** Interval of m_aa in the signal data. */
+    double delta() const { return maa_interval_; }
+    double f_maa(double m) const;  // corresponds to sfnc(...) function
+                                   // in the original implementation.
 
 private:
     TH1D bg_hist_;
     TH1D sig_hist_;
-
     int nbin_;
     double xlow_, xup_;
-
-    std::vector<double> y_maa;
+    double maa_interval_;
+    std::map<double, double> m_aa_;
 
     void set_bg_hist(const InputData &data, std::shared_ptr<InputInfo> info);
     void set_sig_hist(const InputData &data);
