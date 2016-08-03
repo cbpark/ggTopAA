@@ -18,6 +18,7 @@ endif
 CXXFLAGS += $(shell root-config --cflags)
 CXXFLAGS += -std=c++14 -pedantic
 LDFLAGS  += $(shell root-config --ldflags)
+LDFLAGS  += -lMathMore
 LIBS      = $(shell root-config --libs)
 
 # Targets
