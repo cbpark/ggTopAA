@@ -1,5 +1,6 @@
 #include "histograms.h"
 #include <fstream>
+#include <functional>
 #include <memory>
 #include "TH1D.h"
 #include "inputdata.h"
@@ -59,5 +60,25 @@ void Histograms::set(const InputData &data, std::shared_ptr<InputInfo> info) {
 double Histograms::f_maa(double m) const {
     if (m < xlow_ || m > xup_) { return 0.0; }
     return m_aa_.lower_bound(m)->second;
+}
+
+double simpson(std::function<double(double)> func, double xlow, double xup,
+               double delta) {
+    int n = (xup - xlow) / delta;
+    if (n % 2 == 1) {
+        --n;
+        xup -= delta;
+    }
+    double norm = func(xlow) + 4.0 * func(xup - delta) + func(xup);
+    for (int i = 0; i != n / 2; ++i) {
+        norm += 4.0 * func(xlow + (2 * i + 1) * delta) +
+                2.0 * func(xlow + (2 * i + 2) * delta);
+    }
+    return norm * delta / 3.0;
+}
+
+double Histograms::norm_signal() const {
+    return simpson(std::bind(&Histograms::f_maa, this, std::placeholders::_1),
+                   xlow_, xup_, maa_interval_);
 }
 }  // namespace gg2aa

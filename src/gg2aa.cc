@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
     std::cout << "-- f_maa(400 - delta) = "
               << hists.f_maa(400.0 - hists.delta()) << '\n';
     std::cout << "-- f_maa(400) = " << hists.f_maa(400.0) << '\n';
+    std::cout << "-- norm_signal = " << hists.norm_signal() << '\n';
 
     std::cout << appname << ": gracefully done.\n";
 }

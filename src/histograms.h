@@ -30,6 +30,8 @@ public:
     double delta() const { return maa_interval_; }
     double f_maa(double m) const;  // corresponds to sfnc(...) function
                                    // in the original implementation.
+    /** Normalization factor of the signal. */
+    double norm_signal() const;
 
 private:
     TH1D bg_hist_;
