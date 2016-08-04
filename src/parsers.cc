@@ -120,7 +120,9 @@ InputInfo getInputInfo(const InputData &data) {
 
     *f >> info.rs >> info.lum >> info.eff >> info.kg;
     *f >> info.sig_direct >> info.sig_one_frag >> info.sig_two_frag;
-    *f >> info.bins.size >> info.bins.xlow >> info.bins.xup;
+    double x, y, z;
+    *f >> x >> y >> z;
+    info.bins = HistBin(x, y, z);
     *f >> info.a1in >> info.a2in >> info.bin;
     return info;
 }

@@ -98,9 +98,10 @@ string get_string(string name, T x) {
     return name + " = " + std::to_string(x);
 }
 
-void HistBin::show(ostream *out) const {
-    *out << "  " << get_string("mbin", size) << ", " << get_string("min", xlow)
-         << ", " << get_string("max", xup) << "\n";
+void HistBin::show(std::ostream *out) const {
+    *out << "  " << get_string("bin size", bin_size_) << ", "
+         << "(xlow, xup) = "
+         << "(" << xlow_ << ", " << xup_ << ")\n";
 }
 
 void InputInfo::show(ostream *out) const {

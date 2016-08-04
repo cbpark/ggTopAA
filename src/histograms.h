@@ -9,8 +9,10 @@
 namespace gg2aa {
 class Histograms {
 public:
-    explicit Histograms(const InputInfo &info)
-        : nbin_(info.nbin()), xlow_(info.bins.xlow), xup_(info.bins.xup) {
+    explicit Histograms(const InputInfo &info) : nbin_(info.nbin()) {
+        xlow_ = info.bins.hist_bound().first;
+        xup_  = info.bins.hist_bound().second;
+
         bg_hist_  = TH1D("background", "", nbin_, xlow_, xup_);
         sig_hist_ = TH1D("signal", "", 4.0 * (xup_ - xlow_), xlow_, xup_);
     }

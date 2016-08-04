@@ -45,13 +45,29 @@ private:
     InputStatus status_ = InputStatus::NONE;
 };
 
-struct HistBin {
-    double size;
-    double xlow;
-    double xup;
+class HistBin {
+public:
+    HistBin() {}
+    explicit HistBin(double bin_size, double xlow, double xup)
+        : bin_size_(bin_size), xlow_(xlow), xup_(xup) {
+        num_bins_ = static_cast<int>((xup_ - xlow_) / bin_size_);
+    }
+    ~HistBin() {}
 
     void show(std::ostream *out) const;
-    int num_bin() const { return static_cast<int>((xup - xlow) / size); }
+    int num_bin() const { return num_bins_; }
+    double bin_size() const { return bin_size_; }
+    std::pair<double, double> hist_bound() const {
+        return std::make_pair(xlow_, xup_);
+    }
+
+private:
+    /// Bin size.
+    double bin_size_;
+    /// Number of bins.
+    int num_bins_;
+    double xlow_;
+    double xup_;
 };
 
 struct InputInfo {
