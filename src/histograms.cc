@@ -1,7 +1,9 @@
 #include "histograms.h"
+#include <cmath>
 #include <fstream>
 #include <functional>
 #include <memory>
+#include "Math/SpecFuncMathMore.h"
 #include "TH1D.h"
 #include "inputdata.h"
 
@@ -54,6 +56,7 @@ void Histograms::set_sig_hist(const InputData &data) {
 void Histograms::set(const InputData &data, std::shared_ptr<InputInfo> info) {
     set_bg_hist(data, info);
     set_sig_hist(data);
+    sqrt_s_       = info->rs;
     maa_interval_ = (xup_ - xlow_) / (m_aa_.size() - 1);
 }
 
@@ -69,8 +72,9 @@ double simpson(std::function<double(double)> func, double xlow, double xup,
         --n;
         xup -= delta;
     }
+    n /= 2;
     double norm = func(xlow) + 4.0 * func(xup - delta) + func(xup);
-    for (int i = 0; i != n / 2; ++i) {
+    for (int i = 0; i != n; ++i) {
         norm += 4.0 * func(xlow + (2 * i + 1) * delta) +
                 2.0 * func(xlow + (2 * i + 2) * delta);
     }
@@ -80,5 +84,39 @@ double simpson(std::function<double(double)> func, double xlow, double xup,
 double Histograms::norm_signal() const {
     return simpson(std::bind(&Histograms::f_maa, this, std::placeholders::_1),
                    xlow_, xup_, maa_interval_);
+}
+
+double poly_cbrt(double x, double a1, double a2) {
+    return std::pow((1.0 - std::cbrt(x)), a1) * std::pow(x, a2);
+}
+
+double fATL(const Histograms &h, double x, double a1, double a2) {
+    using std::pow;
+
+    double xmax = h.xup_ / h.sqrt_s_, xmin = h.xlow_ / h.sqrt_s_;
+    double sATL = 0.0;
+    if (std::fabs(1.0 + a2) < 1.0e-3) {
+        double delta = (xmax - xmin) / h.sig_nbin_;
+        for (int i = 0; i <= h.sig_nbin_; ++i) {
+            sATL += poly_cbrt(xmin + delta * i, a1, a2);
+        }
+        sATL *= delta;
+    } else {
+        double a = -a1, b = 3.0 * (1.0 + a2), c = 4.0 + 3.0 * a2;
+        double cbrt_xmax = std::cbrt(xmax), cbrt_xmin = std::cbrt(xmin);
+        double pf1 = 1.0, pf2 = 1.0;
+        if (a < -10.0 || b < -10.0) {
+            pf1 = pow(1.0 - cbrt_xmax, c - b - a);
+            pf2 = pow(1.0 - cbrt_xmin, c - b - a);
+            a   = c - a;
+            b   = c - b;
+        }
+        double hyp1 = pf1 * ROOT::Math::hyperg(a, b, c, cbrt_xmax);
+        double hyp2 = pf2 * ROOT::Math::hyperg(a, b, c, cbrt_xmin);
+
+        sATL = (pow(xmax, 1.0 + a2) * hyp1 - pow(xmin, 1.0 + a2) * hyp2) /
+               (1.0 + a2);
+    }
+    return poly_cbrt(x, a1, a2) / sATL;
 }
 }  // namespace gg2aa
