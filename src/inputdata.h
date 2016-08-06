@@ -31,14 +31,12 @@ public:
 
     InputFiles signal() const { return signal_; }
     void add_signal(const FileName &fname) { signal_.push_back(fname); }
-    void show_signal(std::ostream *out) const;
 
     Backgrounds background() const { return background_; }
     InputFiles background(std::string k) const { return background_.at(k); }
     void add_background(std::string k, const FileName &fname) {
         background_[k].push_back(fname);
     }
-    void show_background(std::string k, std::ostream *out) const;
 
     Templates templates() const { return templates_; }
     void add_template(const FileName &fname) {
@@ -47,7 +45,6 @@ public:
     void set_templates(const Info &info) {
         for (auto &t : templates_) { t.set_template(info); }
     }
-    void show_templates(std::ostream *out) const;
 
     void show(std::ostream *out) const;
 
@@ -63,6 +60,10 @@ private:
     Backgrounds background_;
     Templates templates_;
     InputStatus status_ = InputStatus::NONE;
+
+    void show_signal(std::ostream *out) const;
+    void show_background(std::string k, std::ostream *out) const;
+    void show_templates(std::ostream *out) const;
 };
 }  // namespace gg2aa
 
