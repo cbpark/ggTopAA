@@ -109,7 +109,9 @@ void InputInfo::show(ostream *out) const {
     *out << "  " << get_string("sigDir", sig_direct) << ", "
          << get_string("sigOne", sig_one_frag) << ", "
          << get_string("sigTwo", sig_two_frag) << "\n";
-    hist.show_info(out);
+    *out << "  " << get_string("bin size", bin_size) << ", "
+         << "(xlow, xup) = "
+         << "(" << xlow << ", " << xup << ")\n";
     *out << "  fit parameters: " << get_string("a1", a1_in) << ", "
          << get_string("a2", a2_in) << ", " << get_string("b", b_in) << "\n";
 }

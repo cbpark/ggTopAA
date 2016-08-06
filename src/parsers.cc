@@ -5,8 +5,8 @@
 #include <istream>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
-#include "histogram.h"
 #include "input.h"
 
 using std::ifstream;
@@ -124,9 +124,7 @@ InputInfo getInputInfo(const InputData &data) {
 
     *f >> info.rs >> info.lum >> info.eff >> info.kg;
     *f >> info.sig_direct >> info.sig_one_frag >> info.sig_two_frag;
-    double bin_size, xlow, xup;
-    *f >> bin_size >> xlow >> xup;
-    info.hist = Histogram(bin_size, xlow, xup);
+    *f >> info.bin_size >> info.xlow >> info.xup;
     *f >> info.a1_in >> info.a2_in >> info.b_in;
     return info;
 }

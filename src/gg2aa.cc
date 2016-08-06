@@ -3,7 +3,11 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <utility>
+#include "histogram.h"
 #include "parsers.h"
+
+const double BINSIZE_SIG = 0.25;
 
 int main(int argc, char *argv[]) {
     const std::string appname = "gg2aa";
@@ -36,9 +40,10 @@ int main(int argc, char *argv[]) {
     if (info->status != 0) { return errMsg(appname, "info cannot be found."); }
     info->show(fout);
 
-    // gg2aa::Histograms hists(*info);
-    // hists.set(data, info);        // Fill histograms and set delta etc.
-    // info->show_bg_summary(fout);  // Print out information of backgrounds.
+    gg2aa::HistObjs hists(*info, BINSIZE_SIG);
+    hists.fill_hists(data, info);  // Fill histograms and set delta etc.
+    info->show_bg_summary(fout);   // Print out information of backgrounds.
+
     // std::cout << "-- f_maa(300) = " << hists.f_maa(300.0) << '\n';
     // std::cout << "---- delta = " << hists.delta() << '\n';
     // std::cout << "-- f_maa(400 - delta) = "

@@ -6,7 +6,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include "histogram.h"
 
 namespace gg2aa {
 using FileName    = std::string;
@@ -57,14 +56,12 @@ private:
 struct InputInfo {
     double rs, lum, eff, kg;
     double sig_direct, sig_one_frag, sig_two_frag;
-    Histogram hist;
+    double bin_size, xlow, xup;
     double a1_in, a2_in, b_in;
     int status = 0;
 
     void show(std::ostream *out) const;
-    int nbin() const { return hist.num_bins(); }
     void show_bg_summary(std::ostream *out) const;
-
     double sig_bg() const { return sig_direct + sig_one_frag + sig_two_frag; }
     int n_bg() const { return static_cast<int>(sig_bg() * lum * eff * 1.0e3); }
     int n_sig() const { return static_cast<int>(n_bg() * kg / (1.0 - kg)); }

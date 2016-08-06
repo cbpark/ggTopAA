@@ -1,10 +1,55 @@
 #include "histogram.h"
-#include <ostream>
+#include <fstream>
+#include <memory>
+#include "input.h"
 
 namespace gg2aa {
-void Histogram::show_info(std::ostream *out) const {
-    *out << "  bin size = " << bin_size_ << ", "
-         << "(xlow, xup) = "
-         << "(" << xlow_ << ", " << xup_ << ")\n";
+void HistObjs::fill_sig_hist(const InputData &data) {
+    double x, y, z;
+    for (const auto &s : data.signal()) {
+        std::unique_ptr<std::ifstream> f(new std::ifstream(s));
+        while (*f >> x >> y >> z) { sig_.hist().Fill(x, y); }
+    }
+}
+
+void HistObjs::fill_bg_hist(const InputData &data,
+                            std::shared_ptr<InputInfo> info) {
+    HistRange r(info->xlow, info->xup);
+    TH1D hist("hist", "", r.width() / info->bin_size, r.low(), r.up());
+    double content;
+    int n = 0, n_entries = 0;
+    for (const auto &bg : data.background()) {
+        if (bg.first == "info") { continue; }
+
+        n = n_entries = 0;
+        for (const auto &b : bg.second) {
+            std::unique_ptr<std::ifstream> f(new std::ifstream(b));
+            while (*f >> content) {
+                hist.Fill(content);
+                ++n_entries;
+                if (r.in_range(content)) { ++n; }
+            }
+        }
+        if (bg.first == "direct") {
+            info->sig_direct *= static_cast<double>(n) / n_entries;
+            hist.Scale(info->sig_direct / n_entries);
+            bg_.hist().Add(&hist);
+        } else if (bg.first == "one-fragment") {
+            info->sig_one_frag *= static_cast<double>(n) / n_entries;
+            hist.Scale(info->sig_one_frag / n_entries);
+            bg_.hist().Add(&hist);
+        } else if (bg.first == "two-fragment") {
+            info->sig_two_frag *= static_cast<double>(n) / n_entries;
+            hist.Scale(info->sig_two_frag / n_entries);
+            bg_.hist().Add(&hist);
+        }
+        hist.Reset();
+    }
+}
+
+void HistObjs::fill_hists(const InputData &data,
+                          std::shared_ptr<InputInfo> info) {
+    fill_sig_hist(data);
+    fill_bg_hist(data, info);
 }
 }  // namespace gg2aa
