@@ -3,8 +3,7 @@
 
 #include <istream>
 #include <memory>
-#include "histograms.h"
-#include "inputdata.h"
+#include "input.h"
 
 namespace gg2aa {
 InputData parseInputData(std::unique_ptr<std::istream> is);

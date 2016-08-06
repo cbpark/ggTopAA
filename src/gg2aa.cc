@@ -3,8 +3,6 @@
 #include <iostream>
 #include <memory>
 #include <string>
-#include "histograms.h"
-#include "inputdata.h"
 #include "parsers.h"
 
 int main(int argc, char *argv[]) {
@@ -38,15 +36,15 @@ int main(int argc, char *argv[]) {
     if (info->status != 0) { return errMsg(appname, "info cannot be found."); }
     info->show(fout);
 
-    gg2aa::Histograms hists(*info);
-    hists.set(data, info);        // Fill histograms and set delta etc.
-    info->show_bg_summary(fout);  // Print out information of backgrounds.
-    std::cout << "-- f_maa(300) = " << hists.f_maa(300.0) << '\n';
-    std::cout << "---- delta = " << hists.delta() << '\n';
-    std::cout << "-- f_maa(400 - delta) = "
-              << hists.f_maa(400.0 - hists.delta()) << '\n';
-    std::cout << "-- f_maa(400) = " << hists.f_maa(400.0) << '\n';
-    std::cout << "-- norm_signal = " << hists.norm_signal() << '\n';
+    // gg2aa::Histograms hists(*info);
+    // hists.set(data, info);        // Fill histograms and set delta etc.
+    // info->show_bg_summary(fout);  // Print out information of backgrounds.
+    // std::cout << "-- f_maa(300) = " << hists.f_maa(300.0) << '\n';
+    // std::cout << "---- delta = " << hists.delta() << '\n';
+    // std::cout << "-- f_maa(400 - delta) = "
+    //           << hists.f_maa(400.0 - hists.delta()) << '\n';
+    // std::cout << "-- f_maa(400) = " << hists.f_maa(400.0) << '\n';
+    // std::cout << "-- norm_signal = " << hists.norm_signal() << '\n';
 
     std::cout << appname << ": gracefully done.\n";
 }

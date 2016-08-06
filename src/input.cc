@@ -1,12 +1,12 @@
-#include "inputdata.h"
-#include <fstream>  // ifstream
-#include <memory>   // unique_ptr
+#include "input.h"
+#include <fstream>
+#include <memory>
 #include <ostream>
 #include <string>
-#include <utility>  // pair
+#include <utility>
 
-using std::string;
 using std::ostream;
+using std::string;
 
 namespace gg2aa {
 void InputData::show_signal(ostream *out) const {
@@ -39,23 +39,6 @@ void InputData::show_background(string k, ostream *out) const {
     }
 }
 
-void InputData::show_templates(ostream *out) const {
-    *out << "templates (";
-    if (templates_.empty()) {
-        *out << "):\n No files.\n";
-    } else {
-        const auto n = templates_.size();
-        if (n == 1) {
-            *out << "1 file):\n";
-        } else {
-            *out << n << " files):\n";
-        }
-        for (const auto &t : templates_) {
-            *out << "  " << t.file_name() << '\n';
-        }
-    }
-}
-
 void InputData::show(ostream *out) const {
     *out << "--- Input data ---\n";
     show_signal(out);
@@ -63,7 +46,7 @@ void InputData::show(ostream *out) const {
     show_background("direct", out);
     show_background("one-fragment", out);
     show_background("two-fragment", out);
-    show_templates(out);
+    // show_templates(out);
 }
 
 void InputData::show_status(ostream *out) const {
@@ -110,26 +93,12 @@ std::pair<int, InputFiles> InputData::check_input() const {
         }
     }
 
-    for (const auto &t: templates_) {
-        unique_ptr<ifstream> f(new ifstream(t.file_name()));
-        if (!f->good()) {
-            ++bad;
-            failed.push_back(t.file_name());
-        }
-    }
-
     return std::make_pair(bad, failed);
 }
 
 template <typename T>
 string get_string(string name, T x) {
     return name + " = " + std::to_string(x);
-}
-
-void HistBin::show(std::ostream *out) const {
-    *out << "  " << get_string("bin size", bin_size_) << ", "
-         << "(xlow, xup) = "
-         << "(" << xlow_ << ", " << xup_ << ")\n";
 }
 
 void InputInfo::show(ostream *out) const {
@@ -140,9 +109,9 @@ void InputInfo::show(ostream *out) const {
     *out << "  " << get_string("sigDir", sig_direct) << ", "
          << get_string("sigOne", sig_one_frag) << ", "
          << get_string("sigTwo", sig_two_frag) << "\n";
-    bins.show(out);
-    *out << "  " << get_string("a1in", a1in) << ", " << get_string("a2in", a2in)
-         << ", " << get_string("bin", bin) << "\n";
+    hist.show_info(out);
+    *out << "  fit parameters: " << get_string("a1", a1_in) << ", "
+         << get_string("a2", a2_in) << ", " << get_string("b", b_in) << "\n";
 }
 
 void InputInfo::show_bg_summary(ostream *out) const {

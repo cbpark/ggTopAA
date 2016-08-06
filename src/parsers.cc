@@ -6,8 +6,8 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "histograms.h"
-#include "inputdata.h"
+#include "histogram.h"
+#include "input.h"
 
 using std::ifstream;
 using std::string;
@@ -78,7 +78,7 @@ void addInputData(FileName fname, InputData *data) {
     } else if (s == InputStatus::FRAGMENT2) {
         data->add_background("two-fragment", fname);
     } else if (s == InputStatus::TEMPLATE) {
-        data->add_templates(fname);
+        // data->add_templates(fname);
     }
 }
 
@@ -124,10 +124,10 @@ InputInfo getInputInfo(const InputData &data) {
 
     *f >> info.rs >> info.lum >> info.eff >> info.kg;
     *f >> info.sig_direct >> info.sig_one_frag >> info.sig_two_frag;
-    double x, y, z;
-    *f >> x >> y >> z;
-    info.bins = HistBin(x, y, z);
-    *f >> info.a1in >> info.a2in >> info.bin;
+    double bin_size, xlow, xup;
+    *f >> bin_size >> xlow >> xup;
+    info.hist = Histogram(bin_size, xlow, xup);
+    *f >> info.a1_in >> info.a2_in >> info.b_in;
     return info;
 }
 }  // namespace gg2aa
