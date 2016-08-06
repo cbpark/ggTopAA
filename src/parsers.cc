@@ -58,6 +58,8 @@ void setInputStatus(string str, InputData *data) {
         data->set_status(InputStatus::FRAGMENT1);
     } else if (str == "two-fragment") {
         data->set_status(InputStatus::FRAGMENT2);
+    } else if (str == "template") {
+        data->set_status(InputStatus::TEMPLATE);
     }
 }
 
@@ -75,6 +77,8 @@ void addInputData(FileName fname, InputData *data) {
         data->add_background("one-fragment", fname);
     } else if (s == InputStatus::FRAGMENT2) {
         data->add_background("two-fragment", fname);
+    } else if (s == InputStatus::TEMPLATE) {
+        data->add_templates(fname);
     }
 }
 

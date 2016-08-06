@@ -39,6 +39,23 @@ void InputData::show_background(string k, ostream *out) const {
     }
 }
 
+void InputData::show_templates(ostream *out) const {
+    *out << "templates (";
+    if (templates_.empty()) {
+        *out << "):\n No files.\n";
+    } else {
+        const auto n = templates_.size();
+        if (n == 1) {
+            *out << "1 file):\n";
+        } else {
+            *out << n << " files):\n";
+        }
+        for (const auto &t : templates_) {
+            *out << "  " << t.file_name() << '\n';
+        }
+    }
+}
+
 void InputData::show(ostream *out) const {
     *out << "--- Input data ---\n";
     show_signal(out);
@@ -46,6 +63,7 @@ void InputData::show(ostream *out) const {
     show_background("direct", out);
     show_background("one-fragment", out);
     show_background("two-fragment", out);
+    show_templates(out);
 }
 
 void InputData::show_status(ostream *out) const {
@@ -60,6 +78,8 @@ void InputData::show_status(ostream *out) const {
         *out << "one-fragment\n";
     } else if (status_ == InputStatus::FRAGMENT2) {
         *out << "two-fragment\n";
+    } else if (status_ == InputStatus::TEMPLATE) {
+        *out << "template\n";
     } else {
         *out << "none\n";
     }
@@ -87,6 +107,14 @@ std::pair<int, InputFiles> InputData::check_input() const {
                 ++bad;
                 failed.push_back(b);
             }
+        }
+    }
+
+    for (const auto &t: templates_) {
+        unique_ptr<ifstream> f(new ifstream(t.file_name()));
+        if (!f->good()) {
+            ++bad;
+            failed.push_back(t.file_name());
         }
     }
 

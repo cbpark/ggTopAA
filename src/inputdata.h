@@ -7,13 +7,22 @@
 #include <utility>
 #include <vector>
 #include "TH1D.h"
+#include "templates.h"
 
 namespace gg2aa {
 using FileName    = std::string;
 using InputFiles  = std::vector<FileName>;
 using Backgrounds = std::unordered_map<std::string, InputFiles>;
 
-enum class InputStatus { NONE, INFO, DIRECT, FRAGMENT1, FRAGMENT2, SIGNAL };
+enum class InputStatus {
+    NONE,
+    INFO,
+    DIRECT,
+    FRAGMENT1,
+    FRAGMENT2,
+    SIGNAL,
+    TEMPLATE
+};
 
 class InputData {
 public:
@@ -31,6 +40,10 @@ public:
     }
     void show_background(std::string k, std::ostream *out) const;
 
+    Templates templates() const { return templates_; }
+    void add_templates(FileName fname)  { templates_.push_back(Template(fname)); }
+    void show_templates(std::ostream *out) const;
+
     void show(std::ostream *out) const;
 
     InputStatus get_status() const { return status_; }
@@ -43,6 +56,7 @@ public:
 private:
     InputFiles signal_;
     Backgrounds background_;
+    Templates templates_;
     InputStatus status_ = InputStatus::NONE;
 };
 
@@ -67,10 +81,8 @@ public:
     }
     /// The width of the histogram: xup - xlow
     double width() const { return xup_ - xlow_; }
-    bool in_range(double x) const {
-        return x >= xlow_ && x <= xup_;
-    }
-    TH1D mkHist(const char* name, const char* title="") {
+    bool in_range(double x) const { return x >= xlow_ && x <= xup_; }
+    TH1D mkHist(const char *name, const char *title = "") {
         return TH1D(name, title, num_bins_, xlow_, xup_);
     }
 
