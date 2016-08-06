@@ -4,31 +4,27 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "histogram.h"
-#include "input.h"
+#include <memory>
+#include "inputinfo.h"
+#include "utils.h"
 
 namespace gg2aa {
 class Template {
 public:
-    Template(const std::string &fname, const InputInfo &info)
-        : fname_(fname),
-          range_(HistRange(info.xlow, info.xup)),
-          sqrt_s_(info.rs) {
-        set_maa();
-    }
+    explicit Template(const std::string &fname) : fname_(fname) {}
     ~Template() {}
 
+    void set_template(const InputInfo &info);
+    std::string file_name() const { return fname_; }
     double f_maa(double x) const;
     double norm() const;
 
 private:
     const std::string fname_;
-    const HistRange range_;
-    const double sqrt_s_;
+    Range range_;
+    double sqrt_s_ = 0.0;
     std::map<double, double> maa_;
-    double maa_interval_;
-
-    void set_maa();
+    double maa_interval_ = 0.0;
 };
 
 using Templates = std::vector<Template>;

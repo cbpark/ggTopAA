@@ -7,7 +7,8 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "input.h"
+#include "inputdata.h"
+#include "inputinfo.h"
 
 using std::ifstream;
 using std::string;
@@ -78,7 +79,7 @@ void addInputData(FileName fname, InputData *data) {
     } else if (s == InputStatus::FRAGMENT2) {
         data->add_background("two-fragment", fname);
     } else if (s == InputStatus::TEMPLATE) {
-        // data->add_templates(fname);
+        data->add_template(fname);
     }
 }
 

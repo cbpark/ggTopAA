@@ -1,7 +1,9 @@
 #include "histogram.h"
 #include <fstream>
 #include <memory>
-#include "input.h"
+#include "inputdata.h"
+#include "inputinfo.h"
+#include "utils.h"
 
 namespace gg2aa {
 void HistObjs::fill_sig_hist(const InputData &data) {
@@ -14,7 +16,7 @@ void HistObjs::fill_sig_hist(const InputData &data) {
 
 void HistObjs::fill_bg_hist(const InputData &data,
                             std::shared_ptr<InputInfo> info) {
-    const HistRange r(info->xlow, info->xup);
+    const Range r(info->xlow, info->xup);
     TH1D hist("hist", "", r.width() / info->bin_size, r.low(), r.up());
     double content;
     int n = 0, n_entries = 0;

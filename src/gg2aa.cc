@@ -5,6 +5,7 @@
 #include <string>
 #include <utility>
 #include "histogram.h"
+#include "inputinfo.h"
 #include "parsers.h"
 
 const double BINSIZE_SIG = 0.25;
@@ -25,7 +26,7 @@ int main(int argc, char *argv[]) {
     auto fout = &std::cout;
 
     // Parse the list of input data.
-    const auto data = gg2aa::parseInputData(std::move(infile));
+    auto data = gg2aa::parseInputData(std::move(infile));
     data.show(fout);
 
     // Check the input files.
@@ -43,6 +44,7 @@ int main(int argc, char *argv[]) {
     gg2aa::HistObjs hists(*info, BINSIZE_SIG);
     hists.fill_hists(data, info);  // Fill histograms and set scales.
     info->show_bg_summary(fout);   // Print out information of backgrounds.
+    data.set_templates(*info);     // Set all the templates.
 
     // std::cout << "-- f_maa(300) = " << hists.f_maa(300.0) << '\n';
     // std::cout << "---- delta = " << hists.delta() << '\n';

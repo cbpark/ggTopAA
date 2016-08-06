@@ -3,9 +3,14 @@
 #include <functional>
 #include <memory>
 #include "histogram.h"
+#include "inputinfo.h"
+#include "utils.h"
 
 namespace gg2aa {
-void Template::set_maa() {
+void Template::set_template(const InputInfo &info) {
+    range_  = Range(info.xlow, info.xup);
+    sqrt_s_ = info.rs;
+
     std::unique_ptr<std::ifstream> f(new std::ifstream(fname_));
     double x, y, z;
     while (*f >> x >> y >> z) {

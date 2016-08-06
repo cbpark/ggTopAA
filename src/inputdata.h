@@ -1,11 +1,13 @@
-#ifndef GGTOPAA_SRC_INPUT_H_
-#define GGTOPAA_SRC_INPUT_H_
+#ifndef GGTOPAA_SRC_INPUTDATA_H_
+#define GGTOPAA_SRC_INPUTDATA_H_
 
 #include <ostream>
 #include <string>
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include "inputinfo.h"
+#include "templates.h"
 
 namespace gg2aa {
 using FileName    = std::string;
@@ -28,7 +30,7 @@ public:
     ~InputData() {}
 
     InputFiles signal() const { return signal_; }
-    void add_signal(FileName fname) { signal_.push_back(fname); }
+    void add_signal(const FileName &fname) { signal_.push_back(fname); }
     void show_signal(std::ostream *out) const;
 
     Backgrounds background() const { return background_; }
@@ -37,6 +39,15 @@ public:
         background_[k].push_back(fname);
     }
     void show_background(std::string k, std::ostream *out) const;
+
+    Templates templates() const { return templates_; }
+    void add_template(const FileName &fname) {
+        templates_.push_back(Template(fname));
+    }
+    void set_templates(const InputInfo &info) {
+        for (auto &t : templates_) { t.set_template(info); }
+    }
+    void show_templates(std::ostream *out) const;
 
     void show(std::ostream *out) const;
 
@@ -50,23 +61,9 @@ public:
 private:
     InputFiles signal_;
     Backgrounds background_;
+    Templates templates_;
     InputStatus status_ = InputStatus::NONE;
-};
-
-struct InputInfo {
-    double rs, lum, eff, kg;
-    double sig_direct, sig_one_frag, sig_two_frag;
-    double bin_size, xlow, xup;
-    double a1_in, a2_in, b_in;
-    int status = 0;
-
-    void show(std::ostream *out) const;
-    void show_bg_summary(std::ostream *out) const;
-    double sig_bg() const { return sig_direct + sig_one_frag + sig_two_frag; }
-    int n_bg() const { return static_cast<int>(sig_bg() * lum * eff * 1.0e3); }
-    int n_sig() const { return static_cast<int>(n_bg() * kg / (1.0 - kg)); }
-    int nev() const { return n_bg() + n_sig(); }
 };
 }  // namespace gg2aa
 
-#endif  // GGTOPAA_SRC_INPUT_H_
+#endif  // GGTOPAA_SRC_INPUTDATA_H_
