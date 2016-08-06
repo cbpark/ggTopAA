@@ -10,8 +10,9 @@
 namespace gg2aa {
 void Histograms::set_bg_hist(const InputData &data,
                              std::shared_ptr<InputInfo> info) {
+    const auto bound = bg_hist_bin_.hist_bound();
+    TH1D hist("hist", "", bg_hist_bin_.num_bins(), bound.first, bound.second);
     double content;
-    TH1D hist("hist", "", nbin_, xlow_, xup_);
     int n = 0, n_entries = 0;
     for (const auto &bg : data.background()) {
         if (bg.first == "info") { continue; }
@@ -22,7 +23,7 @@ void Histograms::set_bg_hist(const InputData &data,
             while (*f >> content) {
                 hist.Fill(content);
                 ++n_entries;
-                if (content > xlow_ && content < xup_) { ++n; }
+                if (bg_hist_bin_.in_range(content)) { ++n; }
             }
         }
         if (bg.first == "direct") {
@@ -48,7 +49,7 @@ void Histograms::set_sig_hist(const InputData &data) {
         std::unique_ptr<std::ifstream> f(new std::ifstream(s));
         while (*f >> x >> y >> z) {
             sig_hist_.Fill(x, y);
-            if (x >= xlow_ && x <= xup_) { m_aa_.emplace(x, y); }
+            if (sig_hist_bin_.in_range(x)) { m_aa_.emplace(x, y); }
         }
     }
 }
@@ -57,11 +58,11 @@ void Histograms::set(const InputData &data, std::shared_ptr<InputInfo> info) {
     set_bg_hist(data, info);
     set_sig_hist(data);
     sqrt_s_       = info->rs;
-    maa_interval_ = (xup_ - xlow_) / (m_aa_.size() - 1);
+    maa_interval_ = sig_hist_bin_.width() / (m_aa_.size() - 1);
 }
 
 double Histograms::f_maa(double m) const {
-    if (m < xlow_ || m > xup_) { return 0.0; }
+    if (!sig_hist_bin_.in_range(m)) { return 0.0; }
     return m_aa_.lower_bound(m)->second;
 }
 
@@ -82,8 +83,9 @@ double simpson(std::function<double(double)> func, double xlow, double xup,
 }
 
 double Histograms::norm_signal() const {
+    const auto bound = sig_hist_bin_.hist_bound();
     return simpson(std::bind(&Histograms::f_maa, this, std::placeholders::_1),
-                   xlow_, xup_, maa_interval_);
+                   bound.first, bound.second, maa_interval_);
 }
 
 double poly_cbrt(double x, double a1, double a2) {
@@ -93,11 +95,12 @@ double poly_cbrt(double x, double a1, double a2) {
 double fATL(const Histograms &h, double x, double a1, double a2) {
     using std::pow;
 
-    double xmax = h.xup_ / h.sqrt_s_, xmin = h.xlow_ / h.sqrt_s_;
+    auto bound  = h.sig_hist_bin_.hist_bound();
+    double xmax = bound.second / h.sqrt_s_, xmin = bound.first / h.sqrt_s_;
     double sATL = 0.0;
     if (std::fabs(1.0 + a2) < 1.0e-3) {
-        double delta = (xmax - xmin) / h.sig_nbin_;
-        for (int i = 0; i <= h.sig_nbin_; ++i) {
+        double delta = (xmax - xmin) / h.sig_hist_bin_.num_bins();
+        for (int i = 0; i <= h.sig_hist_bin_.num_bins(); ++i) {
             sATL += poly_cbrt(xmin + delta * i, a1, a2);
         }
         sATL *= delta;

@@ -9,21 +9,21 @@
 namespace gg2aa {
 class Histograms {
 public:
-    explicit Histograms(const InputInfo &info) : nbin_(info.nbin()) {
-        xlow_ = info.bins.hist_bound().first;
-        xup_  = info.bins.hist_bound().second;
+    explicit Histograms(const InputInfo &info) {
+        auto hist_bound = info.bins.hist_bound();
 
-        bg_hist_ = TH1D("background", "", nbin_, xlow_, xup_);
+        sig_hist_bin_ = HistBin(0.25, hist_bound);
+        sig_hist_     = sig_hist_bin_.mkHist("signal");
 
-        sig_nbin_ = 4.0 * (xup_ - xlow_);
-        sig_hist_ = TH1D("signal", "", sig_nbin_, xlow_, xup_);
+        bg_hist_bin_ = HistBin(info.bins.bin_size(), hist_bound);
+        bg_hist_     = bg_hist_bin_.mkHist("background");
     }
-    explicit Histograms(int nbin, double xlow, double xup)
-        : nbin_(nbin), xlow_(xlow), xup_(xup) {
-        bg_hist_ = TH1D("background", "", nbin_, xlow_, xup_);
+    explicit Histograms(int nbin, double xlow, double xup) {
+        sig_hist_bin_ = HistBin(0.25, xlow, xup);
+        sig_hist_     = sig_hist_bin_.mkHist("signal");
 
-        sig_nbin_ = 4.0 * (xup_ - xlow_);
-        sig_hist_ = TH1D("signal", "", sig_nbin_, xlow_, xup_);
+        bg_hist_bin_ = HistBin(nbin, xlow, xup);
+        bg_hist_     = bg_hist_bin_.mkHist("background");
     }
     ~Histograms() {}
 
@@ -42,10 +42,10 @@ public:
 private:
     TH1D bg_hist_;
     TH1D sig_hist_;
-    int nbin_, sig_nbin_;
-    double xlow_, xup_;
-    // HistBin sig_hist_bin_;
-    // HistBin bg_hist_bin_;
+    // int nbin_, sig_nbin_;
+    // double xlow_, xup_;
+    HistBin sig_hist_bin_;
+    HistBin bg_hist_bin_;
 
     /// The center of mass energy, sqrt(s).
     double sqrt_s_;
