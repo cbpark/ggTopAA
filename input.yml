@@ -7,3 +7,6 @@ data:
     one-fragment: data/OneF.dat
     two-fragment: data/TwoF.dat
   signal: data/Tab_173.0_1.50.dat
+  template:
+  - data/Tab_172.5_0.50.dat
+  - data/Tab_173.0_1.50.dat

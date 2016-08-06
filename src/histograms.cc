@@ -57,8 +57,8 @@ void Histograms::set_sig_hist(const InputData &data) {
 void Histograms::set(const InputData &data, std::shared_ptr<InputInfo> info) {
     set_bg_hist(data, info);
     set_sig_hist(data);
-    sqrt_s_       = info->rs;
     maa_interval_ = sig_hist_bin_.width() / (m_aa_.size() - 1);
+    n_event_      = info->nev();
 }
 
 double Histograms::f_maa(double m) const {
@@ -93,31 +93,32 @@ double poly_cbrt(double x, double a1, double a2) {
 }
 
 double fATL(const Histograms &h, double x, double a1, double a2) {
-    using std::pow;
+    const auto bound  = h.sig_hist_bin_.hist_bound();
+    const double xmax = bound.second / h.sqrt_s_,
+                 xmin = bound.first / h.sqrt_s_;
 
-    auto bound  = h.sig_hist_bin_.hist_bound();
-    double xmax = bound.second / h.sqrt_s_, xmin = bound.first / h.sqrt_s_;
     double sATL = 0.0;
     if (std::fabs(1.0 + a2) < 1.0e-3) {
-        double delta = (xmax - xmin) / h.sig_hist_bin_.num_bins();
+        const double delta = (xmax - xmin) / h.sig_hist_bin_.num_bins();
         for (int i = 0; i <= h.sig_hist_bin_.num_bins(); ++i) {
             sATL += poly_cbrt(xmin + delta * i, a1, a2);
         }
         sATL *= delta;
     } else {
         double a = -a1, b = 3.0 * (1.0 + a2), c = 4.0 + 3.0 * a2;
-        double cbrt_xmax = std::cbrt(xmax), cbrt_xmin = std::cbrt(xmin);
+        const double cbrt_xmax = std::cbrt(xmax), cbrt_xmin = std::cbrt(xmin);
         double pf1 = 1.0, pf2 = 1.0;
         if (a < -10.0 || b < -10.0) {
-            pf1 = pow(1.0 - cbrt_xmax, c - b - a);
-            pf2 = pow(1.0 - cbrt_xmin, c - b - a);
+            pf1 = std::pow(1.0 - cbrt_xmax, c - b - a);
+            pf2 = std::pow(1.0 - cbrt_xmin, c - b - a);
             a   = c - a;
             b   = c - b;
         }
-        double hyp1 = pf1 * ROOT::Math::hyperg(a, b, c, cbrt_xmax);
-        double hyp2 = pf2 * ROOT::Math::hyperg(a, b, c, cbrt_xmin);
+        const double hyp1 = pf1 * ROOT::Math::hyperg(a, b, c, cbrt_xmax);
+        const double hyp2 = pf2 * ROOT::Math::hyperg(a, b, c, cbrt_xmin);
 
-        sATL = (pow(xmax, 1.0 + a2) * hyp1 - pow(xmin, 1.0 + a2) * hyp2) /
+        sATL = (std::pow(xmax, 1.0 + a2) * hyp1 -
+                std::pow(xmin, 1.0 + a2) * hyp2) /
                (1.0 + a2);
     }
     return poly_cbrt(x, a1, a2) / sATL;
