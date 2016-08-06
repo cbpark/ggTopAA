@@ -7,8 +7,8 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include "info.h"
 #include "inputdata.h"
-#include "inputinfo.h"
 
 using std::ifstream;
 using std::string;
@@ -110,8 +110,8 @@ InputData parseInputData(unique_ptr<std::istream> is) {
     return data;
 }
 
-InputInfo getInputInfo(const InputData &data) {
-    InputInfo info;
+Info getInfo(const InputData &data) {
+    Info info;
     const auto infiles = data.background("info");
     if (infiles.empty()) {
         info.status = -1;

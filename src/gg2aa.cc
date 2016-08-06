@@ -5,7 +5,7 @@
 #include <string>
 #include <utility>
 #include "histogram.h"
-#include "inputinfo.h"
+#include "info.h"
 #include "parsers.h"
 
 const double BINSIZE_SIG = 0.25;
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Get info.
-    auto info = std::make_shared<gg2aa::InputInfo>(getInputInfo(data));
+    auto info = std::make_shared<gg2aa::Info>(getInfo(data));
     if (info->status != 0) { return errMsg(appname, "info cannot be found."); }
     info->show(fout);
 

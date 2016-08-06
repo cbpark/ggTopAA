@@ -3,13 +3,13 @@
 
 #include <istream>
 #include <memory>
+#include "info.h"
 #include "inputdata.h"
-#include "inputinfo.h"
 
 namespace gg2aa {
 InputData parseInputData(std::unique_ptr<std::istream> is);
 
-InputInfo getInputInfo(const InputData &data);
+Info getInfo(const InputData &data);
 }  // namespace gg2aa
 
 #endif  // GGTOPAA_SRC_PARSERS_H_

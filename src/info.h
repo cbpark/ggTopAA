@@ -1,10 +1,10 @@
-#ifndef GGTOPAA_SRC_INPUTINFO_H_
-#define GGTOPAA_SRC_INPUTINFO_H_
+#ifndef GGTOPAA_SRC_INFO_H_
+#define GGTOPAA_SRC_INFO_H_
 
 #include <ostream>
 
 namespace gg2aa {
-struct InputInfo {
+struct Info {
     double rs, lum, eff, kg;
     double sig_direct, sig_one_frag, sig_two_frag;
     double bin_size, xlow, xup;
@@ -20,4 +20,4 @@ struct InputInfo {
 };
 }  // namespace gg2aa
 
-#endif  // GGTOPAA_SRC_INPUTINFO_H_
+#endif  // GGTOPAA_SRC_INFO_H_

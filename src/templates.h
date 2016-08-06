@@ -2,10 +2,10 @@
 #define GGTOPAA_SRC_TEMPLATES_H_
 
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
-#include "inputinfo.h"
+#include "info.h"
 #include "utils.h"
 
 namespace gg2aa {
@@ -14,7 +14,7 @@ public:
     explicit Template(const std::string &fname) : fname_(fname) {}
     ~Template() {}
 
-    void set_template(const InputInfo &info);
+    void set_template(const Info &info);
     std::string file_name() const { return fname_; }
     double f_maa(double x) const;
     double norm() const;

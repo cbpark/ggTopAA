@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include "inputinfo.h"
+#include "info.h"
 #include "templates.h"
 
 namespace gg2aa {
@@ -44,7 +44,7 @@ public:
     void add_template(const FileName &fname) {
         templates_.push_back(Template(fname));
     }
-    void set_templates(const InputInfo &info) {
+    void set_templates(const Info &info) {
         for (auto &t : templates_) { t.set_template(info); }
     }
     void show_templates(std::ostream *out) const;

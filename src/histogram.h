@@ -5,9 +5,9 @@
 #include <ostream>
 #include <utility>
 #include "TH1D.h"
-#include "utils.h"
+#include "info.h"
 #include "inputdata.h"
-#include "inputinfo.h"
+#include "utils.h"
 
 namespace gg2aa {
 class Histogram {
@@ -19,7 +19,7 @@ public:
           num_bins_(static_cast<int>(range_.width() / bin_size_)) {
         hist_ = mkHist(name, title);
     }
-    Histogram(const InputInfo &info, const char *name, const char *title = "")
+    Histogram(const Info &info, const char *name, const char *title = "")
         : bin_size_(info.bin_size),
           range_(Range(info.xlow, info.xup)),
           num_bins_(static_cast<int>(range_.width() / bin_size_)) {
@@ -45,13 +45,13 @@ private:
 
 class HistObjs {
 public:
-    explicit HistObjs(const InputInfo &info, double bin_size_signal = 0.25)
-        : sig_(Histogram(bin_size_signal, Range(info.xlow, info.xup),
-                         "signal")),
+    explicit HistObjs(const Info &info, double bin_size_signal = 0.25)
+        : sig_(
+              Histogram(bin_size_signal, Range(info.xlow, info.xup), "signal")),
           bg_(Histogram(info, "background")) {}
     ~HistObjs() {}
 
-    void fill_hists(const InputData &data, std::shared_ptr<InputInfo> info);
+    void fill_hists(const InputData &data, std::shared_ptr<Info> info);
     Histogram signal() const { return sig_; }
     Histogram background() const { return bg_; }
 
@@ -60,7 +60,7 @@ private:
     Histogram bg_;
 
     void fill_sig_hist(const InputData &data);
-    void fill_bg_hist(const InputData &data, std::shared_ptr<InputInfo> info);
+    void fill_bg_hist(const InputData &data, std::shared_ptr<Info> info);
 };
 }  // namespace gg2aa
 
