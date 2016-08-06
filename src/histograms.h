@@ -37,10 +37,6 @@ public:
     double norm_signal() const;
     /** Number of bins of the background histogram. */
     int bg_num_bins() const { return bg_hist_bin_.num_bins(); }
-    /** (xmax - xmin) of histogram. */
-    double hist_width() const { return sig_hist_bin_.width(); }
-
-    friend double fATL(const Histograms &h, double x, double a1, double a2);
 
 private:
     TH1D bg_hist_;
