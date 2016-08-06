@@ -24,7 +24,7 @@ public:
     double low() const { return low_; }
     double up() const { return up_; }
     double width() const { return up_ - low_; }
-    bool in_range(double x) const { return x >= low_ && x <= up_; }
+    bool includes(double x) const { return x >= low_ && x <= up_; }
 
 private:
     double low_, up_;

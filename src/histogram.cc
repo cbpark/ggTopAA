@@ -26,7 +26,7 @@ void HistObjs::fill_bg_hist(const InputData &data,
             while (*f >> content) {
                 hist.Fill(content);
                 ++n_entries;
-                if (r.in_range(content)) { ++n; }
+                if (r.includes(content)) { ++n; }
             }
         }
         if (bg.first == "direct") {
