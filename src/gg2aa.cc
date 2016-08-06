@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     info->show(fout);
 
     gg2aa::HistObjs hists(*info, BINSIZE_SIG);
-    hists.fill_hists(data, info);  // Fill histograms and set delta etc.
+    hists.fill_hists(data, info);  // Fill histograms and set scales.
     info->show_bg_summary(fout);   // Print out information of backgrounds.
 
     // std::cout << "-- f_maa(300) = " << hists.f_maa(300.0) << '\n';

@@ -14,14 +14,13 @@ void HistObjs::fill_sig_hist(const InputData &data) {
 
 void HistObjs::fill_bg_hist(const InputData &data,
                             std::shared_ptr<InputInfo> info) {
-    HistRange r(info->xlow, info->xup);
+    const HistRange r(info->xlow, info->xup);
     TH1D hist("hist", "", r.width() / info->bin_size, r.low(), r.up());
     double content;
     int n = 0, n_entries = 0;
     for (const auto &bg : data.background()) {
         if (bg.first == "info") { continue; }
 
-        n = n_entries = 0;
         for (const auto &b : bg.second) {
             std::unique_ptr<std::ifstream> f(new std::ifstream(b));
             while (*f >> content) {
@@ -43,6 +42,7 @@ void HistObjs::fill_bg_hist(const InputData &data,
             hist.Scale(info->sig_two_frag / n_entries);
             bg_.hist().Add(&hist);
         }
+        n = n_entries = 0;
         hist.Reset();
     }
 }
