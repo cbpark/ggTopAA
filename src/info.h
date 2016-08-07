@@ -17,6 +17,7 @@ struct Info {
     int n_bg() const { return static_cast<int>(sig_bg() * lum * eff * 1.0e3); }
     int n_sig() const { return static_cast<int>(n_bg() * kg / (1.0 - kg)); }
     int nev() const { return n_bg() + n_sig(); }
+    // int num_bins() const { return static_cast<int>((xup - xlow) / bin_size); }
 };
 }  // namespace gg2aa
 
