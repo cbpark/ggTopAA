@@ -73,8 +73,7 @@ InputData parseInputData(unique_ptr<std::istream> is) {
     while (getline(*is, line)) {
         if (line.find("#") == string::npos && !line.empty()) {
             parsed = removeSpaces(split(line, ':'));
-
-            const auto pos         = line.find(":");
+            const auto pos = line.find(":");
             const auto parsed_size = parsed.size();
             if (pos != string::npos) {  // field found.
                 setInputStatus(removeSpace(line.substr(0, pos)), &data);

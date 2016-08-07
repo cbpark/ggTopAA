@@ -10,9 +10,8 @@
 
 namespace gg2aa {
 void Template::set_template(const Info &info) {
-    range_  = Range(info.xlow, info.xup);
+    range_ = Range(info.xlow, info.xup);
     sqrt_s_ = info.rs;
-
     std::unique_ptr<std::ifstream> f(new std::ifstream(fname_));
     double x, y, z;
     while (*f >> x >> y >> z) {
@@ -54,10 +53,10 @@ double poly_cbrt(double x, double a1, double a2) {
 double fATL(const Template &t, double x, double a1, double a2) {
     const double xmax = t.range_.up() / t.sqrt_s_,
                  xmin = t.range_.low() / t.sqrt_s_;
-
     double sATL = 0.0;
+
     if (std::fabs(1.0 + a2) < 1.0e-3) {
-        const int nbins    = 4 * t.range_.width();
+        const int nbins = 4 * t.range_.width();
         const double delta = (xmax - xmin) / nbins;
         for (int i = 0; i <= nbins; ++i) {
             sATL += poly_cbrt(xmin + delta * i, a1, a2);
@@ -70,8 +69,8 @@ double fATL(const Template &t, double x, double a1, double a2) {
         if (a < -10.0 || b < -10.0) {
             pf1 = std::pow(1.0 - cbrt_xmax, c - b - a);
             pf2 = std::pow(1.0 - cbrt_xmin, c - b - a);
-            a   = c - a;
-            b   = c - b;
+            a = c - a;
+            b = c - b;
         }
         const double hyp1 = pf1 * ROOT::Math::hyperg(a, b, c, cbrt_xmax);
         const double hyp2 = pf2 * ROOT::Math::hyperg(a, b, c, cbrt_xmin);

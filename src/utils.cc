@@ -47,10 +47,8 @@ double stringToDouble(const string &str) {
 std::pair<double, double> getMassWidth(const string &fname) {
     string bname(baseName(fname, "dat"));
     const auto splitted = split(bname, '_');
-    if (splitted.size() < 3) {
-        return std::make_pair<double, double>(0.0, 0.0);
-    }
-    return std::make_pair<double, double>(stringToDouble(splitted[1]),
-                                          stringToDouble(splitted[2]));
+    if (splitted.size() < 3) { return std::make_pair(0.0, 0.0); }
+    return std::make_pair(stringToDouble(splitted[1]),
+                          stringToDouble(splitted[2]));
 }
-}  // namesapce gg2aa
+}  // namespace gg2aa

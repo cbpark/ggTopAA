@@ -10,8 +10,8 @@
 #include "templates.h"
 
 namespace gg2aa {
-using FileName    = std::string;
-using InputFiles  = std::vector<FileName>;
+using FileName = std::string;
+using InputFiles = std::vector<FileName>;
 using Backgrounds = std::unordered_map<std::string, InputFiles>;
 
 enum class InputStatus {

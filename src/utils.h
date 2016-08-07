@@ -12,10 +12,10 @@ public:
     Range(double x1, double x2) {
         if (x1 > x2) {
             low_ = x2;
-            up_  = x1;
+            up_ = x1;
         } else {
             low_ = x1;
-            up_  = x2;
+            up_ = x2;
         }
     }
     ~Range() {}
@@ -31,7 +31,7 @@ private:
 
 std::vector<std::string> split(const std::string &str, char c);
 
-std::pair<double, double> getMassWidth(const std::string& fname);
+std::pair<double, double> getMassWidth(const std::string &fname);
 }  // namespace gg2aa
 
 #endif  // GGTOPAA_SRC_UTILS_H_
