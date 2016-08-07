@@ -19,9 +19,6 @@ void Template::set_template(const Info &info) {
         if (range_.includes(x)) { maa_.emplace(x, y); }
     }
     maa_interval_ = range_.width() / (maa_.size() - 1);
-
-    nevent_ = info.nev();
-    nbins_ = range_.width() / info.bin_size;
 }
 
 double Template::f_maa(double x) const {

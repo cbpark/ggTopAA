@@ -7,8 +7,11 @@
 namespace gg2aa {
 class FitFunction {
 public:
-    FitFunction(const Template &t)
-        : template_(t), sqrt_s_(t.sqrt_s()), nevent_(t.nevent()) {}
+    FitFunction(const Template &t, const Info &info)
+        : template_(t),
+          sqrt_s_(info.rs),
+          nevent_(info.nev()),
+          nbins_(info.num_bins()) {}
     ~FitFunction() {}
 
     double operator()(double *x, double *p);
@@ -16,7 +19,7 @@ public:
 private:
     const Template template_;
     const double sqrt_s_;
-    const int nevent_;
+    const int nevent_, nbins_;
 };
 }  // namespace gg2aa
 

@@ -46,12 +46,9 @@ int main(int argc, char *argv[]) {
     info->show_bg_summary(fout);   // Print out information of backgrounds.
     data.set_templates(*info);     // Set all the templates.
 
-    // std::cout << "-- f_maa(300) = " << hists.f_maa(300.0) << '\n';
-    // std::cout << "---- delta = " << hists.delta() << '\n';
-    // std::cout << "-- f_maa(400 - delta) = "
-    //           << hists.f_maa(400.0 - hists.delta()) << '\n';
-    // std::cout << "-- f_maa(400) = " << hists.f_maa(400.0) << '\n';
-    // std::cout << "-- norm_signal = " << hists.norm_signal() << '\n';
+    std::cout << "-- f_maa(300) = " << data.templates()[0].f_maa(300.0) << '\n';
+    std::cout << "-- f_maa(400) = " << data.templates()[0].f_maa(400.0) << '\n';
+    std::cout << "-- norm = " << data.templates()[0].norm() << '\n';
 
     std::cout << appname << ": gracefully done.\n";
 }

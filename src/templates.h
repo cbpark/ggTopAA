@@ -15,13 +15,9 @@ public:
     ~Template() {}
 
     void set_template(const Info &info);
-
     std::string file_name() const { return fname_; }
     Range range() const { return range_; }
-    int nevent() const { return nevent_; }
-    int num_bins() const { return nbins_; }
     double sqrt_s() const { return sqrt_s_; }
-
     double f_maa(double x) const;
     double norm() const;
 
@@ -30,7 +26,6 @@ public:
 private:
     const std::string fname_;
     Range range_;
-    int nevent_ = 0, nbins_ = 0;
     double sqrt_s_ = 0.0;
     std::map<double, double> maa_;
     double maa_interval_ = 0.0;
