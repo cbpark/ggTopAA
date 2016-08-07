@@ -49,6 +49,10 @@ int main(int argc, char *argv[]) {
     std::cout << "-- f_maa(300) = " << data.templates()[0].f_maa(300.0) << '\n';
     std::cout << "-- f_maa(400) = " << data.templates()[0].f_maa(400.0) << '\n';
     std::cout << "-- norm = " << data.templates()[0].norm() << '\n';
+    for (const auto &t : data.templates()) {
+        std::cout << "mass = " << t.mass_width().first
+                  << ", width = " << t.mass_width().second << '\n';
+    }
 
     std::cout << appname << ": gracefully done.\n";
 }

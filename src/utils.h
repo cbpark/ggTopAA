@@ -1,6 +1,10 @@
 #ifndef GGTOPAA_SRC_UTILS_H_
 #define GGTOPAA_SRC_UTILS_H_
 
+#include <string>
+#include <utility>
+#include <vector>
+
 namespace gg2aa {
 class Range {
 public:
@@ -24,6 +28,10 @@ public:
 private:
     double low_, up_;
 };
+
+std::vector<std::string> split(const std::string &str, char c);
+
+std::pair<double, double> getMassWidth(const std::string& fname);
 }  // namespace gg2aa
 
 #endif  // GGTOPAA_SRC_UTILS_H_

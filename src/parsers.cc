@@ -9,6 +9,7 @@
 #include <vector>
 #include "info.h"
 #include "inputdata.h"
+#include "utils.h"
 
 using std::ifstream;
 using std::string;
@@ -16,24 +17,6 @@ using std::vector;
 using std::unique_ptr;
 
 namespace gg2aa {
-vector<string> split(const string &str, char c) {
-    vector<string> str_;
-    auto pos = str.find(c);
-    if (pos == string::npos) { str_.push_back(str); }
-
-    auto i = 0;
-    while (pos != string::npos) {
-        str_.push_back(str.substr(i, pos - i));
-        i   = ++pos;
-        pos = str.find(c, pos);
-
-        if (pos == string::npos) {
-            str_.push_back(str.substr(i, str.length()));
-        }
-    }
-    return str_;
-}
-
 string removeSpace(string str) {
     str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
     return str;
