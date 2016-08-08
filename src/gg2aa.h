@@ -4,16 +4,18 @@
 #include <iostream>
 #include <string>
 
-void failedToRead(std::string appname, std::string fname) {
+int failedToRead(const std::string &appname, const std::string &fname) {
     std::cerr << appname << ": failed to read `" << fname << "'.\n";
+    return 1;
 }
 
-int errMsg(std::string appname, std::string msg) {
+int errMsg(const std::string &appname, const std::string &msg) {
     std::cerr << appname << ": " << msg << '\n';
     return 1;
 }
 
-void message(std::string appname, std::string msg, std::ostream *out) {
+void message(const std::string &appname, const std::string &msg,
+             std::ostream *out) {
     *out << appname << ": " << msg << '\n';
 }
 

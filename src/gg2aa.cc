@@ -24,10 +24,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     auto infile = std::make_unique<std::ifstream>(argv[1]);
-    if (!infile->good()) {
-        failedToRead(appname, argv[1]);
-        return 1;
-    }
+    if (!infile->good()) { return failedToRead(appname, argv[1]); }
     const auto to_out = &std::cout;
 
     // Parse the list of input data.
