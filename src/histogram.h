@@ -55,6 +55,7 @@ public:
     void fill_hists(const InputData &data, std::shared_ptr<Info> info);
     std::shared_ptr<Histogram> signal() const { return sig_; }
     std::shared_ptr<Histogram> background() const { return bg_; }
+    std::shared_ptr<TH1D> pseudo_experiment(const Info &info);
 
 private:
     std::shared_ptr<Histogram> sig_;
