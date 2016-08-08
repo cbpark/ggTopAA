@@ -30,34 +30,35 @@ public:
     double bin_size() const { return bin_size_; }
     Range range() const { return range_; }
     int num_bins() const { return num_bins_; }
-    TH1D hist() { return hist_; }
+    std::shared_ptr<TH1D> hist() { return hist_; }
 
 private:
     const double bin_size_;
     const Range range_;
     const int num_bins_;
-    TH1D hist_;
+    std::shared_ptr<TH1D> hist_;
 
-    TH1D mkHist(const char *name, const char *title = "") {
-        return TH1D(name, title, num_bins_, range_.low(), range_.up());
+    std::shared_ptr<TH1D> mkHist(const char *name, const char *title = "") {
+        return std::make_shared<TH1D>(
+            TH1D(name, title, num_bins_, range_.low(), range_.up()));
     }
 };
 
 class HistObjs {
 public:
     explicit HistObjs(const Info &info, double bin_size_signal = 0.25)
-        : sig_(
-              Histogram(bin_size_signal, Range(info.xlow, info.xup), "signal")),
-          bg_(Histogram(info, "background")) {}
+        : sig_(std::make_shared<Histogram>(Histogram(
+              bin_size_signal, Range(info.xlow, info.xup), "signal"))),
+          bg_(std::make_shared<Histogram>(Histogram(info, "background"))) {}
     ~HistObjs() {}
 
     void fill_hists(const InputData &data, std::shared_ptr<Info> info);
-    Histogram signal() const { return sig_; }
-    Histogram background() const { return bg_; }
+    std::shared_ptr<Histogram> signal() const { return sig_; }
+    std::shared_ptr<Histogram> background() const { return bg_; }
 
 private:
-    Histogram sig_;
-    Histogram bg_;
+    std::shared_ptr<Histogram> sig_;
+    std::shared_ptr<Histogram> bg_;
 
     void fill_sig_hist(const InputData &data);
     void fill_bg_hist(const InputData &data, std::shared_ptr<Info> info);
