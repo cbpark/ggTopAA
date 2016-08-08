@@ -12,7 +12,7 @@ namespace gg2aa {
 void Template::set_template(const Info &info) {
     range_ = Range(info.xlow, info.xup);
     sqrt_s_ = info.rs;
-    std::unique_ptr<std::ifstream> f(new std::ifstream(fname_));
+    auto f = std::make_unique<std::ifstream>(fname_);
     double x, y, z;
     while (*f >> x >> y >> z) {
         if (range_.includes(x)) { maa_.emplace(x, y); }

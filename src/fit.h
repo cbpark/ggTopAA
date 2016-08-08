@@ -1,7 +1,6 @@
 #ifndef GGTOPAA_SRC_FIT_H_
 #define GGTOPAA_SRC_FIT_H_
 
-#include <iostream>
 #include <memory>
 #include "TF1.h"
 #include "TH1D.h"
@@ -20,7 +19,7 @@ public:
           nbins_(info.num_bins()) {}
     ~FitFunction() {}
 
-    // Range range() const { return range_; }
+    Range range() const { return range_; }
     double operator()(double *x, double *p);
 
 private:
@@ -30,25 +29,25 @@ private:
     const int nevent_, nbins_;
 };
 
-// class Fit {
-// public:
-//     Fit(const FitFunction &f, const Info &info)
-//         : pfnc_(new TF1("pfnc", f, f.range().low(), f.range().up(), 3)) {
-//         set_parameters(info);
-//     }
-//     ~Fit() { delete pfnc_; }
+class Fit {
+public:
+    Fit(const FitFunction &f, const Info &info)
+        : pfnc_(std::make_shared<TF1>("pfnc", f, f.range().low(),
+                                      f.range().up(), 3)) {
+        set_parameters(info);
+    }
+    ~Fit() {}
 
-//     void set_parameters(const Info &info);
-//     double do_fit(std::shared_ptr<TH1D> hist) {
-//         std::cout << "do_fit: Here!\n";
-//         hist->Fit(pfnc_, "I");
-//         std::cout << "do_fit: Here! (2)\n";
-//         return pfnc_->GetChisquare();
-//     }
+    void set_parameters(const Info &info);
 
-// private:
-//     TF1 *pfnc_;
-// };
+    double get_chisquare(std::shared_ptr<TH1D> hist) {
+        hist->Fit(pfnc_.get(), "RN");
+        return pfnc_->GetChisquare();
+    }
+
+private:
+    std::shared_ptr<TF1> pfnc_;
+};
 }  // namespace gg2aa
 
 #endif  // GGTOPAA_SRC_FIT_H_

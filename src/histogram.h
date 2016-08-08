@@ -39,17 +39,17 @@ private:
     std::shared_ptr<TH1D> hist_;
 
     std::shared_ptr<TH1D> mkHist(const char *name, const char *title = "") {
-        return std::make_shared<TH1D>(
-            TH1D(name, title, num_bins_, range_.low(), range_.up()));
+        return std::make_shared<TH1D>(name, title, num_bins_, range_.low(),
+                                      range_.up());
     }
 };
 
 class HistObjs {
 public:
     explicit HistObjs(const Info &info, double bin_size_signal = 0.25)
-        : sig_(std::make_shared<Histogram>(Histogram(
-              bin_size_signal, Range(info.xlow, info.xup), "signal"))),
-          bg_(std::make_shared<Histogram>(Histogram(info, "background"))) {}
+        : sig_(std::make_shared<Histogram>(
+              bin_size_signal, Range(info.xlow, info.xup), "signal")),
+          bg_(std::make_shared<Histogram>(info, "background")) {}
     ~HistObjs() {}
 
     void fill_hists(const InputData &data, std::shared_ptr<Info> info);

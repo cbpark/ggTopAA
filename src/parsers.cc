@@ -14,7 +14,6 @@
 using std::ifstream;
 using std::string;
 using std::vector;
-using std::unique_ptr;
 
 namespace gg2aa {
 string removeSpace(string str) {
@@ -66,7 +65,7 @@ void addInputData(FileName fname, InputData *data) {
     }
 }
 
-InputData parseInputData(unique_ptr<std::istream> is) {
+InputData parseInputData(std::unique_ptr<std::istream> is) {
     string line;
     vector<string> parsed;
     InputData data;
@@ -99,7 +98,7 @@ Info getInfo(const InputData &data) {
         info.status = -1;
         return info;
     }
-    unique_ptr<ifstream> f(new ifstream(infiles.front()));
+    auto f = std::make_unique<ifstream>(infiles.front());
     if (!f->good()) {
         info.status = -2;
         return info;

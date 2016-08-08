@@ -83,14 +83,11 @@ void InputData::show_status(std::ostream *out) const {
 }
 
 std::pair<int, InputFiles> InputData::check_input() const {
-    using std::unique_ptr;
-    using std::ifstream;
-
     int bad = 0;
     InputFiles failed;
 
     for (const auto &s : signal_) {
-        unique_ptr<ifstream> f(new ifstream(s));
+        auto f = std::make_unique<std::ifstream>(s);
         if (!f->good()) {
             ++bad;
             failed.push_back(s);
@@ -99,7 +96,7 @@ std::pair<int, InputFiles> InputData::check_input() const {
 
     for (const auto &bs : background_) {
         for (const auto &b : bs.second) {
-            unique_ptr<ifstream> f(new ifstream(b));
+            auto f = std::make_unique<std::ifstream>(b);
             if (!f->good()) {
                 ++bad;
                 failed.push_back(b);
