@@ -1,5 +1,5 @@
-#ifndef GGTOPAA_SRC_INFO_H_
-#define GGTOPAA_SRC_INFO_H_
+#ifndef SRC_INFO_H_
+#define SRC_INFO_H_
 
 #include <cmath>
 #include <ostream>
@@ -24,4 +24,4 @@ struct Info {
 };
 }  // namespace gg2aa
 
-#endif  // GGTOPAA_SRC_INFO_H_
+#endif  // SRC_INFO_H_

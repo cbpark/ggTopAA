@@ -1,5 +1,5 @@
-#ifndef GGTOPAA_SRC_PARSERS_H_
-#define GGTOPAA_SRC_PARSERS_H_
+#ifndef SRC_PARSERS_H_
+#define SRC_PARSERS_H_
 
 #include <istream>
 #include <memory>
@@ -12,4 +12,4 @@ InputData parseInputData(std::unique_ptr<std::istream> is);
 Info getInfo(const InputData &data);
 }  // namespace gg2aa
 
-#endif  // GGTOPAA_SRC_PARSERS_H_
+#endif  // SRC_PARSERS_H_

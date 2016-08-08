@@ -57,8 +57,8 @@ void HistObjs::fill_hists(const InputData &data, shared_ptr<Info> info) {
     fill_bg_hist(data, info);
 }
 
-shared_ptr<TH1D> HistObjs::pseudo_experiment(const Info &info) {
-    auto r = bg_->range();
+shared_ptr<TH1D> HistObjs::pseudo_experiment(const Info &info) const {
+    const auto r = bg_->range();
     auto h_pd = std::make_shared<TH1D>("hPD", "Pseudo data", bg_->num_bins(),
                                        r.low(), r.up());
     h_pd->FillRandom(sig_->hist().get(), info.n_sig());

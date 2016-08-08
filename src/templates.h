@@ -1,5 +1,5 @@
-#ifndef GGTOPAA_SRC_TEMPLATES_H_
-#define GGTOPAA_SRC_TEMPLATES_H_
+#ifndef SRC_TEMPLATES_H_
+#define SRC_TEMPLATES_H_
 
 #include <map>
 #include <memory>
@@ -38,4 +38,4 @@ private:
 using Templates = std::vector<Template>;
 }  // namespace gg2aa
 
-#endif  // GGTOPAA_SRC_TEMPLATES_H_
+#endif  // SRC_TEMPLATES_H_

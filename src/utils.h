@@ -1,5 +1,5 @@
-#ifndef GGTOPAA_SRC_UTILS_H_
-#define GGTOPAA_SRC_UTILS_H_
+#ifndef SRC_UTILS_H_
+#define SRC_UTILS_H_
 
 #include <string>
 #include <utility>
@@ -34,4 +34,4 @@ std::vector<std::string> split(const std::string &str, char c);
 std::pair<double, double> getMassWidth(const std::string &fname);
 }  // namespace gg2aa
 
-#endif  // GGTOPAA_SRC_UTILS_H_
+#endif  // SRC_UTILS_H_

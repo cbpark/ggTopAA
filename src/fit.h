@@ -1,5 +1,5 @@
-#ifndef GGTOPAA_SRC_FIT_H_
-#define GGTOPAA_SRC_FIT_H_
+#ifndef SRC_FIT_H_
+#define SRC_FIT_H_
 
 #include <memory>
 #include "TF1.h"
@@ -50,4 +50,4 @@ private:
 };
 }  // namespace gg2aa
 
-#endif  // GGTOPAA_SRC_FIT_H_
+#endif  // SRC_FIT_H_

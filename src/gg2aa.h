@@ -1,5 +1,5 @@
-#ifndef GGTOPAA_SRC_GG2AA_H_
-#define GGTOPAA_SRC_GG2AA_H_
+#ifndef SRC_GG2AA_H_
+#define SRC_GG2AA_H_
 
 #include <iostream>
 #include <string>
@@ -13,4 +13,4 @@ int errMsg(std::string appname, std::string msg) {
     return 1;
 }
 
-#endif  // GGTOPAA_SRC_GG2AA_H_
+#endif  // SRC_GG2AA_H_

@@ -11,7 +11,6 @@
 #include "inputdata.h"
 #include "utils.h"
 
-using std::ifstream;
 using std::string;
 using std::vector;
 
@@ -98,7 +97,7 @@ Info getInfo(const InputData &data) {
         info.status = -1;
         return info;
     }
-    auto f = std::make_unique<ifstream>(infiles.front());
+    auto f = std::make_unique<std::ifstream>(infiles.front());
     if (!f->good()) {
         info.status = -2;
         return info;

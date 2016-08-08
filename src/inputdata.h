@@ -1,5 +1,5 @@
-#ifndef GGTOPAA_SRC_INPUTDATA_H_
-#define GGTOPAA_SRC_INPUTDATA_H_
+#ifndef SRC_INPUTDATA_H_
+#define SRC_INPUTDATA_H_
 
 #include <ostream>
 #include <string>
@@ -67,4 +67,4 @@ private:
 };
 }  // namespace gg2aa
 
-#endif  // GGTOPAA_SRC_INPUTDATA_H_
+#endif  // SRC_INPUTDATA_H_

@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
         failedToRead(appname, argv[1]);
         return 1;
     }
-    auto fout = &std::cout;
+    const auto fout = &std::cout;
 
     // Parse the list of input data.
     auto data = gg2aa::parseInputData(std::move(infile));
@@ -43,22 +43,25 @@ int main(int argc, char *argv[]) {
     if (info->status != 0) { return errMsg(appname, "info cannot be found."); }
     info->show(fout);
 
-    // gg2aa::HistObjs hists(*info, BINSIZE_SIG);
     auto hists = std::make_shared<gg2aa::HistObjs>(*info, BINSIZE_SIG);
     hists->fill_hists(data, info);  // Fill histograms and set scales.
     info->show_bg_summary(fout);    // Print out information of backgrounds.
     data.set_templates(*info);      // Set all the templates.
 
     // Create the pseudo-experiment histogram.
-    auto h_pseudo = hists->pseudo_experiment(*info);
+    std::cout << "\ngg2aa: generating pseudo-experiment data...\n";
+    const auto h_pseudo = hists->pseudo_experiment(*info);
 
-    // Prepare the fit function.
-    gg2aa::FitFunction ffnc(data.templates()[1], *info);
-
-    // Get chi square.
-    auto fit = gg2aa::Fit(ffnc, *info);
-    double chi = fit.get_chisquare(h_pseudo);
-    std::cout << "-- chi = " << chi << '\n';
+    std::cout << "\ngg2aa: starting fitting...\n\n";
+    for (const auto &t : data.templates()) {
+        // Prepare the fit function based on the template.
+        const gg2aa::FitFunction ffnc(t, *info);
+        auto fit = gg2aa::Fit(ffnc, *info);
+        const double chi2 = fit.get_chisquare(h_pseudo);  // Get chi square.
+        std::cout << "-- mass = " << t.mass_width().first
+                  << ", width = " << t.mass_width().second
+                  << ", chisquare = " << chi2 << '\n';
+    }
 
     std::cout << appname << ": gracefully done.\n";
 }
