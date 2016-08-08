@@ -13,4 +13,8 @@ int errMsg(std::string appname, std::string msg) {
     return 1;
 }
 
+void message(std::string appname, std::string msg, std::ostream *out) {
+    *out << appname << ": " << msg << '\n';
+}
+
 #endif  // SRC_GG2AA_H_
