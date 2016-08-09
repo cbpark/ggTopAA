@@ -58,11 +58,11 @@ int main(int argc, char *argv[]) {
     const string outfile_name(argv[2]);
     auto outfile = std::make_unique<std::ofstream>(outfile_name);
     if (!outfile->good()) {
-        return errMsg(appname, "failed to create `" + outfile_name + "'");
+        return errMsg(appname, "failed to create `" + outfile_name + "'.");
     }
     message(appname, "output will be saved to `" + outfile_name + "'.", to_out);
 
-    // Perform fitting and calculate the chi square.
+    // Perform fitting and obtain the chi square.
     message(appname, "starting fitting...", to_out);
     for (const auto &t : data.templates()) {
         const gg2aa::FitFunction ffnc(t, *info);  // Prepare the fit function

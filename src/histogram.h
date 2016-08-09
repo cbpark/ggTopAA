@@ -12,6 +12,7 @@
 namespace gg2aa {
 class Histogram {
 public:
+    Histogram() = delete;
     Histogram(double bin_size, const Range &r, const char *name,
               const char *title = "")
         : bin_size_(bin_size),
@@ -46,6 +47,7 @@ private:
 
 class HistObjs {
 public:
+    HistObjs() = delete;
     explicit HistObjs(const Info &info, double bin_size_signal = 0.25)
         : sig_(std::make_shared<Histogram>(
               bin_size_signal, Range(info.xlow, info.xup), "signal")),
@@ -53,6 +55,8 @@ public:
     ~HistObjs() {}
 
     void fill_hists(const InputData &data, std::shared_ptr<Info> info);
+
+    /** Construct the histogram of the pseudo-experiment data. */
     std::shared_ptr<TH1D> pseudo_experiment(const Info &info) const;
 
 private:

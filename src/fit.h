@@ -11,6 +11,7 @@
 namespace gg2aa {
 class FitFunction {
 public:
+    FitFunction() = delete;
     explicit FitFunction(const Template &t, const Info &info)
         : template_(t),
           range_(Range(info.xlow, info.xup)),
@@ -39,6 +40,7 @@ public:
     }
     ~Fit() {}
 
+    /** Set parameters for fitting. */
     void set_parameters(const Info &info);
 
     double get_chisquare(std::shared_ptr<TH1D> hist) {

@@ -31,6 +31,7 @@ private:
 
 std::vector<std::string> split(const std::string &str, char c);
 
+/** Deduce the mass and the width of the input data by its file name. */
 std::pair<double, double> getMassWidth(const std::string &fname);
 }  // namespace gg2aa
 

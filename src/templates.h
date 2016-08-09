@@ -12,6 +12,7 @@
 namespace gg2aa {
 class Template {
 public:
+    Template() = delete;
     explicit Template(const std::string &fname)
         : fname_(fname), mass_width_(getMassWidth(fname)) {}
     ~Template() {}
