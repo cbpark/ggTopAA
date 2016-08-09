@@ -19,9 +19,11 @@ public:
     void set_template(const Info &info);
     std::string file_name() const { return fname_; }
     std::pair<double, double> mass_width() const { return mass_width_; }
+    /** Range of m_aa in the template data. */
     Range range() const { return range_; }
-    double sqrt_s() const { return sqrt_s_; }
-    double f_maa(double x) const;
+    double f_maa(double x) const;  // corresponds to sfnc(...) function
+                                   // in the original implementation.
+    /** Normalization factor for the given template data. */
     double norm() const;
 
     friend double fATL(const Template &t, double x, double a1, double a2);

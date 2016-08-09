@@ -20,6 +20,7 @@ public:
     ~FitFunction() {}
 
     Range range() const { return range_; }
+    // The histogram fit will call this.
     double operator()(double *x, double *p) const;
 
 private:
