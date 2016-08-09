@@ -15,7 +15,7 @@ using std::string;
 const double BINSIZE_SIG = 0.25;
 
 int main(int argc, char *argv[]) {
-    const string appname = "gg2aa";
+    const string appname("gg2aa");
     if (argc != 3) {
         std::cerr << "Usage: " << appname << " input output\n"
                   << "    input - input file\n"
@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
     if (!outfile->good()) {
         return errMsg(appname, "failed to create `" + outfile_name + "'");
     }
-    message(appname, "output will be saved to `" + outfile_name + "'", to_out);
+    message(appname, "output will be saved to `" + outfile_name + "'.", to_out);
 
     // Perform fitting and calculate the chi square.
     message(appname, "starting fitting...", to_out);
