@@ -20,7 +20,7 @@ public:
     ~FitFunction() {}
 
     Range range() const { return range_; }
-    double operator()(double *x, double *p);
+    double operator()(double *x, double *p) const;
 
 private:
     const Template template_;
