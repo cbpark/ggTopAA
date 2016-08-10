@@ -9,7 +9,7 @@
 using std::shared_ptr;
 
 namespace gg2aa {
-void HistObjs::fill_sig_hist(const InputData &data) {
+void HistObjs::fill_sig(const InputData &data) {
     double x, y, z;
     for (const auto &s : data.signal()) {
         auto f = std::make_unique<std::ifstream>(s);
@@ -17,7 +17,7 @@ void HistObjs::fill_sig_hist(const InputData &data) {
     }
 }
 
-void HistObjs::fill_bg_hist(const InputData &data, shared_ptr<Info> info) {
+void HistObjs::fill_bg(const InputData &data, shared_ptr<Info> info) {
     const Range r(info->xlow, info->xup);
     auto hist = std::make_shared<TH1D>("hist", "", r.width() / info->bin_size,
                                        r.low(), r.up());
@@ -52,9 +52,9 @@ void HistObjs::fill_bg_hist(const InputData &data, shared_ptr<Info> info) {
     }
 }
 
-void HistObjs::fill_hists(const InputData &data, shared_ptr<Info> info) {
-    fill_sig_hist(data);
-    fill_bg_hist(data, info);
+void HistObjs::fill(const InputData &data, shared_ptr<Info> info) {
+    fill_sig(data);
+    fill_bg(data, info);
 }
 
 shared_ptr<TH1D> HistObjs::pseudo_experiment(const Info &info) const {

@@ -54,7 +54,11 @@ public:
           bg_(std::make_shared<Histogram>(info, "background")) {}
     ~HistObjs() {}
 
-    void fill_hists(const InputData &data, std::shared_ptr<Info> info);
+    /**
+     *  Fill content of the histogram separately from input signal and
+     *  background data.
+     */
+    void fill(const InputData &data, std::shared_ptr<Info> info);
 
     /** Construct the histogram of the pseudo-experiment data. */
     std::shared_ptr<TH1D> pseudo_experiment(const Info &info) const;
@@ -63,8 +67,8 @@ private:
     std::shared_ptr<Histogram> sig_;
     std::shared_ptr<Histogram> bg_;
 
-    void fill_sig_hist(const InputData &data);
-    void fill_bg_hist(const InputData &data, std::shared_ptr<Info> info);
+    void fill_sig(const InputData &data);
+    void fill_bg(const InputData &data, std::shared_ptr<Info> info);
 };
 }  // namespace gg2aa
 

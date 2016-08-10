@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 
     auto hists = std::make_shared<gg2aa::HistObjs>(*info, BINSIZE_SIG);
     // Fill histograms and set scales (caution: info will be updated).
-    hists->fill_hists(data, info);
+    hists->fill(data, info);
     info->show_bg_summary(to_out);  // Print out information of backgrounds.
     data.set_templates(*info);      // Set all the templates.
 
