@@ -12,7 +12,7 @@ namespace gg2aa {
 class FitFunction {
 public:
     FitFunction() = delete;
-    explicit FitFunction(const Template &t, const Info &info)
+    FitFunction(const Template &t, const Info &info)
         : template_(t),
           range_(Range(info.xlow, info.xup)),
           sqrt_s_(info.rs),

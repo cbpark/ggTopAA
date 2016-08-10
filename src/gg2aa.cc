@@ -12,7 +12,7 @@
 
 using std::string;
 
-const double BINSIZE_SIG = 0.25;
+const double BINSIZE_SIG = 0.25;  // the number of bins will be 4 * (max - min).
 
 int main(int argc, char *argv[]) {
     const string appname("gg2aa");
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     }
     auto infile = std::make_unique<std::ifstream>(argv[1]);
     if (!infile->good()) { return failedToRead(appname, argv[1]); }
-    const auto to_out = &std::cout;
+    const auto to_out = &std::cout;  // information will be displayed in screen.
 
     // Parse the list of input data.
     auto data = gg2aa::parseInputData(std::move(infile));
@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
 
     // Check the input files.
     const auto check = data.check_input();
+    // If any input file fails to be read, print out the file name and exit.
     if (check.first != 0) {
         for (const auto &f : check.second) { failedToRead(appname, f); }
         return 1;
