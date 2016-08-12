@@ -2,10 +2,10 @@ GPATH
 G*TAGS
 bin
 lib
-data
 old
 *.o
 .#*
 *.dat
 *.root
 *.log
+*.old
