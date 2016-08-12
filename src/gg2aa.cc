@@ -1,5 +1,4 @@
 #include "gg2aa.h"
-#include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
