@@ -1,7 +1,6 @@
 #ifndef SRC_TEMPLATES_H_
 #define SRC_TEMPLATES_H_
 
-#include <map>
 #include <memory>
 #include <string>
 #include <utility>
@@ -34,7 +33,7 @@ private:
     const std::pair<double, double> mass_width_;
     Range range_;
     double sqrt_s_ = 0.0;
-    std::map<double, double> maa_;
+    std::vector<double> maa_;
     double maa_interval_ = 0.0;
 };
 

@@ -14,6 +14,7 @@ public:
     FitFunction() = delete;
     FitFunction(const Template &t, const Info &info)
         : template_(t),
+          norm_(t.norm()),
           range_(Range(info.xlow, info.xup)),
           sqrt_s_(info.rs),
           nevent_(info.nev()),
@@ -26,6 +27,7 @@ public:
 
 private:
     const Template template_;
+    const double norm_;
     const Range range_;
     const double sqrt_s_;
     const int nevent_, nbins_;
@@ -44,7 +46,10 @@ public:
     void set_parameters(const Info &info);
 
     double get_chisquare(std::shared_ptr<TH1D> hist) {
-        hist->Fit(pfnc_.get(), "RN");
+        hist->Fit(pfnc_.get(), "IN");  // "I": use integral of function in bin
+                                       // instead of value at bin center.
+                                       // "N": do not store the graphics
+                                       // function, do not draw.
         return pfnc_->GetChisquare();
     }
 

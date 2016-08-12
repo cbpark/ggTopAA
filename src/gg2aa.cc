@@ -76,5 +76,6 @@ int main(int argc, char *argv[]) {
                  << t.mass_width().second;
         *outfile << std::setw(12) << std::setprecision(4) << chi2 << '\n';
     }
+    outfile->close();
     message(appname, "... gracefully done.", to_out);
 }

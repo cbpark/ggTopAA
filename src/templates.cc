@@ -14,15 +14,20 @@ void Template::set_template(const Info &info) {
     sqrt_s_ = info.rs;
     const auto f = std::make_unique<std::ifstream>(fname_);
     double x, y, z;
+    maa_.reserve(1001);
     while (*f >> x >> y >> z) {
-        if (range_.includes(x)) { maa_.emplace(x, y); }
+        if (range_.includes(x)) { maa_.push_back(y); }
     }
+    f->close();
     maa_interval_ = range_.width() / (maa_.size() - 1);
 }
 
 double Template::f_maa(double x) const {
     if (!range_.includes(x)) { return 0.0; }
-    return maa_.lower_bound(x)->second;
+    const std::vector<double>::size_type pos =
+        static_cast<int>(10.0 * (x - range_.low() + maa_interval_ / 2));
+    if (pos >= maa_.size()) { return 0.0; }
+    return maa_[pos];
 }
 
 double simpson(std::function<double(double)> func, double xlow, double xup,

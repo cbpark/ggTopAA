@@ -92,6 +92,7 @@ std::pair<int, InputFiles> InputData::check_input() const {
             ++bad;
             failed.push_back(s);
         }
+        f->close();
     }
 
     for (const auto &bs : background_) {
@@ -101,6 +102,7 @@ std::pair<int, InputFiles> InputData::check_input() const {
                 ++bad;
                 failed.push_back(b);
             }
+            f->close();
         }
     }
 

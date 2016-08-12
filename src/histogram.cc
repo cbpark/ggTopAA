@@ -14,12 +14,13 @@ void HistObjs::fill_sig(const InputData &data) {
     for (const auto &s : data.signal()) {
         auto f = std::make_unique<std::ifstream>(s);
         while (*f >> x >> y >> z) { sig_->hist()->Fill(x, y); }
+        f->close();
     }
 }
 
 void HistObjs::fill_bg(const InputData &data, shared_ptr<Info> info) {
     const Range r(info->xlow, info->xup);
-    auto hist = std::make_shared<TH1D>("hist", "", r.width() / info->bin_size,
+    auto hist = std::make_unique<TH1D>("hist", "", r.width() / info->bin_size,
                                        r.low(), r.up());
     double content;
     int n = 0, n_entries = 0;
@@ -33,6 +34,7 @@ void HistObjs::fill_bg(const InputData &data, shared_ptr<Info> info) {
                 ++n_entries;
                 if (content > r.low() && content < r.up()) { ++n; }
             }
+            f->close();
         }
         if (bg.first == "direct") {
             info->sig_direct *= static_cast<double>(n) / n_entries;
@@ -63,15 +65,10 @@ shared_ptr<TH1D> HistObjs::pseudo_experiment(const Info &info) const {
                                        r.low(), r.up());
     // h_pd->FillRandom(sig_->hist().get(), info.n_sig());
     // h_pd->FillRandom(bg_->hist().get(), info.n_bg());
-    const int n_sig = info.n_sig();
-    for (int i = 0; i != n_sig; ++i) {
-        h_pd->Fill(sig_->hist()->GetRandom(), 1.0);
-    }
     const int n_bg = info.n_bg();
-    for (int i = 0; i != n_bg; ++i) {
-        h_pd->Fill(bg_->hist()->GetRandom(), 1.0);
-    }
-
+    for (int i = 0; i != n_bg; ++i) { h_pd->Fill(bg_->hist()->GetRandom()); }
+    const int n_sig = info.n_sig();
+    for (int i = 0; i != n_sig; ++i) { h_pd->Fill(sig_->hist()->GetRandom()); }
     h_pd->SetMinimum(0.0);
     return h_pd;
 }
