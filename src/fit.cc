@@ -5,8 +5,9 @@
 namespace gg2aa {
 double FitFunction::operator()(double *x, double *p) const {
     const double fgg = template_.f_maa(x[0]) / norm_;
-    double f = nevent_ / nbins_ * template_.range().width();
-    f *= (1.0 - p[2]) / sqrt_s_ * fATL(template_, x[0] / sqrt_s_, p[0], p[1]) +
+    const double sqrt_s = info_.rs;
+    double f = info_.nev() / info_.num_bins() * template_.range().width();
+    f *= (1.0 - p[2]) / sqrt_s * fATL(template_, x[0] / sqrt_s, p[0], p[1]) +
          p[2] * fgg;
     return f;
 }

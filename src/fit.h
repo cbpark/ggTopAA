@@ -13,32 +13,27 @@ class FitFunction {
 public:
     FitFunction() = delete;
     FitFunction(const Template &t, const Info &info)
-        : template_(t),
-          norm_(t.norm()),
-          range_(Range(info.xlow, info.xup)),
-          sqrt_s_(info.rs),
-          nevent_(info.nev()),
-          nbins_(info.num_bins()) {}
+        : template_(t), norm_(t.norm()), info_(info) {}
     ~FitFunction() {}
 
-    Range range() const { return range_; }
+    Info info() const { return info_; }
+    Range range() const { return Range(info_.xlow, info_.xup); }
     // The histogram fit will call this.
     double operator()(double *x, double *p) const;
 
 private:
     const Template template_;
     const double norm_;
-    const Range range_;
-    const double sqrt_s_;
-    const int nevent_, nbins_;
+    const Info info_;
 };
 
 class Fit {
 public:
-    Fit(const FitFunction &f, const Info &info)
+    Fit() = delete;
+    explicit Fit(const FitFunction &f)
         : pfnc_(std::make_shared<TF1>("pfnc", f, f.range().low(),
                                       f.range().up(), 3)) {
-        set_parameters(info);
+        set_parameters(f.info());
     }
     ~Fit() {}
 

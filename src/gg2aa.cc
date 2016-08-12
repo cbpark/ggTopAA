@@ -1,4 +1,5 @@
 #include "gg2aa.h"
+#include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -68,7 +69,7 @@ int main(int argc, char *argv[]) {
     for (const auto &t : data.templates()) {
         const gg2aa::FitFunction ffnc(t, *info);  // Prepare the fit function
                                                   // based on the template.
-        auto fit = gg2aa::Fit(ffnc, *info);
+        auto fit = gg2aa::Fit(ffnc);
         const double chi2 = fit.get_chisquare(h_pseudo);
         *outfile << std::fixed << std::setw(9) << std::setprecision(2)
                  << t.mass_width().first;
