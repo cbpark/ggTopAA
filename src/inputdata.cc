@@ -90,29 +90,42 @@ void InputData::show_status(std::ostream *out) const {
     }
 }
 
+std::pair<int, InputFiles> check_files(const InputFiles &fnames) {
+    int bad = 0;
+    InputFiles failed;
+    for (const auto &fname : fnames) {
+        auto f = std::make_unique<std::ifstream>(fname);
+        if (!f->good()) {
+            ++bad;
+            failed.push_back(fname);
+        }
+        f->close();
+    }
+    return make_pair(bad, failed);
+}
+
 std::pair<int, InputFiles> InputData::check_input() const {
     int bad = 0;
     InputFiles failed;
 
-    for (const auto &s : signal_) {
-        auto f = std::make_unique<std::ifstream>(s);
-        if (!f->good()) {
-            ++bad;
-            failed.push_back(s);
-        }
-        f->close();
+    // check signal files.
+    auto f_sig = check_files(signal_);
+    bad += f_sig.first;
+    failed.insert(failed.end(), f_sig.second.begin(), f_sig.second.end());
+
+    // check background files.
+    for (const auto &bs : background_) {
+        auto f_bg = check_files(bs.second);
+        bad += f_bg.first;
+        failed.insert(failed.end(), f_bg.second.begin(), f_bg.second.end());
     }
 
-    for (const auto &bs : background_) {
-        for (const auto &b : bs.second) {
-            auto f = std::make_unique<std::ifstream>(b);
-            if (!f->good()) {
-                ++bad;
-                failed.push_back(b);
-            }
-            f->close();
-        }
-    }
+    // check template files.
+    InputFiles tmp_files;
+    for (const auto &t : templates_) { tmp_files.push_back(t.file_name()); }
+    auto f_tmp = check_files(tmp_files);
+    bad += f_tmp.first;
+    failed.insert(failed.end(), f_tmp.second.begin(), f_tmp.second.end());
 
     return std::make_pair(bad, failed);
 }
