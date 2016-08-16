@@ -8,7 +8,6 @@
 
 #include "gg2aa.h"
 #include <fstream>
-#include <iomanip>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -56,33 +55,32 @@ int main(int argc, char *argv[]) {
     // Fill histograms and set scales (caution: info will be updated).
     hists->fill(data, info);
     info->show_bg_summary(to_out);  // Print out information of backgrounds.
-    data.set_templates(*info);      // Set all the templates.
+
+    message(appname, "setting templates ...", to_out);
+    data.set_templates(*info);
+    message(appname, "... done.", to_out);
 
     // Create the pseudo-experiment histogram.
-    message(appname, "generating pseudo-experiment data...", to_out);
+    message(appname, "generating pseudo-experiment data ...", to_out);
     const auto h_pseudo = hists->pseudo_experiment(*info);
     message(appname, "... done.", to_out);
 
     // Open output file.
     const string outfile_name(argv[2]);
-    auto outfile = std::make_unique<std::ofstream>(outfile_name);
+    auto outfile = std::make_shared<std::ofstream>(outfile_name);
     if (!outfile->good()) {
         return errMsg(appname, "failed to create `" + outfile_name + "'.");
     }
     message(appname, "output will be saved to `" + outfile_name + "'.", to_out);
 
     // Perform fitting and obtain the chi square.
-    message(appname, "starting fitting...", to_out);
+    message(appname, "performing fitting ...", to_out);
     for (const auto &t : data.templates()) {
         const gg2aa::FitFunction ffnc(t, *info);  // Prepare the fit function
                                                   // based on the template.
         auto fit = gg2aa::Fit(ffnc);
         const double chi2 = fit.get_chisquare(h_pseudo);
-        *outfile << std::fixed << std::setw(9) << std::setprecision(2)
-                 << t.mass_width().first;
-        *outfile << std::setw(8) << std::setprecision(2)
-                 << t.mass_width().second;
-        *outfile << std::setw(12) << std::setprecision(4) << chi2 << '\n';
+        writeChiSquare(t, chi2, outfile);
     }
     outfile->close();
     message(appname, "... gracefully done.", to_out);
