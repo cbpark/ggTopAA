@@ -36,7 +36,7 @@ HEAD    := $(filter-out $(EXESRC:.cc=.h),$(wildcard $(SRCDIR)/*.h))
 
 .PHONY: all build show clean
 
-all: $(LIB) $(BINDIR)/gg2aa
+all: $(BINDIR)/gg2aa
 
 $(BINDIR)/gg2aa: build $(LIB) $(SRCDIR)/gg2aa.o
 	$(CXX) $(LDFLAGS) -o $@ $(SRCDIR)/gg2aa.o $(LIB) $(LIBS)
