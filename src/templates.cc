@@ -12,6 +12,7 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include "Math/SpecFuncMathMore.h"
 #include "histogram.h"
 #include "info.h"
 #include "utils.h"
@@ -59,6 +60,26 @@ double Template::norm() const {
                    range_.low(), range_.up(), maa_interval_);
 }
 
+double hyp2f1(double a, double b, double c, const double z) {
+    double p = 1.0;
+    if (a < -10.0 || b < -10.0) {
+        p = std::pow(1 - z, c - a - b);
+        a = c - a;
+        b = c - b;
+    }
+    return p * ROOT::Math::hyperg(a, b, c, z);
+}
+
+double func_maa3(const Template &t, const double x, const double a,
+                 const double p) {
+    const double x0 = t.range_.low() / t.sqrt_s_,
+                 x1 = t.range_.up() / t.sqrt_s_;
+    const double xx1 = -a, xx2 = 1.0 / p, xx3 = 1.0 + xx2;
+    const double s = x1 * hyp2f1(xx1, xx2, xx3, std::pow(x0, p)) -
+                     x0 * hyp2f1(xx1, xx2, xx3, std::pow(x1, p));
+    return std::pow(1 - std::pow(x, p), a) / s;
+}
+
 double func_maa4(const Template &t, const double x, const double a) {
     const double x0 = t.range_.low() / t.sqrt_s_,
                  x1 = t.range_.up() / t.sqrt_s_;
@@ -69,8 +90,8 @@ double func_maa4(const Template &t, const double x, const double a) {
     };
 
     double s = 3.0 / (a1 * a2 * (3.0 + a));
-    s *= func(x0, a1) * (2 + a1 * (2 + a2 * z0) * z0) -
-         func(x1, a1) * (2 + a1 * (2 + a2 * z1) * z1);
+    s *= func(x0, a1) * (2.0 + a1 * (2.0 + a2 * z0) * z0) -
+         func(x1, a1) * (2.0 + a1 * (2.0 + a2 * z1) * z1);
     return func(x, a) / s;
 }
 }  // namespace gg2aa
