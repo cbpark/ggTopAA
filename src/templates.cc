@@ -75,8 +75,8 @@ double func_maa3(const Template &t, const double x, const double a,
     const double x0 = t.range_.low() / t.sqrt_s_,
                  x1 = t.range_.up() / t.sqrt_s_;
     const double xx1 = -a, xx2 = 1.0 / p, xx3 = 1.0 + xx2;
-    const double s = x1 * hyp2f1(xx1, xx2, xx3, std::pow(x0, p)) -
-                     x0 * hyp2f1(xx1, xx2, xx3, std::pow(x1, p));
+    const double s = x1 * hyp2f1(xx1, xx2, xx3, std::pow(x1, p)) -
+                     x0 * hyp2f1(xx1, xx2, xx3, std::pow(x0, p));
     return std::pow(1 - std::pow(x, p), a) / s;
 }
 
