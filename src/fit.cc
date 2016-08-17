@@ -23,7 +23,7 @@ double FitFunction::operator()(double *x, double *p) const {
 }
 
 void Fit::set_parameters(const Info &info) {
-    pfnc_->SetParNames("a", "b");
+    pfnc_->SetParNames("a1", "b");
     pfnc_->SetParameters(info.a1_in, info.b_in);
     pfnc_->SetParLimits(0, -1.0e4, 1.0e4);
     pfnc_->SetParLimits(1, 0.0, 1.0);
