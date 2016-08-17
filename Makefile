@@ -23,7 +23,6 @@ endif
 CXXFLAGS += -std=c++14 -pedantic
 LDFLAGS  += $(shell root-config --ldflags)
 LIBS      = $(shell root-config --libs)
-LIBS     += -lMathMore
 
 # Targets
 EXE     := $(BINDIR)/gg2aa

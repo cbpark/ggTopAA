@@ -17,12 +17,12 @@
 #include "info.h"
 #include "parsers.h"
 
-using std::string;
+using std::to_string;
 
 const double BINSIZE_SIG = 0.25;  // the number of bins will be 4 * (max - min).
 
 int main(int argc, char *argv[]) {
-    const string appname("gg2aa");
+    const std::string appname("gg2aa");
     if (argc != 3) {
         std::cerr << "Usage: " << appname << " input output\n"
                   << "    input - input file\n"
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
     message(appname, "... done.", to_out);
 
     // Open output file.
-    const string outfile_name(argv[2]);
+    const std::string outfile_name(argv[2]);
     auto outfile = std::make_shared<std::ofstream>(outfile_name);
     if (!outfile->good()) {
         return errMsg(appname, "failed to create `" + outfile_name + "'.");
@@ -80,6 +80,10 @@ int main(int argc, char *argv[]) {
                                                   // based on the template.
         auto fit = gg2aa::Fit(ffnc);
         const double chi2 = fit.get_chisquare(h_pseudo);
+        message(appname, "mass = " + to_string(t.mass_width().first) +
+                             ", width = " + to_string(t.mass_width().second) +
+                             ", chi2 = " + to_string(chi2),
+                to_out);
         writeChiSquare(t, chi2, outfile);
     }
     outfile->close();

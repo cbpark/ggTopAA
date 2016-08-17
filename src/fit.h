@@ -40,7 +40,7 @@ public:
     Fit() = delete;
     explicit Fit(const FitFunction &f)
         : pfnc_(std::make_shared<TF1>("pfnc", f, f.range().low(),
-                                      f.range().up(), 3)) {
+                                      f.range().up(), 2)) {
         set_parameters(f.info());
     }
     ~Fit() {}
@@ -48,13 +48,8 @@ public:
     /** Set parameters for fitting. */
     void set_parameters(const Info &info);
 
-    double get_chisquare(std::shared_ptr<TH1D> hist) {
-        hist->Fit(pfnc_.get(), "IN");  // "I": use integral of function in bin
-                                       // instead of value at bin center.
-                                       // "N": do not store the graphics
-                                       // function, do not draw.
-        return pfnc_->GetChisquare();
-    }
+    /** Perform fitting histogram and return chi square. */
+    double get_chisquare(std::shared_ptr<TH1D> hist);
 
 private:
     std::shared_ptr<TF1> pfnc_;

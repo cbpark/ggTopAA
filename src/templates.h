@@ -34,7 +34,8 @@ public:
     /** Normalization factor for the given template data. */
     double norm() const;
 
-    friend double fATLAS(const Template &t, double x, double a1, double a2);
+    /** \\int (1-x^(1/3))^a */
+    friend double func_maa4(const Template &t, const double x, const double a);
 
 private:
     const std::string fname_;

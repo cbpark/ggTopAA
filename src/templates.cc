@@ -10,8 +10,8 @@
 #include <cmath>
 #include <fstream>
 #include <functional>
+#include <iostream>
 #include <memory>
-#include "Math/SpecFuncMathMore.h"
 #include "histogram.h"
 #include "info.h"
 #include "utils.h"
@@ -59,39 +59,18 @@ double Template::norm() const {
                    range_.low(), range_.up(), maa_interval_);
 }
 
-double poly_cbrt(double x, double a1, double a2) {
-    return std::pow((1.0 - std::cbrt(x)), a1) * std::pow(x, a2);
-}
+double func_maa4(const Template &t, const double x, const double a) {
+    const double x0 = t.range_.low() / t.sqrt_s_,
+                 x1 = t.range_.up() / t.sqrt_s_;
+    const double z0 = std::cbrt(x0), z1 = std::cbrt(x1);
+    const double a1 = 1.0 + a, a2 = 2.0 + a;
+    auto func = [](const double xx, const double aa) {
+        return std::pow(1 - std::cbrt(xx), aa);
+    };
 
-double fATLAS(const Template &t, double x, double a1, double a2) {
-    const double xmax = t.range_.up() / t.sqrt_s_,
-                 xmin = t.range_.low() / t.sqrt_s_;
-    double sATLAS = 0.0;
-
-    if (std::fabs(1.0 + a2) < 1.0e-3) {
-        const int nbins = 4 * t.range_.width();
-        const double delta = (xmax - xmin) / nbins;
-        for (int i = 0; i <= nbins; ++i) {
-            sATLAS += poly_cbrt(xmin + delta * i, a1, a2);
-        }
-        sATLAS *= delta;
-    } else {
-        double a = -a1, b = 3.0 * (1.0 + a2), c = 4.0 + 3.0 * a2;
-        const double cbrt_xmax = std::cbrt(xmax), cbrt_xmin = std::cbrt(xmin);
-        double pf1 = 1.0, pf2 = 1.0;
-        if (a < -10.0 || b < -10.0) {
-            pf1 = std::pow(1.0 - cbrt_xmax, c - b - a);
-            pf2 = std::pow(1.0 - cbrt_xmin, c - b - a);
-            a = c - a;
-            b = c - b;
-        }
-        const double hyp1 = pf1 * ROOT::Math::hyperg(a, b, c, cbrt_xmax);
-        const double hyp2 = pf2 * ROOT::Math::hyperg(a, b, c, cbrt_xmin);
-
-        sATLAS = (std::pow(xmax, 1.0 + a2) * hyp1 -
-                std::pow(xmin, 1.0 + a2) * hyp2) /
-               (1.0 + a2);
-    }
-    return poly_cbrt(x, a1, a2) / sATLAS;
+    double s = 3.0 / (a1 * a2 * (3.0 + a));
+    s *= func(x0, a1) * (2 + a1 * (2 + a2 * z0) * z0) -
+         func(x1, a1) * (2 + a1 * (2 + a2 * z1) * z1);
+    return func(x, a) / s;
 }
 }  // namespace gg2aa
