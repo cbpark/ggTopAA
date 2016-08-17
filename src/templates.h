@@ -34,7 +34,7 @@ public:
     /** Normalization factor for the given template data. */
     double norm() const;
 
-    friend double fATL(const Template &t, double x, double a1, double a2);
+    friend double fATLAS(const Template &t, double x, double a1, double a2);
 
 private:
     const std::string fname_;

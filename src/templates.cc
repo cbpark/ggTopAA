@@ -63,18 +63,18 @@ double poly_cbrt(double x, double a1, double a2) {
     return std::pow((1.0 - std::cbrt(x)), a1) * std::pow(x, a2);
 }
 
-double fATL(const Template &t, double x, double a1, double a2) {
+double fATLAS(const Template &t, double x, double a1, double a2) {
     const double xmax = t.range_.up() / t.sqrt_s_,
                  xmin = t.range_.low() / t.sqrt_s_;
-    double sATL = 0.0;
+    double sATLAS = 0.0;
 
     if (std::fabs(1.0 + a2) < 1.0e-3) {
         const int nbins = 4 * t.range_.width();
         const double delta = (xmax - xmin) / nbins;
         for (int i = 0; i <= nbins; ++i) {
-            sATL += poly_cbrt(xmin + delta * i, a1, a2);
+            sATLAS += poly_cbrt(xmin + delta * i, a1, a2);
         }
-        sATL *= delta;
+        sATLAS *= delta;
     } else {
         double a = -a1, b = 3.0 * (1.0 + a2), c = 4.0 + 3.0 * a2;
         const double cbrt_xmax = std::cbrt(xmax), cbrt_xmin = std::cbrt(xmin);
@@ -88,10 +88,10 @@ double fATL(const Template &t, double x, double a1, double a2) {
         const double hyp1 = pf1 * ROOT::Math::hyperg(a, b, c, cbrt_xmax);
         const double hyp2 = pf2 * ROOT::Math::hyperg(a, b, c, cbrt_xmin);
 
-        sATL = (std::pow(xmax, 1.0 + a2) * hyp1 -
+        sATLAS = (std::pow(xmax, 1.0 + a2) * hyp1 -
                 std::pow(xmin, 1.0 + a2) * hyp2) /
                (1.0 + a2);
     }
-    return poly_cbrt(x, a1, a2) / sATL;
+    return poly_cbrt(x, a1, a2) / sATLAS;
 }
 }  // namespace gg2aa
