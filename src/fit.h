@@ -51,9 +51,11 @@ public:
 
     double chi2() const { return chi2_; }
     std::vector<double> parameter() const { return par_; }
-    void set_result(const double chi2, const std::vector<double> &par) {
-        chi2_ = chi2;
+    void set_result(const std::vector<double> &par, const double chi2,
+                    const unsigned int ndf) {
         par_ = par;
+        chi2_ = chi2;
+        chi2_ndf_ = chi2_ / ndf;
     }
     void write(std::shared_ptr<std::ostream> os) const;
 
@@ -61,6 +63,7 @@ private:
     const double mass_;
     const double width_;
     double chi2_;
+    double chi2_ndf_;
     std::vector<double> par_;
 };
 
@@ -70,12 +73,12 @@ public:
     explicit Fit(const FitFunction &f)
         : pfnc_(std::make_shared<TF1>("pfnc", f, f.range().low(),
                                       f.range().up(), 4)) {
-        set_parameters(f.info());
+        init_parameters(f.info());
     }
     ~Fit() {}
 
-    /** Set parameters for fitting. */
-    void set_parameters(const Info &info);
+    /** Fit function object. */
+    std::shared_ptr<TF1> pfnc() { return pfnc_; }
 
     /**
      * Perform fitting histogram and return chi square and
@@ -85,7 +88,13 @@ public:
 
 private:
     std::shared_ptr<TF1> pfnc_;
+    void init_parameters(const Info &info);
 };
+
+Fit mkFit(const Template &t, const Info &info, const int fit_mode);
+
+Fit fit3(const Template &t, const Info &info);
+Fit fit4(const Template &t, const Info &info);
 }  // namespace gg2aa
 
 #endif  // SRC_FIT_H_

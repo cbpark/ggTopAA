@@ -33,19 +33,16 @@ void FitResult::write(std::shared_ptr<std::ostream> os) const {
     *os << std::setw(9) << std::setprecision(2) << mass_;
     *os << std::setw(8) << std::setprecision(2) << width_;
     *os << std::setw(12) << std::setprecision(4) << chi2_;
+    *os << std::setw(11) << std::setprecision(4) << chi2_ndf_;
     for (const auto p : par_) {
         *os << std::setw(11) << std::setprecision(4) << p;
     }
     *os << '\n';
 }
 
-void Fit::set_parameters(const Info &info) {
+void Fit::init_parameters(const Info &info) {
     pfnc_->SetParNames("a1", "a2", "p", "kgg");
     pfnc_->SetParameters(info.a1_in, info.a2_in, info.p_in, info.kgg_in);
-    pfnc_->SetParLimits(0, 0, 1000);
-    pfnc_->FixParameter(1, 0);
-    pfnc_->SetParLimits(2, 1.0e-9, 10);
-    pfnc_->SetParLimits(3, 0, 1);
 }
 
 void Fit::do_fit(std::shared_ptr<TH1D> hist,
@@ -64,6 +61,35 @@ void Fit::do_fit(std::shared_ptr<TH1D> hist,
     int npar = r->NPar();
     std::vector<double> par;
     for (int i = 0; i != npar; ++i) { par.push_back(r->Parameter(i)); }
-    result->set_result(r->Chi2(), par);
+    result->set_result(par, r->Chi2(), r->Ndf());
+}
+
+Fit fit3(const Template &t, const Info &info) {
+    const FitFunction ffnc(t, info, f_bg3);
+    auto fit = Fit(ffnc);
+    fit.pfnc()->SetParLimits(0, 0, 1000);
+    fit.pfnc()->FixParameter(1, 0);
+    fit.pfnc()->SetParLimits(2, 1.0e-9, 10);
+    fit.pfnc()->SetParLimits(3, 0, 1);
+    return fit;
+}
+
+Fit fit4(const Template &t, const Info &info) {
+    const FitFunction ffnc(t, info, f_bg4);
+    auto fit = Fit(ffnc);
+    fit.pfnc()->SetParLimits(0, 0, 10000);
+    fit.pfnc()->FixParameter(1, 0);
+    fit.pfnc()->FixParameter(2, 0);
+    fit.pfnc()->SetParLimits(3, 0, 1);
+    return fit;
+}
+
+Fit mkFit(const Template &t, const Info &info, const int fit_choice) {
+    switch (fit_choice) {
+    case 3:
+        return fit3(t, info);
+    default:
+        return fit4(t, info);
+    }
 }
 }  // namespace gg2aa

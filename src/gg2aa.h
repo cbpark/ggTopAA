@@ -12,7 +12,19 @@
 #include <iostream>
 #include <memory>
 #include <string>
-#include "templates.h"
+
+int howToUse(const std::string &appname) {
+    std::cerr << "Usage: " << appname << " input output fit_choice\n\n"
+              << "    input      - input file\n"
+              << "    output     - output file\n"
+              << "    fit_choice - choice of fit function (1, 2, 3, 4)\n\n"
+              << "    ex) " << appname << " input.yml output.dat 4\n";
+    return 1;
+}
+
+bool correctFitMode(const int n) {
+    return n == 1 || n == 2 || n == 3 || n == 4;
+}
 
 int failedToRead(const std::string &appname, const std::string &fname) {
     std::cerr << appname << ": failed to read `" << fname << "'.\n";
@@ -30,7 +42,7 @@ void message(const std::string &appname, const std::string &msg,
 }
 
 void write_header(std::shared_ptr<std::ostream> os) {
-    *os << "# mass, width, chi2, parameters (a1, a2, p, kgg)\n";
+    *os << "# mass, width, chi2, chi2/ndf, parameters (a1, a2, p, kgg)\n";
 }
 
 #endif  // SRC_GG2AA_H_

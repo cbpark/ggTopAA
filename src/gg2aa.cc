@@ -7,6 +7,7 @@
  */
 
 #include "gg2aa.h"
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -24,13 +25,13 @@ const double BINSIZE_SIG = 0.25;  // the number of bins will be 4 * (max - min).
 
 int main(int argc, char *argv[]) {
     const std::string appname("gg2aa");
-    if (argc != 3) {
-        std::cerr << "Usage: " << appname << " input output\n"
-                  << "    input - input file\n"
-                  << "    output - output file\n"
-                  << "    ex) " << appname << " input.yml output.dat\n";
-        return 1;
+    if (argc != 4) { return howToUse(appname); }
+
+    const int fit_choice = std::atoi(argv[3]);
+    if (!correctFitMode(fit_choice)) {
+        return errMsg(appname, "fitmode must be in (1, 2, 3, 4).");
     }
+
     auto infile = std::make_unique<std::ifstream>(argv[1]);
     if (!infile->good()) { return failedToRead(appname, argv[1]); }
     const auto to_out = &std::cout;  // information will be displayed in screen.
@@ -81,10 +82,8 @@ int main(int argc, char *argv[]) {
         message(appname, "template mass = " + to_string(t.mass_width().first) +
                              ", width = " + to_string(t.mass_width().second),
                 to_out);
-        // Prepare the fit function based on the template.
-        const gg2aa::FitFunction ffnc(t, *info, gg2aa::f_bg3);
         auto result = std::make_shared<gg2aa::FitResult>(t);
-        auto fit = gg2aa::Fit(ffnc);
+        auto fit = gg2aa::mkFit(t, *info, fit_choice);
         fit.do_fit(h_pseudo, result);
         result->write(outfile);
     }
