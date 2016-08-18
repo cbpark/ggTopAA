@@ -33,7 +33,9 @@ void Fit::set_parameters(const Info &info) {
 }
 
 double Fit::get_chisquare(std::shared_ptr<TH1D> hist) {
-    ROOT::Math::MinimizerOptions::SetDefaultMinimizer("Minuit2", "Minimize");
+    ROOT::Math::MinimizerOptions opt;
+    opt.SetDefaultMinimizer("Minuit2", "Minimize");
+    opt.SetTolerance(0.001);
     hist->Fit(pfnc_.get(), "IN");  // "I": use integral of function in bin
                                    // instead of value at bin center.
                                    // "N": do not store the graphics
