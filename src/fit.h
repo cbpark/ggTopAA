@@ -9,6 +9,7 @@
 #ifndef SRC_FIT_H_
 #define SRC_FIT_H_
 
+#include <functional>
 #include <memory>
 #include <ostream>
 #include <vector>
@@ -19,11 +20,14 @@
 #include "utils.h"
 
 namespace gg2aa {
+using FitFuncType = std::function<double(
+    const Template &, const double, const double, const double, const double)>;
+
 class FitFunction {
 public:
     FitFunction() = delete;
-    FitFunction(const Template &t, const Info &info)
-        : template_(t), norm_(t.norm()), info_(info) {}
+    FitFunction(const Template &t, const Info &info, const FitFuncType &func)
+        : template_(t), norm_(t.norm()), info_(info), func_(func) {}
     ~FitFunction() {}
 
     Info info() const { return info_; }
@@ -35,6 +39,7 @@ private:
     const Template template_;
     const double norm_;
     const Info info_;
+    FitFuncType func_;
 };
 
 class FitResult {

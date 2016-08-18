@@ -23,7 +23,7 @@ double FitFunction::operator()(double *x, double *p) const {
     const double sqrt_s = info_.rs;
     double f = info_.nev() / info_.num_bins() * template_.range().width();
     f *= (1.0 - p[3]) / sqrt_s *
-        func_maa3(template_, x[0] / sqrt_s, p[0], p[1], p[2]) +
+             func_(template_, x[0] / sqrt_s, p[0], p[1], p[2]) +
          p[3] * fgg;
     return f;
 }

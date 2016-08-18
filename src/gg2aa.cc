@@ -16,6 +16,7 @@
 #include "histogram.h"
 #include "info.h"
 #include "parsers.h"
+#include "templates.h"
 
 using std::to_string;
 
@@ -80,8 +81,8 @@ int main(int argc, char *argv[]) {
         message(appname, "template mass = " + to_string(t.mass_width().first) +
                              ", width = " + to_string(t.mass_width().second),
                 to_out);
-        const gg2aa::FitFunction ffnc(t, *info);  // Prepare the fit function
-                                                  // based on the template.
+        // Prepare the fit function based on the template.
+        const gg2aa::FitFunction ffnc(t, *info, gg2aa::f_bg3);
         auto result = std::make_shared<gg2aa::FitResult>(t);
         auto fit = gg2aa::Fit(ffnc);
         fit.do_fit(h_pseudo, result);

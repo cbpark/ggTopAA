@@ -35,11 +35,11 @@ public:
     double norm() const;
 
     /** \\int (1-x^p)^a1 */
-    friend double func_maa3(const Template &t, const double x, const double a1,
-                            const double a2, const double p);
+    friend double f_bg3(const Template &t, const double x, const double a1,
+                        const double a2, const double p);
     /** \\int (1-x^(1/3))^a1 */
-    friend double func_maa4(const Template &t, const double x, const double a1,
-                            const double a2, const double p);
+    friend double f_bg4(const Template &t, const double x, const double a1,
+                        const double a2, const double p);
 
 private:
     const std::string fname_;
@@ -51,6 +51,12 @@ private:
 };
 
 using Templates = std::vector<Template>;
+
+double f_bg3(const gg2aa::Template &, const double, const double, const double,
+             const double);
+
+double f_bg4(const gg2aa::Template &, const double, const double, const double,
+             const double);
 }  // namespace gg2aa
 
 #endif  // SRC_TEMPLATES_H_

@@ -61,8 +61,8 @@ double Template::norm() const {
                    range_.low(), range_.up(), maa_interval_);
 }
 
-double func_maa3(const Template &t, const double x, const double a1,
-                 const double a2, const double p) {
+double f_bg3(const Template &t, const double x, const double a1,
+             const double a2, const double p) {
     ignore(a2);
     const double x0 = t.range_.low() / t.sqrt_s_,
                  x1 = t.range_.up() / t.sqrt_s_;
@@ -72,8 +72,8 @@ double func_maa3(const Template &t, const double x, const double a1,
     return std::pow(1 - std::pow(x, p), a1) / s;
 }
 
-double func_maa4(const Template &t, const double x, const double a1,
-                 const double a2, const double p) {
+double f_bg4(const Template &t, const double x, const double a1,
+             const double a2, const double p) {
     ignore(a2);
     ignore(p);
     const double x0 = t.range_.low() / t.sqrt_s_,
