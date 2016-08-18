@@ -72,6 +72,7 @@ int main(int argc, char *argv[]) {
         return errMsg(appname, "failed to create `" + outfile_name + "'.");
     }
     message(appname, "output will be saved to `" + outfile_name + "'.", to_out);
+    write_header(outfile);
 
     // Perform fitting and obtain the chi square.
     message(appname, "performing fitting ...", to_out);
@@ -81,9 +82,10 @@ int main(int argc, char *argv[]) {
                 to_out);
         const gg2aa::FitFunction ffnc(t, *info);  // Prepare the fit function
                                                   // based on the template.
+        auto result = std::make_shared<gg2aa::FitResult>(t);
         auto fit = gg2aa::Fit(ffnc);
-        const double chi2 = fit.get_chisquare(h_pseudo);
-        writeChiSquare(t, chi2, outfile);
+        fit.do_fit(h_pseudo, result);
+        result->write(outfile);
     }
     outfile->close();
     message(appname, "... gracefully done.", to_out);

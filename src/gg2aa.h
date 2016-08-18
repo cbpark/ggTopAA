@@ -9,7 +9,6 @@
 #ifndef SRC_GG2AA_H_
 #define SRC_GG2AA_H_
 
-#include <iomanip>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -30,12 +29,8 @@ void message(const std::string &appname, const std::string &msg,
     *out << appname << ": " << msg << '\n';
 }
 
-void writeChiSquare(const gg2aa::Template &t, double chi2,
-                    std::shared_ptr<std::ostream> os) {
-    *os << std::fixed;
-    *os << std::setw(9) << std::setprecision(2) << t.mass_width().first;
-    *os << std::setw(8) << std::setprecision(2) << t.mass_width().second;
-    *os << std::setw(12) << std::setprecision(4) << chi2 << '\n';
+void write_header(std::shared_ptr<std::ostream> os) {
+    *os << "# mass, width, chi2, parameters (a1, a2, p, kgg, ...)\n";
 }
 
 #endif  // SRC_GG2AA_H_

@@ -7,8 +7,12 @@
  */
 
 #include "fit.h"
+#include <iomanip>
 #include <memory>
+#include <ostream>
+#include <vector>
 #include "Math/MinimizerOptions.h"
+#include "TFitResult.h"
 #include "TH1D.h"
 #include "info.h"
 #include "templates.h"
@@ -24,6 +28,17 @@ double FitFunction::operator()(double *x, double *p) const {
     return f;
 }
 
+void FitResult::write(std::shared_ptr<std::ostream> os) const {
+    *os << std::fixed;
+    *os << std::setw(9) << std::setprecision(2) << mass_;
+    *os << std::setw(8) << std::setprecision(2) << width_;
+    *os << std::setw(12) << std::setprecision(4) << chi2_;
+    for (const auto p : par_) {
+        *os << std::setw(11) << std::setprecision(4) << p;
+    }
+    *os << '\n';
+}
+
 void Fit::set_parameters(const Info &info) {
     pfnc_->SetParNames("a1", "p", "b");
     pfnc_->SetParameters(info.a1_in, 1.0 / 3, info.b_in);
@@ -32,14 +47,22 @@ void Fit::set_parameters(const Info &info) {
     pfnc_->SetParLimits(2, 0, 1);
 }
 
-double Fit::get_chisquare(std::shared_ptr<TH1D> hist) {
+void Fit::do_fit(std::shared_ptr<TH1D> hist,
+                 std::shared_ptr<FitResult> result) {
     ROOT::Math::MinimizerOptions opt;
     opt.SetDefaultMinimizer("Minuit2", "Minimize");
+    opt.SetMaxFunctionCalls(1000000);
+    opt.SetMaxIterations(100000);
     opt.SetTolerance(0.001);
-    hist->Fit(pfnc_.get(), "IN");  // "I": use integral of function in bin
-                                   // instead of value at bin center.
-                                   // "N": do not store the graphics
-                                   // function, do not draw.
-    return pfnc_->GetChisquare();
+
+    // - "I": use integral of function in bin instead of value at bin center.
+    // - "N": do not store the graphics function, do not draw.
+    // - "S": the result of the fit is returned in the TFitResultPtr.
+    auto r = hist->Fit(pfnc_.get(), "INS");
+
+    int npar = r->NPar();
+    std::vector<double> par;
+    for (int i = 0; i != npar; ++i) { par.push_back(r->Parameter(i)); }
+    result->set_result(r->Chi2(), par);
 }
 }  // namespace gg2aa
