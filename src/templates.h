@@ -34,11 +34,12 @@ public:
     /** Normalization factor for the given template data. */
     double norm() const;
 
-    /** \\int (1-x^p)^a */
-    friend double func_maa3(const Template &t, const double x, const double a,
-                            const double p);
-    /** \\int (1-x^(1/3))^a */
-    friend double func_maa4(const Template &t, const double x, const double a);
+    /** \\int (1-x^p)^a1 */
+    friend double func_maa3(const Template &t, const double x, const double a1,
+                            const double a2, const double p);
+    /** \\int (1-x^(1/3))^a1 */
+    friend double func_maa4(const Template &t, const double x, const double a1,
+                            const double a2, const double p);
 
 private:
     const std::string fname_;

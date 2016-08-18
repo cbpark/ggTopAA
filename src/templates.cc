@@ -61,28 +61,32 @@ double Template::norm() const {
                    range_.low(), range_.up(), maa_interval_);
 }
 
-double func_maa3(const Template &t, const double x, const double a,
-                 const double p) {
+double func_maa3(const Template &t, const double x, const double a1,
+                 const double a2, const double p) {
+    ignore(a2);
     const double x0 = t.range_.low() / t.sqrt_s_,
                  x1 = t.range_.up() / t.sqrt_s_;
-    const double xx1 = -a, xx2 = 1.0 / p, xx3 = 1.0 + xx2;
-    const double s = x1 * hyp2f1(xx1, xx2, xx3, std::pow(x1, p)) -
-                     x0 * hyp2f1(xx1, xx2, xx3, std::pow(x0, p));
-    return std::pow(1 - std::pow(x, p), a) / s;
+    const double b1 = -a1, b2 = 1.0 / p, b3 = 1.0 + b2;
+    const double s = x1 * hyp2f1(b1, b2, b3, std::pow(x1, p)) -
+                     x0 * hyp2f1(b1, b2, b3, std::pow(x0, p));
+    return std::pow(1 - std::pow(x, p), a1) / s;
 }
 
-double func_maa4(const Template &t, const double x, const double a) {
+double func_maa4(const Template &t, const double x, const double a1,
+                 const double a2, const double p) {
+    ignore(a2);
+    ignore(p);
     const double x0 = t.range_.low() / t.sqrt_s_,
                  x1 = t.range_.up() / t.sqrt_s_;
     const double z0 = std::cbrt(x0), z1 = std::cbrt(x1);
-    const double a1 = 1.0 + a, a2 = 2.0 + a;
-    auto func = [](const double xx, const double aa) {
-        return std::pow(1 - std::cbrt(xx), aa);
+    const double b1 = 1 + a1, b2 = 2 + a1;
+    auto func = [](const double y, const double b) {
+        return std::pow(1 - std::cbrt(y), b);
     };
 
-    double s = 3.0 / (a1 * a2 * (3.0 + a));
-    s *= func(x0, a1) * (2.0 + a1 * (2.0 + a2 * z0) * z0) -
-         func(x1, a1) * (2.0 + a1 * (2.0 + a2 * z1) * z1);
-    return func(x, a) / s;
+    double s = 3.0 / (b1 * b2 * (3 + a1));
+    s *= func(x0, b1) * (2 + b1 * (2 + b2 * z0) * z0) -
+         func(x1, b1) * (2 + b1 * (2 + b2 * z1) * z1);
+    return func(x, a1) / s;
 }
 }  // namespace gg2aa

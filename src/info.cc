@@ -20,7 +20,7 @@ void Info::show(std::ostream *out) const {
     *out << "--- Input information ---\n";
     *out << "  " << get_string("Rs", rs * 1.0e-3) << " TeV, "
          << get_string("Lum", lum * 1.0e-3) << " ab^{-1}, "
-         << get_string("Eff", eff) << ", " << get_string("Kg", kg) << "\n";
+         << get_string("Eff", eff) << ", " << get_string("Kgg", kgg) << "\n";
     *out << "  " << get_string("sigDir", sig_direct) << ", "
          << get_string("sigOne", sig_one_frag) << ", "
          << get_string("sigTwo", sig_two_frag) << "\n";
@@ -28,7 +28,8 @@ void Info::show(std::ostream *out) const {
          << "(xlow, xup) = "
          << "(" << xlow << ", " << xup << ")\n";
     *out << "  fit parameters: " << get_string("a1", a1_in) << ", "
-         << get_string("a2", a2_in) << ", " << get_string("b", b_in) << "\n";
+         << get_string("a2", a2_in) << ", " << get_string("p", p_in) << ", "
+         << get_string("kgg", kgg_in) << "\n";
 }
 
 void Info::show_bg_summary(std::ostream *out) const {

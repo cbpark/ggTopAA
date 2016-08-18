@@ -111,10 +111,10 @@ Info getInfo(const InputData &data) {
         return info;
     }
 
-    *f >> info.rs >> info.lum >> info.eff >> info.kg;
+    *f >> info.rs >> info.lum >> info.eff >> info.kgg;
     *f >> info.sig_direct >> info.sig_one_frag >> info.sig_two_frag;
     *f >> info.bin_size >> info.xlow >> info.xup;
-    *f >> info.a1_in >> info.a2_in >> info.b_in;
+    *f >> info.a1_in >> info.a2_in >> info.p_in >> info.kgg_in;
     return info;
 }
 }  // namespace gg2aa

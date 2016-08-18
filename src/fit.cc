@@ -22,9 +22,9 @@ double FitFunction::operator()(double *x, double *p) const {
     const double fgg = template_.f_maa(x[0]) / norm_;
     const double sqrt_s = info_.rs;
     double f = info_.nev() / info_.num_bins() * template_.range().width();
-    f *= (1.0 - p[2]) / sqrt_s *
-             func_maa3(template_, x[0] / sqrt_s, p[0], p[1]) +
-         p[2] * fgg;
+    f *= (1.0 - p[3]) / sqrt_s *
+        func_maa3(template_, x[0] / sqrt_s, p[0], p[1], p[2]) +
+         p[3] * fgg;
     return f;
 }
 
@@ -40,11 +40,12 @@ void FitResult::write(std::shared_ptr<std::ostream> os) const {
 }
 
 void Fit::set_parameters(const Info &info) {
-    pfnc_->SetParNames("a1", "p", "b");
-    pfnc_->SetParameters(info.a1_in, 1.0 / 3, info.b_in);
+    pfnc_->SetParNames("a1", "a2", "p", "kgg");
+    pfnc_->SetParameters(info.a1_in, info.a2_in, info.p_in, info.kgg_in);
     pfnc_->SetParLimits(0, 0, 1000);
-    pfnc_->SetParLimits(1, 1.0e-9, 10);
-    pfnc_->SetParLimits(2, 0, 1);
+    pfnc_->FixParameter(1, 0);
+    pfnc_->SetParLimits(2, 1.0e-9, 10);
+    pfnc_->SetParLimits(3, 0, 1);
 }
 
 void Fit::do_fit(std::shared_ptr<TH1D> hist,

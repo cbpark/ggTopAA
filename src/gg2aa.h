@@ -30,7 +30,7 @@ void message(const std::string &appname, const std::string &msg,
 }
 
 void write_header(std::shared_ptr<std::ostream> os) {
-    *os << "# mass, width, chi2, parameters (a1, a2, p, kgg, ...)\n";
+    *os << "# mass, width, chi2, parameters (a1, a2, p, kgg)\n";
 }
 
 #endif  // SRC_GG2AA_H_
