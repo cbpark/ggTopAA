@@ -11,6 +11,6 @@
 
 extern "C" {
 double hyp2f1(double a, double b, double c, double x);
-};
+}
 
 #endif  // CEPHES_CEPHES_HYP2F1_H_

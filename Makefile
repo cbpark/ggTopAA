@@ -62,6 +62,8 @@ show:
 	@echo "UNAME    = $(UNAME)"
 	@echo "CXX      = $(CXX)"
 	@echo "CXXFLAGS = $(CXXFLAGS)"
+	@echo "CC       = $(CC)"
+	@echo "CFLAGS   = $(CFLAGS)"
 	@echo "LDFLAGS  = $(LDFLAGS)"
 	@echo "LIBS     = $(LIBS)"
 	@echo "EXE      = $(EXE)"
