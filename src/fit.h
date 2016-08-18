@@ -20,13 +20,15 @@
 #include "utils.h"
 
 namespace gg2aa {
-using FitFuncType = std::function<double(
-    const Template &, const double, const double, const double, const double)>;
-
 class FitFunction {
+    // this is just a type synonym.
+    using FFType =
+        std::function<double(const Template &, const double, const double,
+                             const double, const double)>;
+
 public:
     FitFunction() = delete;
-    FitFunction(const Template &t, const Info &info, const FitFuncType &func)
+    FitFunction(const Template &t, const Info &info, const FFType &func)
         : template_(t), norm_(t.norm()), info_(info), func_(func) {}
     ~FitFunction() {}
 
@@ -39,7 +41,7 @@ private:
     const Template template_;
     const double norm_;
     const Info info_;
-    FitFuncType func_;
+    FFType func_;
 };
 
 class FitResult {
@@ -62,8 +64,7 @@ public:
 private:
     const double mass_;
     const double width_;
-    double chi2_;
-    double chi2_ndf_;
+    double chi2_ = 0, chi2_ndf_ = 0;
     std::vector<double> par_;
 };
 
