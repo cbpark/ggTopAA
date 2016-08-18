@@ -22,7 +22,7 @@ int howToUse(const std::string &appname) {
     return 1;
 }
 
-bool correctFitMode(const int n) {
+bool correctFitChoice(const int n) {
     return n == 1 || n == 2 || n == 3 || n == 4;
 }
 

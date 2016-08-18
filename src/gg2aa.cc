@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
     if (argc != 4) { return howToUse(appname); }
 
     const int fit_choice = std::atoi(argv[3]);
-    if (!correctFitMode(fit_choice)) {
+    if (!correctFitChoice(fit_choice)) {
         return errMsg(appname, "fitmode must be in (1, 2, 3, 4).");
     }
 
