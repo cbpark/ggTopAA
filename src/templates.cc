@@ -12,7 +12,8 @@
 #include <functional>
 #include <iostream>
 #include <memory>
-#include "Math/SpecFuncMathMore.h"
+// #include "Math/SpecFuncMathMore.h"
+#include "cephes_hyp2f1.h"
 #include "histogram.h"
 #include "info.h"
 #include "utils.h"
@@ -58,16 +59,6 @@ double simpson(std::function<double(double)> func, double xlow, double xup,
 double Template::norm() const {
     return simpson(std::bind(&Template::f_maa, this, std::placeholders::_1),
                    range_.low(), range_.up(), maa_interval_);
-}
-
-double hyp2f1(double a, double b, double c, const double z) {
-    double p = 1.0;
-    if (a < -10.0 || b < -10.0) {
-        p = std::pow(1 - z, c - a - b);
-        a = c - a;
-        b = c - b;
-    }
-    return p * ROOT::Math::hyperg(a, b, c, z);
 }
 
 double func_maa3(const Template &t, const double x, const double a,

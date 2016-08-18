@@ -76,14 +76,13 @@ int main(int argc, char *argv[]) {
     // Perform fitting and obtain the chi square.
     message(appname, "performing fitting ...", to_out);
     for (const auto &t : data.templates()) {
+        message(appname, "template mass = " + to_string(t.mass_width().first) +
+                             ", width = " + to_string(t.mass_width().second),
+                to_out);
         const gg2aa::FitFunction ffnc(t, *info);  // Prepare the fit function
                                                   // based on the template.
         auto fit = gg2aa::Fit(ffnc);
         const double chi2 = fit.get_chisquare(h_pseudo);
-        message(appname, "mass = " + to_string(t.mass_width().first) +
-                             ", width = " + to_string(t.mass_width().second) +
-                             ", chi2 = " + to_string(chi2),
-                to_out);
         writeChiSquare(t, chi2, outfile);
     }
     outfile->close();

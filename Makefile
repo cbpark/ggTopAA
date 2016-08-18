@@ -6,6 +6,8 @@ LIBDIR      := lib
 CXX         := c++
 CXXFLAGS    := -g -O2 -Wall -Wextra -I$(SRCDIR)
 LDFLAGS     := -g
+LIBS        :=
+AR          := ar crs
 MKDIR       := mkdir -p
 RM          := rm -f
 UNAME       := $(shell uname -s)
@@ -22,8 +24,8 @@ ifeq ($(UNAME), Linux)
 endif
 CXXFLAGS += -std=c++14 -pedantic
 LDFLAGS  += $(shell root-config --ldflags)
-LIBS      = $(shell root-config --libs)
-LIBS     += -lMathMore
+LIBS     += $(shell root-config --libs)
+LIBS     += -lMinuit2
 
 # Targets
 EXE     := $(BINDIR)/gg2aa
@@ -36,14 +38,17 @@ HEAD    := $(filter-out $(EXESRC:.cc=.h),$(wildcard $(SRCDIR)/*.h))
 
 .PHONY: all build show clean
 
-all: $(LIB) $(BINDIR)/gg2aa
+all: $(EXE)
+
+# cephes (http://www.netlib.org/cephes/)
+include cephes/module.mk
 
 $(BINDIR)/gg2aa: build $(LIB) $(SRCDIR)/gg2aa.o
 	$(CXX) $(LDFLAGS) -o $@ $(SRCDIR)/gg2aa.o $(LIB) $(LIBS)
 
-$(LIB): CXXFLAGS += -fPIC
-$(LIB): $(LIBOBJ)
-	ar crs $@ $^
+$(LIBDIR)/lib$(PKGNAME).a: CXXFLAGS += -fPIC
+$(LIBDIR)/lib$(PKGNAME).a: $(LIBOBJ)
+	$(AR) $@ $^
 	ranlib $@
 
 build:
@@ -61,13 +66,11 @@ show:
 	@echo "LIBS     = $(LIBS)"
 	@echo "EXE      = $(EXE)"
 	@echo "EXESRC   = $(EXESRC)"
-	@echo "EXEOBJ   = $(EXEOBJ)"
 	@echo "LIB      = $(LIB)"
 	@echo "LIBSRC   = $(LIBSRC)"
-	@echo "LIBOBJ   = $(LIBOBJ)"
 	@echo "HEAD     = $(HEAD)"
 
-clean:
-	$(RM) $(EXE) $(EXEOBJ)
+clean::
 	$(RM) $(LIB) $(LIBOBJ)
+	$(RM) $(EXE) $(EXEOBJ)
 	$(RM) -r `find . -name "*.dSYM" -print`
