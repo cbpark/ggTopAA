@@ -32,7 +32,7 @@ public:
     double f_maa(double x) const;  // corresponds to sfnc(...) function
                                    // in the original implementation.
     /** Normalization factor for the given template data. */
-    double norm() const;
+    double norm_sig() const;
 
     friend double norm_bg1(const Template &, const double, const double,
                            const double, const double);

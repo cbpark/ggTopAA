@@ -56,7 +56,7 @@ double simpson(std::function<double(double)> func, double xlow, double xup,
     return norm * delta / 3.0;
 }
 
-double Template::norm() const {
+double Template::norm_sig() const {
     return simpson(std::bind(&Template::f_maa, this, std::placeholders::_1),
                    range_.low(), range_.up(), maa_interval_);
 }

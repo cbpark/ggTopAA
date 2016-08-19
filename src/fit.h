@@ -29,7 +29,7 @@ class FitFunction {
 public:
     FitFunction() = delete;
     FitFunction(const Template &t, const Info &info, const FFType &func)
-        : template_(t), norm_(t.norm()), info_(info), func_(func) {}
+        : template_(t), norm_sig_(t.norm_sig()), info_(info), func_(func) {}
     ~FitFunction() {}
 
     Info info() const { return info_; }
@@ -39,7 +39,7 @@ public:
 
 private:
     const Template template_;
-    const double norm_;
+    const double norm_sig_;
     const Info info_;
     FFType func_;
 };
