@@ -92,7 +92,7 @@ private:
     void init_parameters(const Info &info);
 };
 
-Fit mkFit(const Template &t, const Info &info, const int fit_mode);
+Fit mkFit(const Template &t, const Info &info, const int fit_choice);
 
 Fit fit3(const Template &t, const Info &info);
 Fit fit4(const Template &t, const Info &info);

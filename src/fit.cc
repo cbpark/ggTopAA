@@ -65,7 +65,7 @@ void Fit::do_fit(std::shared_ptr<TH1D> hist,
 }
 
 Fit fit3(const Template &t, const Info &info) {
-    const FitFunction ffnc(t, info, f_bg3);
+    const FitFunction ffnc(t, info, norm_bg3);
     auto fit = Fit(ffnc);
     fit.pfnc()->SetParLimits(0, 0, 1000);
     fit.pfnc()->FixParameter(1, 0);
@@ -75,7 +75,7 @@ Fit fit3(const Template &t, const Info &info) {
 }
 
 Fit fit4(const Template &t, const Info &info) {
-    const FitFunction ffnc(t, info, f_bg4);
+    const FitFunction ffnc(t, info, norm_bg4);
     auto fit = Fit(ffnc);
     fit.pfnc()->SetParLimits(0, 0, 10000);
     fit.pfnc()->FixParameter(1, 0);

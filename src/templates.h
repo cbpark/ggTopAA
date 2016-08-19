@@ -34,12 +34,14 @@ public:
     /** Normalization factor for the given template data. */
     double norm() const;
 
-    /** \\int (1-x^p)^a1 */
-    friend double f_bg3(const Template &t, const double x, const double a1,
-                        const double a2, const double p);
-    /** \\int (1-x^(1/3))^a1 */
-    friend double f_bg4(const Template &t, const double x, const double a1,
-                        const double a2, const double p);
+    friend double norm_bg1(const Template &, const double, const double,
+                           const double, const double);
+    friend double norm_bg2(const Template &, const double, const double,
+                           const double, const double);
+    friend double norm_bg3(const Template &, const double, const double,
+                           const double, const double);
+    friend double norm_bg4(const Template &, const double, const double,
+                           const double, const double);
 
 private:
     const std::string fname_;
@@ -52,11 +54,21 @@ private:
 
 using Templates = std::vector<Template>;
 
-double f_bg3(const gg2aa::Template &, const double, const double, const double,
-             const double);
+/** \\int (1-x^(1/3))^{a1} * x^{a2} */
+double norm_bg1(const Template &t, const double x, const double a1,
+                const double a2, const double p);
 
-double f_bg4(const gg2aa::Template &, const double, const double, const double,
-             const double);
+/** \\int (1-x^p)^{a1} * x^{a2} */
+double norm_bg2(const Template &t, const double x, const double a1,
+                const double a2, const double p);
+
+/** \\int (1-x^p)^{a1} */
+double norm_bg3(const Template &, const double, const double, const double,
+                const double);
+
+/** \\int (1-x^(1/3))^{a1} */
+double norm_bg4(const Template &, const double, const double, const double,
+                const double);
 }  // namespace gg2aa
 
 #endif  // SRC_TEMPLATES_H_
