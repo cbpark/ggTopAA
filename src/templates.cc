@@ -61,15 +61,39 @@ double Template::norm_sig() const {
                    range_.low(), range_.up(), maa_interval_);
 }
 
+double norm_bg(const Template &t, const double x, const double a1,
+               const double a2, const double p) {
+    const double x0 = t.range_.low() / t.sqrt_s_,
+                 x1 = t.range_.up() / t.sqrt_s_;
+    const double b1 = -a1, b2 = (1.0 + a2) / p, b3 = 1 + b2;
+    const double z0 = std::pow(x0, p), z1 = std::pow(x1, p);
+    if (std::fabs(z0 - z1) < 1.0e-12) { return 0.0; }
+
+    double s = 1.0 / (1 + a2);
+    // Use the hypergeometric function from ROOT with GSL.
+    // s *= z1 * ROOT::Math::hyperg(b1, b2, b3, z1) -
+    //      z0 * ROOT::Math::hyperg(b1, b2, b3, z0);
+    // Use the hypergeometric function from Cephes.
+    s *= z1 * hyp2f1(b1, b2, b3, z1) - z0 * hyp2f1(b1, b2, b3, z0);
+
+    return std::pow(1 - std::pow(x, p), a1) * std::pow(x, a2) / s;
+}
+
+double norm_bg1(const Template &t, const double x, const double a1,
+                const double a2, const double p) {
+    ignore(p);
+    return norm_bg(t, x, a1, a2, 1.0 / 3);
+}
+
+double norm_bg2(const Template &t, const double x, const double a1,
+                const double a2, const double p) {
+    return norm_bg(t, x, a1, a2, p);
+}
+
 double norm_bg3(const Template &t, const double x, const double a1,
                 const double a2, const double p) {
     ignore(a2);
-    const double x0 = t.range_.low() / t.sqrt_s_,
-                 x1 = t.range_.up() / t.sqrt_s_;
-    const double b1 = -a1, b2 = 1.0 / p, b3 = 1.0 + b2;
-    const double s = x1 * hyp2f1(b1, b2, b3, std::pow(x1, p)) -
-                     x0 * hyp2f1(b1, b2, b3, std::pow(x0, p));
-    return std::pow(1 - std::pow(x, p), a1) / s;
+    return norm_bg(t, x, a1, 0, p);
 }
 
 double norm_bg4(const Template &t, const double x, const double a1,

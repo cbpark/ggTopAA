@@ -50,6 +50,9 @@ private:
     double sqrt_s_ = 0.0;
     std::vector<double> maa_;
     double maa_interval_ = 0.0;
+
+    friend double norm_bg(const Template &, const double, const double,
+                          const double, const double);
 };
 
 using Templates = std::vector<Template>;
