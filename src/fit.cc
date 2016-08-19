@@ -18,7 +18,7 @@
 #include "info.h"
 #include "templates.h"
 
-const double EPS = 1.0e-12;
+const double EPS = 1.0e-9;
 
 namespace gg2aa {
 double FitFunction::operator()(double *x, double *p) const {
@@ -72,46 +72,6 @@ void Fit::do_fit(std::shared_ptr<TH1D> hist,
     result->set_result(par, r->Chi2(), r->Ndf());
 }
 
-Fit fit1(const Template &t, const Info &info) {
-    const FitFunction ffnc(t, info, norm_bg1);
-    auto fit = Fit(ffnc);
-    // fit.pfnc()->SetParLimits(0, 0, 1000);  // a1
-    // fit.pfnc()->SetParLimits(1, -10, 0);   // a2
-    fit.pfnc()->FixParameter(2, 1.0 / 3);  // p
-    fit.pfnc()->SetParLimits(3, 0, 1);     // kgg
-    return fit;
-}
-
-Fit fit2(const Template &t, const Info &info) {
-    const FitFunction ffnc(t, info, norm_bg2);
-    auto fit = Fit(ffnc);
-    // fit.pfnc()->SetParLimits(0, 0, 1000);     // a1
-    // fit.pfnc()->SetParLimits(1, -10, 0);   // a2
-    // fit.pfnc()->SetParLimits(2, 1.0e-9, 10);  // p
-    fit.pfnc()->SetParLimits(3, 0, 1);  // kgg
-    return fit;
-}
-
-Fit fit3(const Template &t, const Info &info) {
-    const FitFunction ffnc(t, info, norm_bg3);
-    auto fit = Fit(ffnc);
-    // fit.pfnc()->SetParLimits(0, 0, 1000);     // a1
-    fit.pfnc()->FixParameter(1, 0);           // a2
-    fit.pfnc()->SetParLimits(2, 1.0e-9, 10);  // p
-    fit.pfnc()->SetParLimits(3, 0.0, 1.0);    // kgg
-    return fit;
-}
-
-Fit fit4(const Template &t, const Info &info) {
-    const FitFunction ffnc(t, info, norm_bg4);
-    auto fit = Fit(ffnc);
-    // fit.pfnc()->SetParLimits(0, 0, 10000);  // a1
-    fit.pfnc()->FixParameter(1, 0);        // a2
-    fit.pfnc()->FixParameter(2, 1.0 / 3);  // p
-    fit.pfnc()->SetParLimits(3, 0, 1);     // kgg
-    return fit;
-}
-
 Fit mkFit(const Template &t, const Info &info, const int fit_choice) {
     switch (fit_choice) {
     case 1:
@@ -123,5 +83,52 @@ Fit mkFit(const Template &t, const Info &info, const int fit_choice) {
     default:
         return fit4(t, info);
     }
+}
+
+Fit fit1(const Template &t, const Info &info) {
+    const FitFunction ffnc(t, info, norm_bg1);
+    auto fit = Fit(ffnc);
+    // mostly the same, but much more calls?
+    // fit.pfnc()->SetParLimits(0, 0, 1000);  // a1
+    // worse fit?
+    // fit.pfnc()->SetParLimits(1, -10, 0);   // a2
+    fit.pfnc()->FixParameter(2, 1.0 / 3);  // p
+    fit.pfnc()->SetParLimits(3, 0, 1);     // kgg
+    return fit;
+}
+
+Fit fit2(const Template &t, const Info &info) {
+    const FitFunction ffnc(t, info, norm_bg2);
+    auto fit = Fit(ffnc);
+    // worse fit?
+    // fit.pfnc()->SetParLimits(0, 0, 1000);  // a1
+    // worse fit?
+    // fit.pfnc()->SetParLimits(1, -10, 0);  // a2
+    // better fit?
+    fit.pfnc()->SetParLimits(2, 0, 10);  // p
+    fit.pfnc()->SetParLimits(3, 0, 1);   // kgg
+    return fit;
+}
+
+Fit fit3(const Template &t, const Info &info) {
+    const FitFunction ffnc(t, info, norm_bg3);
+    auto fit = Fit(ffnc);
+    // to avoid hyp2f1 overflow.
+    fit.pfnc()->SetParLimits(0, 0, 1000);  // a1
+    fit.pfnc()->FixParameter(1, 0);        // a2
+    // better fit?
+    fit.pfnc()->SetParLimits(2, 0, 10);  // p
+    fit.pfnc()->SetParLimits(3, 0, 1);   // kgg
+    return fit;
+}
+
+Fit fit4(const Template &t, const Info &info) {
+    const FitFunction ffnc(t, info, norm_bg4);
+    auto fit = Fit(ffnc);
+    // fit.pfnc()->SetParLimits(0, 0, 10000);  // a1
+    fit.pfnc()->FixParameter(1, 0);        // a2
+    fit.pfnc()->FixParameter(2, 1.0 / 3);  // p
+    fit.pfnc()->SetParLimits(3, 0, 1);     // kgg
+    return fit;
 }
 }  // namespace gg2aa
