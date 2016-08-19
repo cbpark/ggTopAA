@@ -57,7 +57,7 @@ private:
 
 using Templates = std::vector<Template>;
 
-/** \\int (1-x^(1/3))^{a1} * x^{a2} */
+/** \\int (1-x^{1/3})^{a1} * x^{a2} */
 double norm_bg1(const Template &t, const double x, const double a1,
                 const double a2, const double p);
 
@@ -69,7 +69,7 @@ double norm_bg2(const Template &t, const double x, const double a1,
 double norm_bg3(const Template &, const double, const double, const double,
                 const double);
 
-/** \\int (1-x^(1/3))^{a1} */
+/** \\int (1-x^{1/3})^{a1} */
 double norm_bg4(const Template &, const double, const double, const double,
                 const double);
 }  // namespace gg2aa

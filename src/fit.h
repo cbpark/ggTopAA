@@ -94,6 +94,8 @@ private:
 
 Fit mkFit(const Template &t, const Info &info, const int fit_choice);
 
+Fit fit1(const Template &t, const Info &info);
+Fit fit2(const Template &t, const Info &info);
 Fit fit3(const Template &t, const Info &info);
 Fit fit4(const Template &t, const Info &info);
 }  // namespace gg2aa
