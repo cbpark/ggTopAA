@@ -66,15 +66,14 @@ double norm_bg(const Template &t, const double x, const double a1,
     const double x0 = t.range_.low() / t.sqrt_s_,
                  x1 = t.range_.up() / t.sqrt_s_;
     const double b1 = -a1, b2 = (1.0 + a2) / p, b3 = 1 + b2;
-    const double z0 = std::pow(x0, p), z1 = std::pow(x1, p);
-    if (std::fabs(z0 - z1) < 1.0e-12) { return 0.0; }
 
     double s = 1.0 / (1 + a2);
-    // Use the hypergeometric function from ROOT with GSL.
+    // use the hypergeometric function from ROOT with GSL.
     // s *= z1 * ROOT::Math::hyperg(b1, b2, b3, z1) -
     //      z0 * ROOT::Math::hyperg(b1, b2, b3, z0);
-    // Use the hypergeometric function from Cephes.
-    s *= z1 * hyp2f1(b1, b2, b3, z1) - z0 * hyp2f1(b1, b2, b3, z0);
+    // use the hypergeometric function from Cephes.
+    s *= std::pow(x1, 1 + a2) * hyp2f1(b1, b2, b3, std::pow(x1, p)) -
+         std::pow(x0, 1 + a2) * hyp2f1(b1, b2, b3, std::pow(x0, p));
 
     return std::pow(1 - std::pow(x, p), a1) * std::pow(x, a2) / s;
 }
