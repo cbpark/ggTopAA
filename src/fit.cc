@@ -36,7 +36,7 @@ double FitFunction::operator()(double *x, double *p) const {
     return f;
 }
 
-void FitResult::write(std::ostream *os) const {
+void FitResult::write(std::shared_ptr<std::ostream> os) const {
     *os << std::fixed;
     *os << std::setw(9) << std::setprecision(2) << mass_;
     *os << std::setw(8) << std::setprecision(2) << width_;

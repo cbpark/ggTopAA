@@ -9,12 +9,13 @@
 #ifndef SRC_PARSERS_H_
 #define SRC_PARSERS_H_
 
-#include <istream>
+#include <fstream>
+#include <memory>
 #include "info.h"
 #include "inputdata.h"
 
 namespace gg2aa {
-InputData parseInputData(std::istream *is);
+InputData parseInputData(std::unique_ptr<std::ifstream> is);
 
 Info getInfo(const InputData &data);
 }  // namespace gg2aa

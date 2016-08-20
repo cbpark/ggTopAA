@@ -10,7 +10,6 @@
 #include <algorithm>
 #include <cctype>
 #include <fstream>
-#include <istream>
 #include <memory>
 #include <string>
 #include <utility>
@@ -72,7 +71,7 @@ void addInputData(FileName fname, InputData *data) {
     }
 }
 
-InputData parseInputData(std::istream *is) {
+InputData parseInputData(std::unique_ptr<std::ifstream> is) {
     string line;
     vector<string> parsed;
     InputData data;
@@ -95,6 +94,7 @@ InputData parseInputData(std::istream *is) {
             continue;
         }
     }
+    is->close();
     return data;
 }
 

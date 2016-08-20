@@ -32,13 +32,12 @@ int main(int argc, char *argv[]) {
         return errMsg(appname, "fitmode must be in (1, 2, 3, 4).");
     }
 
-    std::ifstream infile(argv[1]);
-    if (!infile.good()) { return failedToRead(appname, argv[1]); }
+    auto infile = std::make_unique<std::ifstream>(argv[1]);
+    if (!infile->good()) { return failedToRead(appname, argv[1]); }
     const auto to_out = &std::cout;  // information will be displayed in screen.
 
     // Parse the list of input data.
-    auto data = gg2aa::parseInputData(&infile);
-    infile.close();
+    auto data = gg2aa::parseInputData(std::move(infile));
     data.show(to_out);
 
     // Check the input files.
@@ -70,12 +69,12 @@ int main(int argc, char *argv[]) {
 
     // Open output file.
     const std::string outfile_name(argv[2]);
-    std::ofstream outfile(outfile_name);
-    if (!outfile.good()) {
+    auto outfile = std::make_shared<std::ofstream>(outfile_name);
+    if (!outfile->good()) {
         return errMsg(appname, "failed to create `" + outfile_name + "'.");
     }
     message(appname, "output will be saved to `" + outfile_name + "'.", to_out);
-    write_header(&outfile);
+    write_header(outfile);
 
     // Perform fitting and obtain the chi square.
     message(appname, "performing fitting ...", to_out);
@@ -86,8 +85,8 @@ int main(int argc, char *argv[]) {
         auto result = std::make_shared<gg2aa::FitResult>(t);
         auto fit = gg2aa::mkFit(t, *info, fit_choice);
         fit.do_fit(h_pseudo, result);
-        result->write(&outfile);
+        result->write(outfile);
     }
-    outfile.close();
+    outfile->close();
     message(appname, "... gracefully done.", to_out);
 }
