@@ -72,7 +72,7 @@ void addInputData(FileName fname, InputData *data) {
     }
 }
 
-InputData parseInputData(std::unique_ptr<std::istream> is) {
+InputData parseInputData(std::istream *is) {
     string line;
     vector<string> parsed;
     InputData data;

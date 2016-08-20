@@ -36,7 +36,7 @@ double FitFunction::operator()(double *x, double *p) const {
     return f;
 }
 
-void FitResult::write(std::shared_ptr<std::ostream> os) const {
+void FitResult::write(std::ostream *os) const {
     *os << std::fixed;
     *os << std::setw(9) << std::setprecision(2) << mass_;
     *os << std::setw(8) << std::setprecision(2) << width_;
@@ -64,7 +64,7 @@ void Fit::do_fit(std::shared_ptr<TH1D> hist,
     // - "I": use integral of function in bin instead of value at bin center.
     // - "N": do not store the graphics function, do not draw.
     // - "S": the result of the fit is returned in the TFitResultPtr.
-    auto r = hist->Fit(pfnc_.get(), "INS");
+    auto r = hist->Fit(pfnc_.get(), "NS");
 
     int npar = r->NPar();
     std::vector<double> par;
@@ -88,10 +88,8 @@ Fit mkFit(const Template &t, const Info &info, const int fit_choice) {
 Fit fit1(const Template &t, const Info &info) {
     const FitFunction ffnc(t, info, norm_bg1);
     auto fit = Fit(ffnc);
-    // mostly the same, but much more calls?
-    // fit.pfnc()->SetParLimits(0, 0, 1000);  // a1
-    // worse fit?
-    // fit.pfnc()->SetParLimits(1, -10, 0);   // a2
+    fit.pfnc()->SetParLimits(0, 0, 1000);  // a1
+    fit.pfnc()->SetParLimits(1, -10, 0);   // a2
     fit.pfnc()->FixParameter(2, 1.0 / 3);  // p
     fit.pfnc()->SetParLimits(3, 0, 1);     // kgg
     return fit;
@@ -100,32 +98,27 @@ Fit fit1(const Template &t, const Info &info) {
 Fit fit2(const Template &t, const Info &info) {
     const FitFunction ffnc(t, info, norm_bg2);
     auto fit = Fit(ffnc);
-    // worse fit?
-    // fit.pfnc()->SetParLimits(0, 0, 1000);  // a1
-    // worse fit?
-    // fit.pfnc()->SetParLimits(1, -10, 0);  // a2
-    // better fit?
-    fit.pfnc()->SetParLimits(2, 0, 10);  // p
-    fit.pfnc()->SetParLimits(3, 0, 1);   // kgg
+    fit.pfnc()->SetParLimits(0, 0, 1000);  // a1
+    fit.pfnc()->SetParLimits(1, -10, 0);   // a2
+    fit.pfnc()->SetParLimits(2, 0, 10);    // p
+    fit.pfnc()->SetParLimits(3, 0, 1);     // kgg
     return fit;
 }
 
 Fit fit3(const Template &t, const Info &info) {
     const FitFunction ffnc(t, info, norm_bg3);
     auto fit = Fit(ffnc);
-    // to avoid hyp2f1 overflow.
     fit.pfnc()->SetParLimits(0, 0, 1000);  // a1
     fit.pfnc()->FixParameter(1, 0);        // a2
-    // better fit?
-    fit.pfnc()->SetParLimits(2, 0, 10);  // p
-    fit.pfnc()->SetParLimits(3, 0, 1);   // kgg
+    fit.pfnc()->SetParLimits(2, 0, 10);    // p
+    fit.pfnc()->SetParLimits(3, 0, 1);     // kgg
     return fit;
 }
 
 Fit fit4(const Template &t, const Info &info) {
     const FitFunction ffnc(t, info, norm_bg4);
     auto fit = Fit(ffnc);
-    // fit.pfnc()->SetParLimits(0, 0, 10000);  // a1
+    fit.pfnc()->SetParLimits(0, 0, 1000);  // a1
     fit.pfnc()->FixParameter(1, 0);        // a2
     fit.pfnc()->FixParameter(2, 1.0 / 3);  // p
     fit.pfnc()->SetParLimits(3, 0, 1);     // kgg

@@ -59,7 +59,7 @@ public:
         chi2_ = chi2;
         chi2_ndf_ = chi2_ / ndf;
     }
-    void write(std::shared_ptr<std::ostream> os) const;
+    void write(std::ostream *os) const;
 
 private:
     const double mass_;
