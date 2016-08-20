@@ -3,6 +3,7 @@ G*TAGS
 bin
 lib
 old
+tmp
 *.o
 .#*
 *.dat
