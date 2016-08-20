@@ -43,12 +43,13 @@ HEAD    := $(filter-out $(EXESRC:.cc=.h),$(wildcard $(SRCDIR)/*.h))
 all: $(EXE)
 
 # cephes (http://www.netlib.org/cephes/)
-include cephes/module.mk
+CEPHES_DIR := cephes
+include $(CEPHES_DIR)/module.mk
 
 $(BINDIR)/gg2aa: build $(LIB) $(SRCDIR)/gg2aa.o
 	$(CXX) $(LDFLAGS) -o $@ $(SRCDIR)/gg2aa.o $(LIB) $(LIBS)
 
-$(LIBDIR)/lib$(PKGNAME).a: CXXFLAGS += -fPIC
+$(LIBDIR)/lib$(PKGNAME).a: CXXFLAGS += -fPIC -I$(CEPHES_DIR)
 $(LIBDIR)/lib$(PKGNAME).a: $(LIBOBJ)
 	$(AR) $@ $^
 	ranlib $@
@@ -75,6 +76,6 @@ show:
 	@echo "HEAD     = $(HEAD)"
 
 clean::
-	$(RM) $(LIB) $(LIBOBJ)
-	$(RM) $(EXE) $(EXEOBJ)
-	$(RM) -r `find . -name "*.dSYM" -print`
+	$(RM) $(LIBOBJ) $(EXEOBJ)
+	$(RM) $(EXE) $(LIB)
+	$(RM) -r $(BINDIR) $(LIBDIR)
