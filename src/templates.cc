@@ -12,8 +12,9 @@
 #include <functional>
 #include <iostream>
 #include <memory>
-// #include "Math/SpecFuncMathMore.h"
-#include "cephes_hyp2f1.h"
+#include "Math/GSLIntegrator.h"
+#include "Math/WrappedTF1.h"
+#include "TF1.h"
 #include "histogram.h"
 #include "info.h"
 #include "utils.h"
@@ -61,22 +62,42 @@ double Template::norm_sig() const {
                    range_.low(), range_.up(), maa_interval_);
 }
 
+double fNormBG(const double x, const double a1, const double a2,
+               const double p) {
+    return std::pow(1 - std::pow(x, p), a1) * std::pow(x, a2);
+}
+
+class FuncNormBG {
+public:
+    FuncNormBG() = delete;
+    FuncNormBG(double a1, double a2, double p) : a1_(a1), a2_(a2), p_(p) {}
+    ~FuncNormBG() {}
+
+    double operator()(double *x, double *par) {
+        ignore(par);
+        return fNormBG(x[0], a1_, a2_, p_);
+    }
+
+private:
+    const double a1_, a2_, p_;
+};
+
+double integralNormBG(const double x0, const double x1, const double a1,
+                      const double a2, const double p) {
+    FuncNormBG norm_func(a1, a2, p);
+    TF1 f("f", norm_func, x0, x1, 0);
+    ROOT::Math::WrappedTF1 wf1(f);
+    ROOT::Math::GSLIntegrator ig(ROOT::Math::IntegrationOneDim::kADAPTIVE);
+    ig.SetFunction(wf1);
+    ig.SetRelTolerance(0.001);
+    return ig.Integral(x0, x1);
+}
+
 double norm_bg(const Template &t, const double x, const double a1,
                const double a2, const double p) {
     const double x0 = t.range_.low() / t.sqrt_s_,
                  x1 = t.range_.up() / t.sqrt_s_;
-    const double a2_1 = a2 + 1.0;
-    const double b1 = -a1, b2 = a2_1 / p, b3 = 1 + b2;
-
-    double s = 1.0 / (1 + a2);
-    // use the hypergeometric function from ROOT with GSL.
-    // s *= z1 * ROOT::Math::hyperg(b1, b2, b3, z1) -
-    //      z0 * ROOT::Math::hyperg(b1, b2, b3, z0);
-    // use the hypergeometric function from Cephes.
-    s *= std::pow(x1, a2_1) * hyp2f1(b1, b2, b3, std::pow(x1, p)) -
-         std::pow(x0, a2_1) * hyp2f1(b1, b2, b3, std::pow(x0, p));
-
-    return std::pow(1 - std::pow(x, p), a1) * std::pow(x, a2) / s;
+    return fNormBG(x, a1, a2, p) / integralNormBG(x0, x1, a1, a2, p);
 }
 
 double norm_bg1(const Template &t, const double x, const double a1,

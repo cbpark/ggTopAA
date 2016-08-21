@@ -4,9 +4,7 @@ SRCDIR      := src
 BINDIR      := bin
 LIBDIR      := lib
 CXX         := c++
-CXXFLAGS    := -g -O2 -Wall -Wextra -m64 -I$(SRCDIR)
-CC          := cc
-CFLAGS      := -g -O2 -Wall -Wextra -m64
+CXXFLAGS    := -g -O3 -Wall -Wextra -m64 -I$(SRCDIR)
 LDFLAGS     := -g -m64
 LIBS        :=
 AR          := ar crs
@@ -27,7 +25,7 @@ endif
 CXXFLAGS += -std=c++14 -pedantic
 LDFLAGS  += $(shell root-config --ldflags)
 LIBS     += $(shell root-config --libs)
-LIBS     += -lMinuit2
+LIBS     += -lMathMore -lMinuit2
 
 # Targets
 EXE     := $(BINDIR)/gg2aa
@@ -42,14 +40,10 @@ HEAD    := $(filter-out $(EXESRC:.cc=.h),$(wildcard $(SRCDIR)/*.h))
 
 all: $(EXE)
 
-# cephes (http://www.netlib.org/cephes/)
-CEPHES_DIR := cephes
-include $(CEPHES_DIR)/module.mk
-
 $(BINDIR)/gg2aa: build $(LIB) $(SRCDIR)/gg2aa.o
 	$(CXX) $(LDFLAGS) -o $@ $(SRCDIR)/gg2aa.o $(LIB) $(LIBS)
 
-$(LIBDIR)/lib$(PKGNAME).a: CXXFLAGS += -fPIC -I$(CEPHES_DIR)
+$(LIBDIR)/lib$(PKGNAME).a: CXXFLAGS += -fPIC
 $(LIBDIR)/lib$(PKGNAME).a: $(LIBOBJ)
 	$(AR) $@ $^
 	ranlib $@
