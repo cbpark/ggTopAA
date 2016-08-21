@@ -87,7 +87,9 @@ double integralNormBG(const double x0, const double x1, const double a1,
     FuncNormBG norm_func(a1, a2, p);
     TF1 f("f", norm_func, x0, x1, 0);
     ROOT::Math::WrappedTF1 wf1(f);
-    ROOT::Math::GSLIntegrator ig(ROOT::Math::IntegrationOneDim::kADAPTIVE);
+    // ROOT::Math::GSLIntegrator ig(ROOT::Math::IntegrationOneDim::kADAPTIVE,
+    //                              ROOT::Math::Integration::kGAUSS15);
+    ROOT::Math::GSLIntegrator ig(ROOT::Math::IntegrationOneDim::kNONADAPTIVE);
     ig.SetFunction(wf1);
     ig.SetRelTolerance(0.001);
     return ig.Integral(x0, x1);
