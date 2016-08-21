@@ -12,7 +12,10 @@
 #include <functional>
 #include <iostream>
 #include <memory>
-// #include "Math/SpecFuncMathMore.h"
+#include "Math/GSLIntegrator.h"
+// #include "Math/SpecFuncMathMore.h"  // ROOT::Math::hyperg
+#include "Math/WrappedTF1.h"
+#include "TF1.h"
 #include "cephes_hyp2f1.h"
 #include "histogram.h"
 #include "info.h"
@@ -61,22 +64,56 @@ double Template::norm_sig() const {
                    range_.low(), range_.up(), maa_interval_);
 }
 
+double fBG(const double x, const double a1, const double a2,
+               const double p) {
+    return std::pow(1 - std::pow(x, p), a1) * std::pow(x, a2);
+}
+
+class FuncBG {
+public:
+    FuncBG() = delete;
+    FuncBG(double a1, double a2, double p) : a1_(a1), a2_(a2), p_(p) {}
+    ~FuncBG() {}
+
+    double operator()(double *x, double *par) {
+        ignore(par);
+        return fBG(x[0], a1_, a2_, p_);
+    }
+
+private:
+    const double a1_, a2_, p_;
+};
+
+double integralNormBG(const double x0, const double x1, const double a1,
+                      const double a2, const double p) {
+    FuncBG func_bg(a1, a2, p);
+    TF1 f("f", func_bg, x0, x1, 0);
+    ROOT::Math::WrappedTF1 wf1(f);
+    // ROOT::Math::GSLIntegrator ig(ROOT::Math::IntegrationOneDim::kADAPTIVE);
+    ROOT::Math::GSLIntegrator ig(ROOT::Math::IntegrationOneDim::kNONADAPTIVE);
+    ig.SetFunction(wf1);
+    ig.SetRelTolerance(0.001);
+    return ig.Integral(x0, x1);
+}
+
 double norm_bg(const Template &t, const double x, const double a1,
                const double a2, const double p) {
     const double x0 = t.range_.low() / t.sqrt_s_,
                  x1 = t.range_.up() / t.sqrt_s_;
-    const double a2_1 = a2 + 1.0;
+    const double a2_1 = a2 + 1;
     const double b1 = -a1, b2 = a2_1 / p, b3 = 1 + b2;
 
-    double s = 1.0 / (1 + a2);
+    double s = 1.0 / a2_1;
     // use the hypergeometric function from ROOT with GSL.
-    // s *= z1 * ROOT::Math::hyperg(b1, b2, b3, z1) -
-    //      z0 * ROOT::Math::hyperg(b1, b2, b3, z0);
+    // s *= std::pow(x1, a2_1) * ROOT::Math::hyperg(b1, b2, b3, std::pow(x1, p))
+    // -
+    //      std::pow(x0, a2_1) * ROOT::Math::hyperg(b1, b2, b3, std::pow(x0,
+    //      p));
     // use the hypergeometric function from Cephes.
     s *= std::pow(x1, a2_1) * hyp2f1(b1, b2, b3, std::pow(x1, p)) -
          std::pow(x0, a2_1) * hyp2f1(b1, b2, b3, std::pow(x0, p));
 
-    return std::pow(1 - std::pow(x, p), a1) * std::pow(x, a2) / s;
+    return fBG(x, a1, a2, p) / s;
 }
 
 double norm_bg1(const Template &t, const double x, const double a1,

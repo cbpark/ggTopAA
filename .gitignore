@@ -10,3 +10,4 @@ tmp
 *.root
 *.log
 *.old
+input_test.yml

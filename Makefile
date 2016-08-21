@@ -4,9 +4,9 @@ SRCDIR      := src
 BINDIR      := bin
 LIBDIR      := lib
 CXX         := c++
-CXXFLAGS    := -g -O2 -Wall -Wextra -m64 -I$(SRCDIR)
+CXXFLAGS    := -g -O3 -m64 -march=native -Wall -Wextra -I$(SRCDIR)
 CC          := cc
-CFLAGS      := -g -O2 -Wall -Wextra -m64
+CFLAGS      := -g -O3 -m64 -march=native -Wall -Wextra
 LDFLAGS     := -g -m64
 LIBS        :=
 AR          := ar crs
@@ -27,7 +27,7 @@ endif
 CXXFLAGS += -std=c++14 -pedantic
 LDFLAGS  += $(shell root-config --ldflags)
 LIBS     += $(shell root-config --libs)
-LIBS     += -lMinuit2
+LIBS     += -lMathMore -lMinuit2
 
 # Targets
 EXE     := $(BINDIR)/gg2aa
