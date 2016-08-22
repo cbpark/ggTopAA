@@ -4,7 +4,9 @@ SRCDIR      := src
 BINDIR      := bin
 LIBDIR      := lib
 CXX         := c++
-CXXFLAGS    := -g -O3 -Wall -Wextra -m64 -I$(SRCDIR)
+CXXFLAGS    := -g -O3 -m64 -march=native -Wall -Wextra -I$(SRCDIR)
+CC          := cc
+CFLAGS      := -g -O3 -m64 -march=native -Wall -Wextra
 LDFLAGS     := -g -m64
 LIBS        :=
 AR          := ar crs
@@ -40,10 +42,14 @@ HEAD    := $(filter-out $(EXESRC:.cc=.h),$(wildcard $(SRCDIR)/*.h))
 
 all: $(EXE)
 
+# cephes (http://www.netlib.org/cephes/)
+CEPHES_DIR := cephes
+include $(CEPHES_DIR)/module.mk
+
 $(BINDIR)/gg2aa: build $(LIB) $(SRCDIR)/gg2aa.o
 	$(CXX) $(LDFLAGS) -o $@ $(SRCDIR)/gg2aa.o $(LIB) $(LIBS)
 
-$(LIBDIR)/lib$(PKGNAME).a: CXXFLAGS += -fPIC
+$(LIBDIR)/lib$(PKGNAME).a: CXXFLAGS += -fPIC -I$(CEPHES_DIR)
 $(LIBDIR)/lib$(PKGNAME).a: $(LIBOBJ)
 	$(AR) $@ $^
 	ranlib $@
