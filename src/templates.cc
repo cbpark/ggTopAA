@@ -7,7 +7,6 @@
  */
 
 #include "templates.h"
-#include <cmath>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -16,10 +15,13 @@
 // #include "Math/SpecFuncMathMore.h"  // ROOT::Math::hyperg
 #include "Math/WrappedTF1.h"
 #include "TF1.h"
-#include "cephes_hyp2f1.h"
+#include "cephes.h"
 #include "histogram.h"
 #include "info.h"
 #include "utils.h"
+
+// using std::pow;
+// using std::cbrt;
 
 namespace gg2aa {
 void Template::set_template(const Info &info) {
@@ -65,7 +67,7 @@ double Template::norm_sig() const {
 }
 
 double fBG(const double x, const double a1, const double a2, const double p) {
-    return std::pow(1 - std::pow(x, p), a1) * std::pow(x, a2);
+    return pow(1 - pow(x, p), a1) * pow(x, a2);
 }
 
 class FuncBG {
@@ -104,13 +106,11 @@ double norm_bg(const Template &t, const double x, const double a1,
 
     double s = 1.0 / a2_1;
     // use the hypergeometric function from ROOT with GSL.
-    // s *= std::pow(x1, a2_1) * ROOT::Math::hyperg(b1, b2, b3, std::pow(x1, p))
-    // -
-    //      std::pow(x0, a2_1) * ROOT::Math::hyperg(b1, b2, b3, std::pow(x0,
-    //      p));
+    // s *= pow(x1, a2_1) * ROOT::Math::hyperg(b1, b2, b3, pow(x1, p)) -
+    //      pow(x0, a2_1) * ROOT::Math::hyperg(b1, b2, b3, pow(x0, p));
     // use the hypergeometric function from Cephes.
-    s *= std::pow(x1, a2_1) * hyp2f1(b1, b2, b3, std::pow(x1, p)) -
-         std::pow(x0, a2_1) * hyp2f1(b1, b2, b3, std::pow(x0, p));
+    s *= pow(x1, a2_1) * hyp2f1(b1, b2, b3, pow(x1, p)) -
+         pow(x0, a2_1) * hyp2f1(b1, b2, b3, pow(x0, p));
 
     return fBG(x, a1, a2, p) / s;
 }
@@ -138,10 +138,10 @@ double norm_bg4(const Template &t, const double x, const double a1,
     ignore(p);
     const double x0 = t.range_.low() / t.sqrt_s_,
                  x1 = t.range_.up() / t.sqrt_s_;
-    const double z0 = std::cbrt(x0), z1 = std::cbrt(x1);
+    const double z0 = cbrt(x0), z1 = cbrt(x1);
     const double b1 = 1 + a1, b2 = 2 + a1;
     auto func = [](const double y, const double b) {
-        return std::pow(1 - std::cbrt(y), b);
+        return pow(1 - cbrt(y), b);
     };
 
     double s = 3.0 / (b1 * b2 * (3 + a1));

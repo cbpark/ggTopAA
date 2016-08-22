@@ -10,6 +10,10 @@
 #define CEPHES_CEPHES_HYP2F1_H_
 
 extern "C" {
+double pow(double x, double y);
+
+double cbrt(double x);
+
 double hyp2f1(double a, double b, double c, double x);
 }
 
