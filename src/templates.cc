@@ -66,28 +66,31 @@ double Template::norm_sig() const {
                    range_.low(), range_.up(), maa_interval_);
 }
 
-double fBG(const double x, const double a1, const double a2, const double p) {
-    return pow(1 - pow(x, p), a1) * pow(x, a2);
+// Eq.(2) in https://cds.cern.ch/record/2114853/files/ATLAS-CONF-2015-081.pdf
+double fBG(const double x, const double p, const double b, const double a0,
+           const double a1) {
+    return pow(1 - pow(x, p), b) * pow(x, a0 + a1 * log(x));
 }
 
 class FuncBG {
 public:
     FuncBG() = delete;
-    FuncBG(double a1, double a2, double p) : a1_(a1), a2_(a2), p_(p) {}
+    FuncBG(double p, double b, double a0, double a1)
+        : p_(p), b_(b), a0_(a0), a1_(a1) {}
     ~FuncBG() {}
 
     double operator()(double *x, double *par) {
         ignore(par);
-        return fBG(x[0], a1_, a2_, p_);
+        return fBG(x[0], p_, b_, a0_, a1_);
     }
 
 private:
-    const double a1_, a2_, p_;
+    const double p_, b_, a0_, a1_;
 };
 
-double integralNormBG(const double x0, const double x1, const double a1,
-                      const double a2, const double p) {
-    FuncBG func_bg(a1, a2, p);
+double integralNormBG(const double x0, const double x1, const double p,
+                      const double b, const double a0, const double a1) {
+    FuncBG func_bg(p, b, a0, a1);
     TF1 f("f", func_bg, x0, x1, 0);
     ROOT::Math::WrappedTF1 wf1(f);
     // ROOT::Math::GSLIntegrator ig(ROOT::Math::IntegrationOneDim::kADAPTIVE);
@@ -97,56 +100,71 @@ double integralNormBG(const double x0, const double x1, const double a1,
     return ig.Integral(x0, x1);
 }
 
-double norm_bg(const Template &t, const double x, const double a1,
-               const double a2, const double p) {
+double norm_bg_nolog(const Template &t, const double x, const double p,
+                     const double b, const double a0) {
     const double x0 = t.range_.low() / t.sqrt_s_,
                  x1 = t.range_.up() / t.sqrt_s_;
-    const double a2_1 = a2 + 1;
-    const double b1 = -a1, b2 = a2_1 / p, b3 = 1 + b2;
+    const double a0_1 = a0 + 1;
+    const double b1 = -b;
+    const double b2 = a0_1 / p;
+    const double b3 = b2 + 1;
 
-    double s = 1.0 / a2_1;
+    double s = 1.0 / a0_1;
     // use the hypergeometric function from ROOT with GSL.
-    // s *= pow(x1, a2_1) * ROOT::Math::hyperg(b1, b2, b3, pow(x1, p)) -
-    //      pow(x0, a2_1) * ROOT::Math::hyperg(b1, b2, b3, pow(x0, p));
+    // s *= pow(x1, a0_1) * ROOT::Math::hyperg(b1, b2, b3, pow(x1, p)) -
+    //      pow(x0, a0_1) * ROOT::Math::hyperg(b1, b2, b3, pow(x0, p));
     // use the hypergeometric function from Cephes.
-    s *= pow(x1, a2_1) * hyp2f1(b1, b2, b3, pow(x1, p)) -
-         pow(x0, a2_1) * hyp2f1(b1, b2, b3, pow(x0, p));
-
-    return fBG(x, a1, a2, p) / s;
+    s *= pow(x1, a0_1) * hyp2f1(b1, b2, b3, pow(x1, p)) -
+         pow(x0, a0_1) * hyp2f1(b1, b2, b3, pow(x0, p));
+    return fBG(x, p, b, a0, 0) / s;
 }
 
-double norm_bg1(const Template &t, const double x, const double a1,
-                const double a2, const double p) {
+double norm_bg1(const Template &t, const double x, const double p,
+                const double b, const double a0, const double a1) {
     ignore(p);
-    return norm_bg(t, x, a1, a2, 1.0 / 3);
+    ignore(a1);
+    return norm_bg_nolog(t, x, 1.0 / 3, b, a0);
 }
 
-double norm_bg2(const Template &t, const double x, const double a1,
-                const double a2, const double p) {
-    return norm_bg(t, x, a1, a2, p);
+double norm_bg2(const Template &t, const double x, const double p,
+                const double b, const double a0, const double a1) {
+    ignore(a1);
+    return norm_bg_nolog(t, x, p, b, a0);
 }
 
-double norm_bg3(const Template &t, const double x, const double a1,
-                const double a2, const double p) {
-    ignore(a2);
-    return norm_bg(t, x, a1, 0, p);
+double norm_bg3(const Template &t, const double x, const double p,
+                const double b, const double a0, const double a1) {
+    ignore(a0);
+    ignore(a1);
+    return norm_bg_nolog(t, x, p, b, 0);
 }
 
-double norm_bg4(const Template &t, const double x, const double a1,
-                const double a2, const double p) {
-    ignore(a2);
+double norm_bg4(const Template &t, const double x, const double p,
+                const double b, const double a0, const double a1) {
     ignore(p);
+    ignore(a0);
+    ignore(a1);
     const double x0 = t.range_.low() / t.sqrt_s_,
                  x1 = t.range_.up() / t.sqrt_s_;
     const double z0 = cbrt(x0), z1 = cbrt(x1);
-    const double b1 = 1 + a1, b2 = 2 + a1;
+    const double b1 = b + 1;
+    const double b2 = b1 + 1;
     auto func = [](const double y, const double b) {
         return pow(1 - cbrt(y), b);
     };
 
-    double s = 3.0 / (b1 * b2 * (3 + a1));
+    double s = 3.0 / (b1 * b2 * (b2 + 1));
     s *= func(x0, b1) * (2 + b1 * (2 + b2 * z0) * z0) -
          func(x1, b1) * (2 + b1 * (2 + b2 * z1) * z1);
-    return func(x, a1) / s;
+    return func(x, b) / s;
+}
+
+double norm_bg5(const Template &t, const double x, const double p,
+                const double b, const double a0, const double a1) {
+    ignore(p);
+    const double x0 = t.range_.low() / t.sqrt_s_,
+                 x1 = t.range_.up() / t.sqrt_s_;
+    return fBG(x, 1.0 / 3, b, a0, a1) /
+           integralNormBG(x0, x1, 1.0 / 3, b, a0, a1);
 }
 }  // namespace gg2aa

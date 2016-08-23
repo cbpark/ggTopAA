@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 
     const int fit_choice = std::atoi(argv[3]);
     if (!correctFitChoice(fit_choice)) {
-        return errMsg(appname, "fitmode must be in (1, 2, 3, 4).");
+        return errMsg(appname, "fit_choice must be in [1, ..., 5].");
     }
 
     auto infile = std::make_unique<std::ifstream>(argv[1]);

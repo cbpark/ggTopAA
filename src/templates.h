@@ -35,13 +35,15 @@ public:
     double norm_sig() const;
 
     friend double norm_bg1(const Template &, const double, const double,
-                           const double, const double);
+                           const double, const double, const double);
     friend double norm_bg2(const Template &, const double, const double,
-                           const double, const double);
+                           const double, const double, const double);
     friend double norm_bg3(const Template &, const double, const double,
-                           const double, const double);
+                           const double, const double, const double);
     friend double norm_bg4(const Template &, const double, const double,
-                           const double, const double);
+                           const double, const double, const double);
+    friend double norm_bg5(const Template &, const double, const double,
+                           const double, const double, const double);
 
 private:
     const std::string fname_;
@@ -51,27 +53,31 @@ private:
     std::vector<double> maa_;
     double maa_interval_ = 0.0;
 
-    friend double norm_bg(const Template &, const double, const double,
-                          const double, const double);
+    friend double norm_bg_nolog(const Template &, const double, const double,
+                                const double, const double);
 };
 
 using Templates = std::vector<Template>;
 
-/** \\int (1-x^{1/3})^{a1} * x^{a2} */
-double norm_bg1(const Template &t, const double x, const double a1,
-                const double a2, const double p);
+/** \\int (1-x^{1/3})^b * x^{a0} */
+double norm_bg1(const Template &t, const double x, const double p,
+                const double b, const double a0, const double a1);
 
-/** \\int (1-x^p)^{a1} * x^{a2} */
-double norm_bg2(const Template &t, const double x, const double a1,
-                const double a2, const double p);
+/** \\int (1-x^p)^b * x^{a0} */
+double norm_bg2(const Template &, const double, const double, const double,
+                const double, const double);
 
-/** \\int (1-x^p)^{a1} */
+/** \\int (1-x^p)^b */
 double norm_bg3(const Template &, const double, const double, const double,
-                const double);
+                const double, const double);
 
-/** \\int (1-x^{1/3})^{a1} */
+/** \\int (1-x^{1/3})^b */
 double norm_bg4(const Template &, const double, const double, const double,
-                const double);
+                const double, const double);
+
+/** \\int (1-x^{1/3})^b) * x^{a0 + a1 * \\log(x)} */
+double norm_bg5(const Template &, const double, const double, const double,
+                const double, const double);
 }  // namespace gg2aa
 
 #endif  // SRC_TEMPLATES_H_

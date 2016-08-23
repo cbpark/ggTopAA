@@ -24,7 +24,7 @@ class FitFunction {
     // this is just a type synonym.
     using FFType =
         std::function<double(const Template &, const double, const double,
-                             const double, const double)>;
+                             const double, const double, const double)>;
 
 public:
     FitFunction() = delete;
@@ -73,7 +73,7 @@ public:
     Fit() = delete;
     explicit Fit(const FitFunction &f)
         : pfnc_(std::make_shared<TF1>("pfnc", f, f.range().low(),
-                                      f.range().up(), 4)) {
+                                      f.range().up(), 5)) {
         init_parameters(f.info());
     }
     ~Fit() {}
@@ -98,6 +98,7 @@ Fit fit1(const Template &t, const Info &info);
 Fit fit2(const Template &t, const Info &info);
 Fit fit3(const Template &t, const Info &info);
 Fit fit4(const Template &t, const Info &info);
+Fit fit5(const Template &t, const Info &info);
 }  // namespace gg2aa
 
 #endif  // SRC_FIT_H_
