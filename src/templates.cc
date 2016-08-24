@@ -100,7 +100,7 @@ double integralNormBG(const double x0, const double x1, const double p,
     return ig.Integral(x0, x1);
 }
 
-double norm_bg_nolog(const Template &t, const double x, const double p,
+double fit_func_bg_nolog(const Template &t, const double x, const double p,
                      const double b, const double a0) {
     const double x0 = t.range_.low() / t.sqrt_s_,
                  x1 = t.range_.up() / t.sqrt_s_;
@@ -119,27 +119,27 @@ double norm_bg_nolog(const Template &t, const double x, const double p,
     return fBG(x, p, b, a0, 0) / s;
 }
 
-double norm_bg1(const Template &t, const double x, const double p,
+double fit_func_bg1(const Template &t, const double x, const double p,
                 const double b, const double a0, const double a1) {
     ignore(p);
     ignore(a1);
-    return norm_bg_nolog(t, x, 1.0 / 3, b, a0);
+    return fit_func_bg_nolog(t, x, 1.0 / 3, b, a0);
 }
 
-double norm_bg2(const Template &t, const double x, const double p,
+double fit_func_bg2(const Template &t, const double x, const double p,
                 const double b, const double a0, const double a1) {
     ignore(a1);
-    return norm_bg_nolog(t, x, p, b, a0);
+    return fit_func_bg_nolog(t, x, p, b, a0);
 }
 
-double norm_bg3(const Template &t, const double x, const double p,
+double fit_func_bg3(const Template &t, const double x, const double p,
                 const double b, const double a0, const double a1) {
     ignore(a0);
     ignore(a1);
-    return norm_bg_nolog(t, x, p, b, 0);
+    return fit_func_bg_nolog(t, x, p, b, 0);
 }
 
-double norm_bg4(const Template &t, const double x, const double p,
+double fit_func_bg4(const Template &t, const double x, const double p,
                 const double b, const double a0, const double a1) {
     ignore(p);
     ignore(a0);
@@ -159,7 +159,7 @@ double norm_bg4(const Template &t, const double x, const double p,
     return func(x, b) / s;
 }
 
-double norm_bg5(const Template &t, const double x, const double p,
+double fit_func_bg5(const Template &t, const double x, const double p,
                 const double b, const double a0, const double a1) {
     ignore(p);
     const double x0 = t.range_.low() / t.sqrt_s_,
