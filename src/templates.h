@@ -67,28 +67,28 @@ private:
 
 using Templates = std::vector<Template>;
 
-/** s = \\int (1-x^{1/3})^b * x^{a0} */
+/** f = (1-x^{1/3})^b * x^{a0}, s = \\int f */
 double fit_func_bg1(const Template &t, const double x, const double s,
                     const double p, const double b, const double a0,
                     const double a1);
 
-/** s = \\int (1-x^p)^b * x^{a0} */
+/** f = (1-x^p)^b * x^{a0}, s = \\int f */
 double fit_func_bg2(const Template &, const double, const double, const double,
                     const double, const double, const double);
 
-/** s = \\int (1-x^p)^b */
+/** f = (1-x^p)^b, s = \\int f */
 double fit_func_bg3(const Template &, const double, const double, const double,
                     const double, const double, const double);
 
-/** s = \\int (1-x^{1/3})^b */
+/** f = (1-x^{1/3})^b, s = \\int f */
 double fit_func_bg4(const Template &, const double, const double, const double,
                     const double, const double, const double);
 
-/** s = \\int (1-x^{1/3})^b) * x^{a0 + a1 * \\log(x)} */
+/** f = (1-x^{1/3})^b) * x^{a0 + a1 * \\log(x)}, s = \\int f */
 double fit_func_bg5(const Template &, const double, const double, const double,
                     const double, const double, const double);
 
-/** s is a free parameter. */
+/** The same as fit_func_bg5(), but s is a free parameter. */
 double fit_func_bg6(const Template &, const double, const double, const double,
                     const double, const double, const double);
 }  // namespace gg2aa
