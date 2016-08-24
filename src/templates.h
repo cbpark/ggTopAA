@@ -49,6 +49,9 @@ public:
     friend double fit_func_bg5(const Template &, const double, const double,
                                const double, const double, const double,
                                const double);
+    friend double fit_func_bg6(const Template &, const double, const double,
+                               const double, const double, const double,
+                               const double);
 
 private:
     const std::string fname_;
@@ -83,6 +86,10 @@ double fit_func_bg4(const Template &, const double, const double, const double,
 
 /** s = \\int (1-x^{1/3})^b) * x^{a0 + a1 * \\log(x)} */
 double fit_func_bg5(const Template &, const double, const double, const double,
+                    const double, const double, const double);
+
+/** s is a free parameter. */
+double fit_func_bg6(const Template &, const double, const double, const double,
                     const double, const double, const double);
 }  // namespace gg2aa
 

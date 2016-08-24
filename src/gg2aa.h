@@ -17,13 +17,13 @@ int howToUse(const std::string &appname) {
     std::cerr << "Usage: " << appname << " input output fit_choice\n\n"
               << "    input      - input file\n"
               << "    output     - output file\n"
-              << "    fit_choice - choice of fit function [1, ..., 5]\n\n"
-              << "    ex) " << appname << " input.yml output.dat 5\n";
+              << "    fit_choice - choice of fit function [1, ..., 6]\n\n"
+              << "    ex) " << appname << " input.yml output.dat 6\n";
     return 1;
 }
 
 bool correctFitChoice(const int n) {
-    return n == 1 || n == 2 || n == 3 || n == 4 || n == 5;
+    return n == 1 || n == 2 || n == 3 || n == 4 || n == 5 || n == 6;
 }
 
 int failedToRead(const std::string &appname, const std::string &fname) {
@@ -42,7 +42,7 @@ void message(const std::string &appname, const std::string &msg,
 }
 
 void write_header(std::shared_ptr<std::ostream> os) {
-    *os << "# mass, width, chi2, chi2/ndf, parameters (p, b, a0, a1, kgg)\n";
+    *os << "# mass, width, chi2, chi2/ndf, parameters (s, p, b, a0, a1, kgg)\n";
 }
 
 #endif  // SRC_GG2AA_H_

@@ -99,6 +99,7 @@ Fit fit2(const Template &t, const Info &info);
 Fit fit3(const Template &t, const Info &info);
 Fit fit4(const Template &t, const Info &info);
 Fit fit5(const Template &t, const Info &info);
+Fit fit6(const Template &t, const Info &info);
 }  // namespace gg2aa
 
 #endif  // SRC_FIT_H_

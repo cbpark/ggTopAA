@@ -45,7 +45,7 @@ void FitResult::write(std::shared_ptr<std::ostream> os) const {
     *os << std::setw(12) << std::setprecision(4) << chi2_;
     *os << std::setw(11) << std::setprecision(4) << chi2_ndf_;
     for (const auto p : par_) {
-        *os << std::setw(11) << std::setprecision(4) << p;
+        *os << std::setw(12) << std::setprecision(5) << p;
     }
     *os << '\n';
 }
@@ -85,8 +85,10 @@ Fit mkFit(const Template &t, const Info &info, const int fit_choice) {
         return fit3(t, info);
     case 4:
         return fit4(t, info);
-    default:
+    case 5:
         return fit5(t, info);
+    default:
+        return fit6(t, info);
     }
 }
 
@@ -142,6 +144,18 @@ Fit fit5(const Template &t, const Info &info) {
     const FitFunction ffnc(t, info, fit_func_bg5);
     auto fit = Fit(ffnc);
     fit.pfnc()->FixParameter(0, 1);        // s
+    fit.pfnc()->FixParameter(1, 1.0 / 3);  // p
+    fit.pfnc()->SetParLimits(2, 0, 1000);  // b
+    // fit.pfnc()->SetParLimits(3, -10, 10);  // a0
+    // fit.pfnc()->SetParLimits(4, -10, 10);  // a1
+    fit.pfnc()->SetParLimits(5, 0, 1);  // kgg
+    return fit;
+}
+
+Fit fit6(const Template &t, const Info &info) {
+    const FitFunction ffnc(t, info, fit_func_bg6);
+    auto fit = Fit(ffnc);
+    // fit.pfnc()->FixParameter(0, 1);        // s
     fit.pfnc()->FixParameter(1, 1.0 / 3);  // p
     fit.pfnc()->SetParLimits(2, 0, 1000);  // b
     // fit.pfnc()->SetParLimits(3, -10, 10);  // a0
