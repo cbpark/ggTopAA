@@ -18,7 +18,7 @@
 #include "info.h"
 #include "templates.h"
 
-const double EPS = 1.0e-9;
+const double EPS = 1.0e-12;
 
 namespace gg2aa {
 double FitFunction::operator()(double *x, double *p) const {
@@ -45,7 +45,7 @@ void FitResult::write(std::shared_ptr<std::ostream> os) const {
     *os << std::setw(12) << std::setprecision(4) << chi2_;
     *os << std::setw(11) << std::setprecision(4) << chi2_ndf_;
     for (const auto p : par_) {
-        *os << std::setw(12) << std::setprecision(5) << p;
+        *os << std::setw(14) << std::setprecision(8) << p;
     }
     *os << '\n';
 }
@@ -155,12 +155,12 @@ Fit fit5(const Template &t, const Info &info) {
 Fit fit6(const Template &t, const Info &info) {
     const FitFunction ffnc(t, info, fit_func_bg6);
     auto fit = Fit(ffnc);
-    // fit.pfnc()->FixParameter(0, 1);        // s
+    // fit.pfnc()->SetParLimits(0, 0, 10);    // s
     fit.pfnc()->FixParameter(1, 1.0 / 3);  // p
     fit.pfnc()->SetParLimits(2, 0, 1000);  // b
-    // fit.pfnc()->SetParLimits(3, -10, 10);  // a0
-    // fit.pfnc()->SetParLimits(4, -10, 10);  // a1
-    fit.pfnc()->SetParLimits(5, 0, 1);  // kgg
+    fit.pfnc()->SetParLimits(3, -10, 10);  // a0
+    fit.pfnc()->SetParLimits(4, -10, 10);  // a1
+    fit.pfnc()->SetParLimits(5, 0, 1);     // kgg
     return fit;
 }
 }  // namespace gg2aa
