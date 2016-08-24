@@ -181,6 +181,7 @@ double fit_func_bg5(const Template &t, const double x, const double s,
 double fit_func_bg6(const Template &t, const double x, const double s,
                     const double p, const double b, const double a0,
                     const double a1) {
+    ignore(t);
     ignore(p);
     return fBG(x, s, 1.0 / 3, b, a0, a1);
 }
