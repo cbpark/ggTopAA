@@ -46,7 +46,7 @@ void FitResult::write(std::shared_ptr<std::ostream> os) const {
     for (const auto p : par_) {
         *os << std::setw(12) << std::setprecision(5) << p;
     }
-    *os << '\n';
+    *os << std::setw(6) << status_ << '\n';
 }
 
 void Fit::init_parameters(const Info &info) {
@@ -71,7 +71,7 @@ void Fit::do_fit(std::shared_ptr<TH1D> hist,
     int npar = r->NPar();
     std::vector<double> par;
     for (int i = 0; i != npar; ++i) { par.push_back(r->Parameter(i)); }
-    result->set_result(par, r->Chi2(), r->Ndf());
+    result->set_result(par, r->Chi2(), r->Ndf(), r->Status());
 }
 
 Fit mkFit(const Template &t, const Info &info, const int fit_choice) {

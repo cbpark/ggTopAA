@@ -54,10 +54,11 @@ public:
     double chi2() const { return chi2_; }
     std::vector<double> parameter() const { return par_; }
     void set_result(const std::vector<double> &par, const double chi2,
-                    const unsigned int ndf) {
+                    const unsigned int ndf, const int status) {
         par_ = par;
         chi2_ = chi2;
         chi2_ndf_ = chi2_ / ndf;
+        status_ = status;
     }
     void write(std::shared_ptr<std::ostream> os) const;
 
@@ -66,6 +67,7 @@ private:
     const double width_;
     double chi2_ = 0, chi2_ndf_ = 0;
     std::vector<double> par_;
+    int status_;
 };
 
 class Fit {
