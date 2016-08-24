@@ -22,8 +22,8 @@ const double EPS = 1.0e-9;
 
 namespace gg2aa {
 double FitFunction::operator()(double *x, double *p) const {
-    if (std::fabs(p[1]) < EPS ||
-        std::fabs(p[3] + 1) < EPS) {  // if p -> 0 or a0 + 1 -> 0
+    if (std::fabs(p[0]) < EPS || std::fabs(p[1]) < EPS ||
+        std::fabs(p[3] + 1) < EPS) {  // if s -> or p -> 0 or a0 + 1 -> 0
         TF1::RejectPoint();
         return 0;
     }
