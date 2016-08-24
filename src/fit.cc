@@ -107,7 +107,7 @@ Fit fit2(const Template &t, const Info &info) {
     const FitFunction ffnc(t, info, fit_func_bg2);
     auto fit = Fit(ffnc);
     fit.pfnc()->FixParameter(0, 1);        // s
-    fit.pfnc()->SetParLimits(1, 0, 10);     // p
+    fit.pfnc()->SetParLimits(1, 0, 10);    // p
     fit.pfnc()->SetParLimits(2, 0, 1000);  // b
     fit.pfnc()->SetParLimits(3, -10, 10);  // a0
     fit.pfnc()->FixParameter(4, 0);        // a1
@@ -145,8 +145,8 @@ Fit fit5(const Template &t, const Info &info) {
     fit.pfnc()->FixParameter(0, 1);        // s
     fit.pfnc()->FixParameter(1, 1.0 / 3);  // p
     fit.pfnc()->SetParLimits(2, 0, 1000);  // b
-    fit.pfnc()->SetParLimits(3, -10, 10);  // a0
-    fit.pfnc()->SetParLimits(4, -10, 10);  // a1
+    fit.pfnc()->SetParLimits(3, -1, 1);    // a0
+    fit.pfnc()->SetParLimits(4, -1, 1);    // a1
     fit.pfnc()->SetParLimits(5, 0, 1);     // kgg
     return fit;
 }
@@ -157,8 +157,8 @@ Fit fit6(const Template &t, const Info &info) {
     fit.pfnc()->SetParLimits(0, 0, 0.01);  // s
     fit.pfnc()->FixParameter(1, 1.0 / 3);  // p
     fit.pfnc()->SetParLimits(2, 0, 1000);  // b
-    fit.pfnc()->SetParLimits(3, -10, 10);  // a0
-    fit.pfnc()->SetParLimits(4, -10, 10);  // a1
+    fit.pfnc()->SetParLimits(3, -1, 1);    // a0
+    fit.pfnc()->SetParLimits(4, -1, 1);    // a1
     fit.pfnc()->SetParLimits(5, 0, 1);     // kgg
     return fit;
 }
