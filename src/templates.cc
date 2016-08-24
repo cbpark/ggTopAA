@@ -7,6 +7,7 @@
  */
 
 #include "templates.h"
+#include <cmath>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -19,9 +20,6 @@
 #include "histogram.h"
 #include "info.h"
 #include "utils.h"
-
-// using std::pow;
-// using std::cbrt;
 
 namespace gg2aa {
 void Template::set_template(const Info &info) {
@@ -69,7 +67,12 @@ double Template::norm_sig() const {
 // Eq.(2) in https://cds.cern.ch/record/2114853/files/ATLAS-CONF-2015-081.pdf
 double fBG(const double x, const double s, const double p, const double b,
            const double a0, const double a1) {
+#if defined(__APPLE__) && defined(__MACH__)
+    return std::pow(1 - std::pow(x, p), b) *
+           std::pow(x, a0 + a1 * std::log(x)) / s;
+#elif defined(__linux__)
     return pow(1 - pow(x, p), b) * pow(x, a0 + a1 * log(x)) / s;
+#endif
 }
 
 class FuncBG {
@@ -102,21 +105,23 @@ double integralNormBG(const double x0, const double x1, const double p,
 
 double fit_func_bg_nolog(const Template &t, const double x, const double p,
                          const double b, const double a0) {
-    const double x0 = t.range_.low() / t.sqrt_s_,
-                 x1 = t.range_.up() / t.sqrt_s_;
+    const double sqrt_s = t.sqrt_s_;
+    const double x0 = t.range_.low() / sqrt_s, x1 = t.range_.up() / sqrt_s;
     const double a0_1 = a0 + 1;
     const double b1 = -b;
     const double b2 = a0_1 / p;
     const double b3 = b2 + 1;
 
     double scale = 1.0 / a0_1;
-    // use the hypergeometric function from ROOT with GSL.
-    // scale *= pow(x1, a0_1) * ROOT::Math::hyperg(b1, b2, b3, pow(x1, p)) -
-    //          pow(x0, a0_1) * ROOT::Math::hyperg(b1, b2, b3, pow(x0, p));
-    // use the hypergeometric function from Cephes.
+// use the hypergeometric function from Cephes.
+#if defined(__APPLE__) && defined(__MACH__)
+    scale *= std::pow(x1, a0_1) * hyp2f1(b1, b2, b3, std::pow(x1, p)) -
+             std::pow(x0, a0_1) * hyp2f1(b1, b2, b3, std::pow(x0, p));
+#elif defined(__linux__)
     scale *= pow(x1, a0_1) * hyp2f1(b1, b2, b3, pow(x1, p)) -
              pow(x0, a0_1) * hyp2f1(b1, b2, b3, pow(x0, p));
-    return fBG(x, scale, p, b, a0, 0);
+#endif
+    return fBG(x, scale * sqrt_s, p, b, a0, 0);
 }
 
 double fit_func_bg1(const Template &t, const double x, const double s,
@@ -152,19 +157,19 @@ double fit_func_bg4(const Template &t, const double x, const double s,
     ignore(p);
     ignore(a0);
     ignore(a1);
-    const double x0 = t.range_.low() / t.sqrt_s_,
-                 x1 = t.range_.up() / t.sqrt_s_;
+    const double sqrt_s = t.sqrt_s_;
+    const double x0 = t.range_.low() / sqrt_s, x1 = t.range_.up() / sqrt_s;
     const double z0 = cbrt(x0), z1 = cbrt(x1);
     const double b1 = b + 1;
     const double b2 = b1 + 1;
     auto func = [](const double y, const double b) {
-        return pow(1 - cbrt(y), b);
+        return std::pow(1 - std::cbrt(y), b);
     };
 
     double scale = 3.0 / (b1 * b2 * (b2 + 1));
     scale *= func(x0, b1) * (2 + b1 * (2 + b2 * z0) * z0) -
              func(x1, b1) * (2 + b1 * (2 + b2 * z1) * z1);
-    return func(x, b) / scale;
+    return func(x, b) / (scale * sqrt_s);
 }
 
 double fit_func_bg5(const Template &t, const double x, const double s,
@@ -172,10 +177,10 @@ double fit_func_bg5(const Template &t, const double x, const double s,
                     const double a1) {
     ignore(s);
     ignore(p);
-    const double x0 = t.range_.low() / t.sqrt_s_,
-                 x1 = t.range_.up() / t.sqrt_s_;
+    const double sqrt_s = t.sqrt_s_;
+    const double x0 = t.range_.low() / sqrt_s, x1 = t.range_.up() / sqrt_s;
     const double scale = integralNormBG(x0, x1, 1.0 / 3, b, a0, a1);
-    return fBG(x, scale, 1.0 / 3, b, a0, a1);
+    return fBG(x, scale * sqrt_s, 1.0 / 3, b, a0, a1);
 }
 
 double fit_func_bg6(const Template &t, const double x, const double s,
