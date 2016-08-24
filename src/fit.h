@@ -22,9 +22,9 @@
 namespace gg2aa {
 class FitFunction {
     // this is just a type synonym.
-    using FFType =
-        std::function<double(const Template &, const double, const double,
-                             const double, const double, const double)>;
+    using FFType = std::function<double(
+        const Template &, const double, const double, const double,
+        const double, const double, const double)>;
 
 public:
     FitFunction() = delete;
@@ -73,7 +73,7 @@ public:
     Fit() = delete;
     explicit Fit(const FitFunction &f)
         : pfnc_(std::make_shared<TF1>("pfnc", f, f.range().low(),
-                                      f.range().up(), 5)) {
+                                      f.range().up(), 6)) {
         init_parameters(f.info());
     }
     ~Fit() {}

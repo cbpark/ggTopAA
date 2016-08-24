@@ -27,10 +27,10 @@ void Info::show(std::ostream *out) const {
     *out << "  " << get_string("bin size", bin_size) << ", "
          << "(xlow, xup) = "
          << "(" << xlow << ", " << xup << ")\n";
-    *out << "  fit parameters: " << get_string("p", p_in) << ", "
-         << get_string("b", b_in) << ", " << get_string("a0", a0_in) << ", "
-         << get_string("a1", a1_in) << ", " << get_string("kgg", kgg_in)
-         << "\n";
+    *out << "  fit parameters: " << get_string("s", s_in) << ", "
+         << get_string("p", p_in) << ", " << get_string("b", b_in) << ", "
+         << get_string("a0", a0_in) << ", " << get_string("a1", a1_in) << ", "
+         << get_string("kgg", kgg_in) << "\n";
 }
 
 void Info::show_bg_summary(std::ostream *out) const {

@@ -35,15 +35,20 @@ public:
     double norm_sig() const;
 
     friend double fit_func_bg1(const Template &, const double, const double,
-                               const double, const double, const double);
+                               const double, const double, const double,
+                               const double);
     friend double fit_func_bg2(const Template &, const double, const double,
-                               const double, const double, const double);
+                               const double, const double, const double,
+                               const double);
     friend double fit_func_bg3(const Template &, const double, const double,
-                               const double, const double, const double);
+                               const double, const double, const double,
+                               const double);
     friend double fit_func_bg4(const Template &, const double, const double,
-                               const double, const double, const double);
+                               const double, const double, const double,
+                               const double);
     friend double fit_func_bg5(const Template &, const double, const double,
-                               const double, const double, const double);
+                               const double, const double, const double,
+                               const double);
 
 private:
     const std::string fname_;
@@ -59,25 +64,26 @@ private:
 
 using Templates = std::vector<Template>;
 
-/** \\int (1-x^{1/3})^b * x^{a0} */
-double fit_func_bg1(const Template &t, const double x, const double p,
-                    const double b, const double a0, const double a1);
+/** s = \\int (1-x^{1/3})^b * x^{a0} */
+double fit_func_bg1(const Template &t, const double x, const double s,
+                    const double p, const double b, const double a0,
+                    const double a1);
 
-/** \\int (1-x^p)^b * x^{a0} */
+/** s = \\int (1-x^p)^b * x^{a0} */
 double fit_func_bg2(const Template &, const double, const double, const double,
-                    const double, const double);
+                    const double, const double, const double);
 
-/** \\int (1-x^p)^b */
+/** s = \\int (1-x^p)^b */
 double fit_func_bg3(const Template &, const double, const double, const double,
-                    const double, const double);
+                    const double, const double, const double);
 
-/** \\int (1-x^{1/3})^b */
+/** s = \\int (1-x^{1/3})^b */
 double fit_func_bg4(const Template &, const double, const double, const double,
-                    const double, const double);
+                    const double, const double, const double);
 
-/** \\int (1-x^{1/3})^b) * x^{a0 + a1 * \\log(x)} */
+/** s = \\int (1-x^{1/3})^b) * x^{a0 + a1 * \\log(x)} */
 double fit_func_bg5(const Template &, const double, const double, const double,
-                    const double, const double);
+                    const double, const double, const double);
 }  // namespace gg2aa
 
 #endif  // SRC_TEMPLATES_H_

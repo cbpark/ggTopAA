@@ -17,7 +17,7 @@ struct Info {
     double rs, lum, eff, kgg;
     double sig_direct, sig_one_frag, sig_two_frag;
     double bin_size, xlow, xup;
-    double p_in, b_in, a0_in, a1_in, kgg_in;
+    double s_in, p_in, b_in, a0_in, a1_in, kgg_in;
     int status = 0;
 
     void show(std::ostream *out) const;
