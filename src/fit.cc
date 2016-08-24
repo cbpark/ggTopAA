@@ -97,7 +97,7 @@ Fit fit1(const Template &t, const Info &info) {
     fit.pfnc()->FixParameter(0, 1);        // s
     fit.pfnc()->FixParameter(1, 1.0 / 3);  // p
     fit.pfnc()->SetParLimits(2, 0, 1000);  // b
-    fit.pfnc()->SetParLimits(3, -10, 10);  // a0
+    fit.pfnc()->SetParLimits(3, -10, 0);   // a0
     fit.pfnc()->FixParameter(4, 0);        // a1
     fit.pfnc()->SetParLimits(5, 0, 1);     // kgg
     return fit;
@@ -109,7 +109,7 @@ Fit fit2(const Template &t, const Info &info) {
     fit.pfnc()->FixParameter(0, 1);        // s
     fit.pfnc()->SetParLimits(1, 0, 10);    // p
     fit.pfnc()->SetParLimits(2, 0, 1000);  // b
-    fit.pfnc()->SetParLimits(3, -10, 10);  // a0
+    fit.pfnc()->SetParLimits(3, -10, 0);   // a0
     fit.pfnc()->FixParameter(4, 0);        // a1
     fit.pfnc()->SetParLimits(5, 0, 1);     // kgg
     return fit;
