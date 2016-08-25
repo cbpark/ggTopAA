@@ -67,7 +67,7 @@ private:
     const double width_;
     double chi2_ = 0, chi2_ndf_ = 0;
     std::vector<double> par_;
-    int status_;
+    int status_ = 0;
 };
 
 class Fit {

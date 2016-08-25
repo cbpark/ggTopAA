@@ -10,7 +10,6 @@
 #define SRC_GG2AA_H_
 
 #include <iostream>
-#include <memory>
 #include <string>
 
 int howToUse(const std::string &appname) {
@@ -39,7 +38,7 @@ void message(const std::string &appname, const std::string &msg,
     *out << appname << ": " << msg << '\n';
 }
 
-void write_header(std::shared_ptr<std::ostream> os) {
+void write_header(std::ostream *os) {
     *os << "# mass, width, chi2, chi2/ndf, parameters (s, p, b, a0, a1, kgg)";
     *os << ", status (>2 means invalid result)\n";
 }

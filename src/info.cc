@@ -12,7 +12,7 @@
 
 namespace gg2aa {
 template <typename T>
-std::string get_string(std::string name, T x) {
+std::string get_string(const std::string &name, T x) {
     return name + " = " + std::to_string(x);
 }
 

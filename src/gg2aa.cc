@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
         return errMsg(appname, "failed to create `" + outfile_name + "'.");
     }
     message(appname, "output will be saved to `" + outfile_name + "'.", to_out);
-    write_header(outfile);
+    write_header(outfile.get());
 
     // Perform fitting and obtain the chi square.
     message(appname, "performing fitting ...", to_out);
