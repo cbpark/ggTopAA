@@ -43,7 +43,7 @@ void message(const std::string &appname, const std::string &msg,
 
 void write_header(std::shared_ptr<std::ostream> os) {
     *os << "# mass, width, chi2, chi2/ndf, parameters (s, p, b, a0, a1, kgg)";
-    *os << ", status (>0 means invalid result)\n";
+    *os << ", status (>2 means invalid result)\n";
 }
 
 #endif  // SRC_GG2AA_H_
