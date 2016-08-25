@@ -9,7 +9,6 @@
 #ifndef SRC_GG2AA_H_
 #define SRC_GG2AA_H_
 
-#include <cctype>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -23,7 +22,7 @@ int howToUse(const std::string &appname) {
     return 1;
 }
 
-bool correctFitChoice(const int n) { return std::isdigit(n) && n > 0 && n < 7; }
+bool correctFitChoice(const int n) { return n > 0 && n < 7; }
 
 int failedToRead(const std::string &appname, const std::string &fname) {
     std::cerr << appname << ": failed to read `" << fname << "'.\n";
