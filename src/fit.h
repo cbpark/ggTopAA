@@ -9,10 +9,10 @@
 #ifndef SRC_FIT_H_
 #define SRC_FIT_H_
 
+#include <array>
 #include <functional>
 #include <memory>
 #include <ostream>
-#include <vector>
 #include "TF1.h"
 #include "TH1D.h"
 #include "info.h"
@@ -44,6 +44,8 @@ private:
     FFType func_;
 };
 
+using FitParameters = std::array<double, 6>;
+
 class FitResult {
 public:
     FitResult() = delete;
@@ -52,8 +54,8 @@ public:
     ~FitResult() {}
 
     double chi2() const { return chi2_; }
-    std::vector<double> parameter() const { return par_; }
-    void set_result(const std::vector<double> &par, const double chi2,
+    FitParameters parameter() const { return par_; }
+    void set_result(const FitParameters &par, const double chi2,
                     const unsigned int ndf, const int status) {
         par_ = par;
         chi2_ = chi2;
@@ -66,7 +68,7 @@ private:
     const double mass_;
     const double width_;
     double chi2_ = 0, chi2_ndf_ = 0;
-    std::vector<double> par_;
+    FitParameters par_;
     int status_ = 0;
 };
 

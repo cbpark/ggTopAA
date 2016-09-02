@@ -7,11 +7,11 @@
  */
 
 #include "fit.h"
+#include <array>
 #include <cmath>
 #include <iomanip>
 #include <memory>
 #include <ostream>
-#include <vector>
 #include "Math/MinimizerOptions.h"
 #include "TFitResult.h"
 #include "TH1D.h"
@@ -68,9 +68,16 @@ void Fit::do_fit(std::shared_ptr<TH1D> hist,
     // - "S": the result of the fit is returned in the TFitResultPtr.
     auto r = hist->Fit(pfnc_.get(), "INS");
 
-    int npar = r->NPar();
-    std::vector<double> par;
-    for (int i = 0; i != npar; ++i) { par.push_back(r->Parameter(i)); }
+    const int npar(r->NPar());
+    FitParameters par;
+    const int par_size(par.size());
+    if (npar >= par_size) {  // in case that NPar does not match
+        for (int i = 0; i != par_size; ++i) { par[i] = r->Parameter(i); }
+    } else {
+        for (int i = 0; i != npar; ++i) { par[i] = r->Parameter(i); }
+        for (int ir = npar; ir != par_size; ++ir) { par[ir] = 0; }
+    }
+
     result->set_result(par, r->Chi2(), r->Ndf(), r->Status());
 }
 
