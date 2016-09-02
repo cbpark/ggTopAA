@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
         auto result = std::make_shared<gg2aa::FitResult>(t);
         auto fit = gg2aa::mkFit(t, *info, fit_choice);
         fit.do_fit(h_pseudo, result);
-        result->write(outfile);
+        *outfile << *result << '\n';
     }
     outfile->close();
     message(appname, "... gracefully done.", to_out);

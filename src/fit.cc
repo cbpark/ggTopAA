@@ -10,8 +10,8 @@
 #include <array>
 #include <cmath>
 #include <iomanip>
+#include <iostream>
 #include <memory>
-#include <ostream>
 #include "Math/MinimizerOptions.h"
 #include "TFitResult.h"
 #include "TH1D.h"
@@ -37,16 +37,25 @@ double FitFunction::operator()(double *x, double *p) const {
     return f;
 }
 
-void FitResult::write(std::shared_ptr<std::ostream> os) const {
-    *os << std::fixed;
-    *os << std::setw(9) << std::setprecision(2) << mass_;
-    *os << std::setw(8) << std::setprecision(2) << width_;
-    *os << std::setw(12) << std::setprecision(4) << chi2_;
-    *os << std::setw(11) << std::setprecision(4) << chi2_ndf_;
-    for (const auto p : par_) {
-        *os << std::setw(12) << std::setprecision(5) << p;
+std::istream &operator>>(std::istream &is, FitResult &fres) {
+    is >> fres.mass_ >> fres.width_ >> fres.chi2_ >> fres.chi2_ndf_;
+    const int par_size(fres.par_.size());
+    for (int i = 0; i != par_size; ++i) { is >> fres.par_[i]; }
+    is >> fres.status_;
+    return is;
+}
+
+std::ostream &operator<<(std::ostream &os, const FitResult &fres) {
+    os << std::fixed;
+    os << std::setw(9) << std::setprecision(2) << fres.mass_;
+    os << std::setw(8) << std::setprecision(2) << fres.width_;
+    os << std::setw(12) << std::setprecision(4) << fres.chi2_;
+    os << std::setw(11) << std::setprecision(4) << fres.chi2_ndf_;
+    for (const auto p : fres.par_) {
+        os << std::setw(12) << std::setprecision(5) << p;
     }
-    *os << std::setw(6) << status_ << '\n';
+    os << std::setw(6) << fres.status_;
+    return os;
 }
 
 void Fit::init_parameters(const Info &info) {

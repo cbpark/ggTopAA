@@ -11,8 +11,8 @@
 
 #include <array>
 #include <functional>
+#include <iostream>
 #include <memory>
-#include <ostream>
 #include "TF1.h"
 #include "TH1D.h"
 #include "info.h"
@@ -48,7 +48,7 @@ using FitParameters = std::array<double, 6>;
 
 class FitResult {
 public:
-    FitResult() = delete;
+    FitResult() {}
     explicit FitResult(const Template &t)
         : mass_(t.mass_width().first), width_(t.mass_width().second) {}
     ~FitResult() {}
@@ -62,11 +62,13 @@ public:
         chi2_ndf_ = chi2_ / ndf;
         status_ = status;
     }
-    void write(std::shared_ptr<std::ostream> os) const;
+
+    friend std::istream &operator>>(std::istream &is, FitResult &fres);
+    friend std::ostream &operator<<(std::ostream &os, const FitResult &fres);
 
 private:
-    const double mass_;
-    const double width_;
+    double mass_ = 0;
+    double width_ = 0;
     double chi2_ = 0, chi2_ndf_ = 0;
     FitParameters par_;
     int status_ = 0;

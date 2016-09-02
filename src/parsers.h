@@ -11,6 +11,8 @@
 
 #include <fstream>
 #include <memory>
+#include <vector>
+#include "fit.h"
 #include "info.h"
 #include "inputdata.h"
 
@@ -18,6 +20,8 @@ namespace gg2aa {
 InputData parseInputData(std::unique_ptr<std::ifstream> is);
 
 Info getInfo(const InputData &data);
+
+std::vector<FitResult> parseFitResults(std::unique_ptr<std::ifstream> is);
 }  // namespace gg2aa
 
 #endif  // SRC_PARSERS_H_

@@ -30,7 +30,7 @@ LIBS     += $(shell root-config --libs)
 LIBS     += -lMathMore -lMinuit2
 
 # Targets
-EXE     := $(BINDIR)/gg2aa
+EXE     := $(BINDIR)/gg2aa $(BINDIR)/test_parse
 EXESRC  := $(patsubst $(BINDIR)/%,$(SRCDIR)/%.cc,$(EXE))
 EXEOBJ  := $(EXESRC:.cc=.o)
 LIB     := $(LIBDIR)/lib$(PKGNAME).a
@@ -46,8 +46,8 @@ all: $(EXE)
 CEPHES_DIR := cephes
 include $(CEPHES_DIR)/module.mk
 
-$(BINDIR)/gg2aa: build $(LIB) $(SRCDIR)/gg2aa.o
-	$(CXX) $(LDFLAGS) -o $@ $(SRCDIR)/gg2aa.o $(LIB) $(LIBS)
+$(BINDIR)/%: $(SRCDIR)/%.o build $(LIB)
+	$(CXX) $(LDFLAGS) -o $@ $< $(LIB) $(LIBS)
 
 $(LIBDIR)/lib$(PKGNAME).a: CXXFLAGS += -fPIC -I$(CEPHES_DIR)
 $(LIBDIR)/lib$(PKGNAME).a: $(LIBOBJ)

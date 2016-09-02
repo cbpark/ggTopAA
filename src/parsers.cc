@@ -11,9 +11,11 @@
 #include <cctype>
 #include <fstream>
 #include <memory>
+#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
+#include "fit.h"
 #include "info.h"
 #include "inputdata.h"
 #include "utils.h"
@@ -117,5 +119,22 @@ Info getInfo(const InputData &data) {
     *f >> info.s_in >> info.p_in >> info.b_in >> info.a0_in >> info.a1_in >>
         info.kgg_in;
     return info;
+}
+
+std::vector<FitResult> parseFitResults(std::unique_ptr<std::ifstream> is) {
+    string line;
+    FitResult fr;
+    std::vector<FitResult> fres;
+    while (getline(*is, line)) {
+        if (line.find("#") == string::npos && !line.empty()) {
+            std::istringstream iss(line);
+            iss >> fr;
+            fres.push_back(fr);
+        } else {  // comment or empty line
+            continue;
+        }
+    }
+    is->close();
+    return fres;
 }
 }  // namespace gg2aa
