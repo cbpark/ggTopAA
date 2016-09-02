@@ -7,7 +7,7 @@ CXX         := c++
 CXXFLAGS    := -g -O3 -m64 -march=native -Wall -Wextra -pipe -I$(SRCDIR)
 CC          := cc
 CFLAGS      := -g -O3 -m64 -march=native -Wall -Wextra -pipe
-LDFLAGS     := -O3
+LDFLAGS     := -O3 -m64
 LIBS        :=
 AR          := ar crs
 MKDIR       := mkdir -p

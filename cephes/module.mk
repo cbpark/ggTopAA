@@ -3,7 +3,7 @@ CEPHES_OBJS := $(CEPHES_SRCS:.c=.o)
 
 LIB  += $(LIBDIR)/libmd.a
 
-$(LIBDIR)/libmd.a: CFLAGS += -fno-builtin -fPIC -I$(CEPHES_DIR)
+$(LIBDIR)/libmd.a: CFLAGS += -fno-builtin -fno-math-errno -fPIC -I$(CEPHES_DIR)
 $(LIBDIR)/libmd.a: $(CEPHES_OBJS)
 	$(AR) $@ $^
 	ranlib $@
