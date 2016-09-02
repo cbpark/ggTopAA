@@ -21,6 +21,7 @@
 
 namespace gg2aa {
 class FitFunction {
+private:
     // this is just a type synonym.
     using FFType = std::function<double(
         const Template &, const double, const double, const double,
@@ -53,6 +54,8 @@ public:
         : mass_(t.mass_width().first), width_(t.mass_width().second) {}
     ~FitResult() {}
 
+    double mass() const { return mass_; }
+    double width() const { return width_; }
     double chi2() const { return chi2_; }
     FitParameters parameter() const { return par_; }
     void set_result(const FitParameters &par, const double chi2,

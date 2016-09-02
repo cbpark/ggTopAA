@@ -4,10 +4,10 @@ SRCDIR      := src
 BINDIR      := bin
 LIBDIR      := lib
 CXX         := c++
-CXXFLAGS    := -g -O3 -m64 -march=native -Wall -Wextra -I$(SRCDIR)
+CXXFLAGS    := -g -O3 -m64 -march=native -Wall -Wextra -pipe -I$(SRCDIR)
 CC          := cc
-CFLAGS      := -g -O3 -m64 -march=native -Wall -Wextra
-LDFLAGS     := -g -m64
+CFLAGS      := -g -O3 -m64 -march=native -Wall -Wextra -pipe
+LDFLAGS     := -O3
 LIBS        :=
 AR          := ar crs
 MKDIR       := mkdir -p
@@ -17,6 +17,15 @@ UNAME       := $(shell uname -s)
 ifeq ($(UNAME), Darwin)
 	CXXFLAGS += -stdlib=libc++
 endif
+
+# Targets
+EXE     := $(BINDIR)/gg2aa $(BINDIR)/test_parse
+EXESRC  := $(patsubst $(BINDIR)/%,$(SRCDIR)/%.cc,$(EXE))
+EXEOBJ  := $(EXESRC:.cc=.o)
+LIB     := $(LIBDIR)/lib$(PKGNAME).a
+LIBSRC  := $(filter-out $(EXESRC),$(wildcard $(SRCDIR)/*.cc))
+LIBOBJ  := $(LIBSRC:.cc=.o)
+HEAD    := $(filter-out $(EXESRC:.cc=.h),$(wildcard $(SRCDIR)/*.h))
 
 # ROOT (https://root.cern.ch)
 CXXFLAGS += $(shell root-config --cflags)
@@ -28,15 +37,6 @@ CXXFLAGS += -std=c++14 -pedantic
 LDFLAGS  += $(shell root-config --ldflags)
 LIBS     += $(shell root-config --libs)
 LIBS     += -lMathMore -lMinuit2
-
-# Targets
-EXE     := $(BINDIR)/gg2aa $(BINDIR)/test_parse
-EXESRC  := $(patsubst $(BINDIR)/%,$(SRCDIR)/%.cc,$(EXE))
-EXEOBJ  := $(EXESRC:.cc=.o)
-LIB     := $(LIBDIR)/lib$(PKGNAME).a
-LIBSRC  := $(filter-out $(EXESRC),$(wildcard $(SRCDIR)/*.cc))
-LIBOBJ  := $(LIBSRC:.cc=.o)
-HEAD    := $(filter-out $(EXESRC:.cc=.h),$(wildcard $(SRCDIR)/*.h))
 
 .PHONY: all build show clean
 
