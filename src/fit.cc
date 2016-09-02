@@ -79,13 +79,7 @@ void Fit::do_fit(std::shared_ptr<TH1D> hist,
 
     const int npar(r->NPar());
     FitParameters par;
-    const int par_size(par.size());
-    if (npar >= par_size) {  // in case that NPar does not match
-        for (int i = 0; i != par_size; ++i) { par[i] = r->Parameter(i); }
-    } else {
-        for (int i = 0; i != npar; ++i) { par[i] = r->Parameter(i); }
-        for (int ir = npar; ir != par_size; ++ir) { par[ir] = 0; }
-    }
+    for (int i = 0; i != npar; ++i) { par[i] = r->Parameter(i); }
 
     result->set_result(par, r->Chi2(), r->Ndf(), r->Status());
 }

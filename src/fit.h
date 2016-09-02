@@ -82,7 +82,7 @@ public:
     Fit() = delete;
     explicit Fit(const FitFunction &f)
         : pfnc_(std::make_shared<TF1>("pfnc", f, f.range().low(),
-                                      f.range().up(), 6)) {
+                                      f.range().up(), FitParameters().size())) {
         init_parameters(f.info());
     }
     ~Fit() {}
