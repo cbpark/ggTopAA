@@ -12,8 +12,10 @@
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <vector>
 #include "Math/MinimizerOptions.h"
 #include "TFitResult.h"
+#include "TGraph2D.h"
 #include "TH1D.h"
 #include "info.h"
 #include "templates.h"
@@ -179,5 +181,18 @@ Fit fit6(const Template &t, const Info &info) {
     fit.pfnc()->SetParLimits(4, -1, 1);    // a1
     fit.pfnc()->SetParLimits(5, 0, 1);     // kgg
     return fit;
+}
+
+std::unique_ptr<TGraph2D> fitResultGraph(const std::vector<FitResult> &fres) {
+    std::vector<double> masses, widths, chi2s;
+    for (const auto &fr : fres) {
+        masses.push_back(fr.mass());
+        widths.push_back(fr.width());
+        chi2s.push_back(fr.chi2());
+    }
+
+    auto g2 = std::make_unique<TGraph2D>(fres.size(), masses.data(),
+                                         widths.data(), chi2s.data());
+    return g2;
 }
 }  // namespace gg2aa

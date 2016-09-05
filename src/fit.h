@@ -13,7 +13,9 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <vector>
 #include "TF1.h"
+#include "TGraph2D.h"
 #include "TH1D.h"
 #include "info.h"
 #include "templates.h"
@@ -109,6 +111,8 @@ Fit fit3(const Template &t, const Info &info);
 Fit fit4(const Template &t, const Info &info);
 Fit fit5(const Template &t, const Info &info);
 Fit fit6(const Template &t, const Info &info);
+
+std::unique_ptr<TGraph2D> fitResultGraph(const std::vector<FitResult> &fres);
 }  // namespace gg2aa
 
 #endif  // SRC_FIT_H_
