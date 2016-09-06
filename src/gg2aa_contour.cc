@@ -1,3 +1,11 @@
+/*
+ *  Copyright (C) 2016 Chan Beom Park <cbpark@gmail.com>
+ *
+ *  This file is part of ggTopAA, which is released under the GNU General Public
+ *  License. See file LICENSE in the top directory of this project or go to
+ *  <http://www.gnu.org/licenses/> for full license details.
+ */
+
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -7,7 +15,7 @@
 #include "parsers.h"
 
 int main(int, char *argv[]) {
-    const std::string appname("parse_test");
+    const std::string appname("gg2aa_contour");
 
     auto infile = std::make_unique<std::ifstream>(argv[1]);
     if (!infile->good()) { return failedToRead(appname, argv[1]); }

@@ -19,7 +19,7 @@ ifeq ($(UNAME), Darwin)
 endif
 
 # Targets
-EXE     := $(BINDIR)/gg2aa $(BINDIR)/test_parse
+EXE     := $(BINDIR)/gg2aa $(BINDIR)/gg2aa_contour
 EXESRC  := $(patsubst $(BINDIR)/%,$(SRCDIR)/%.cc,$(EXE))
 EXEOBJ  := $(EXESRC:.cc=.o)
 LIB     := $(LIBDIR)/lib$(PKGNAME).a
