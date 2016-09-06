@@ -12,16 +12,25 @@ int main(int, char *argv[]) {
     if (!infile->good()) { return failedToRead(appname, argv[1]); }
 
     auto fres = gg2aa::parseFitResults(std::move(infile));
-    for (const auto &fr : fres) { std::cout << fr << '\n'; }
 
     auto gr = gg2aa::fitResultGraph(fres);
-    auto masses = gr->GetX();
-    auto widths = gr->GetY();
-    auto chi2s = gr->GetZ();
-    const int npoint(fres.size());
-    for (int i = 0; i != npoint; ++i) {
-        std::cout << "mass = " << masses[i];
-        std::cout << ", width = " << widths[i];
-        std::cout << ", chi2 = " << chi2s[i] << '\n';
+    // auto masses = gr->GetX();
+    // auto widths = gr->GetY();
+    // auto chi2s = gr->GetZ();
+    // const int npoint(fres.size());
+    // for (int i = 0; i != npoint; ++i) {
+    //     std::cout << "mass = " << masses[i];
+    //     std::cout << ", width = " << widths[i];
+    //     std::cout << ", chi2 = " << chi2s[i] << '\n';
+    // }
+
+    double mass, width;
+    for (int i = 0; i != 10; ++i) {
+        for (int j = 0; j != 100; ++j) {
+            mass = 172 + i * 0.2;
+            width = 0.5 + j * 0.01;
+            std::cout << "interp (mass = " << mass << ", width = " << width
+                      << ") = " << gr->Interpolate(mass, width) << '\n';
+        }
     }
 }
