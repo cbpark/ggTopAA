@@ -112,7 +112,25 @@ Fit fit4(const Template &t, const Info &info);
 Fit fit5(const Template &t, const Info &info);
 Fit fit6(const Template &t, const Info &info);
 
-std::unique_ptr<TGraph2D> fitResultGraph(const std::vector<FitResult> &fres);
+/**
+ *  The result of fitting is stored in the function using
+ *  TGraph2D::Interpolate of ROOT.
+ */
+class FitResultFunc {
+public:
+    FitResultFunc() = delete;
+    explicit FitResultFunc(const std::vector<FitResult> &fres)
+        : fres_graph_(mkGraph2D(fres)) {}
+    ~FitResultFunc() {}
+
+    double operator()(double *x) {
+        return fres_graph_->Interpolate(x[0], x[1]);
+    }
+
+private:
+    std::shared_ptr<TGraph2D> fres_graph_;
+    std::shared_ptr<TGraph2D> mkGraph2D(const std::vector<FitResult> &fres);
+};
 }  // namespace gg2aa
 
 #endif  // SRC_FIT_H_

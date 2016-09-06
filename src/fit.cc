@@ -20,6 +20,9 @@
 #include "info.h"
 #include "templates.h"
 
+using std::shared_ptr;
+using std::vector;
+
 const double EPS = 1.0e-12;
 
 namespace gg2aa {
@@ -66,8 +69,7 @@ void Fit::init_parameters(const Info &info) {
                          info.a1_in, info.kgg_in);
 }
 
-void Fit::do_fit(std::shared_ptr<TH1D> hist,
-                 std::shared_ptr<FitResult> result) {
+void Fit::do_fit(shared_ptr<TH1D> hist, shared_ptr<FitResult> result) {
     ROOT::Math::MinimizerOptions opt;
     opt.SetDefaultMinimizer("Minuit2", "Minimize");
     opt.SetMaxFunctionCalls(1000000);
@@ -183,15 +185,15 @@ Fit fit6(const Template &t, const Info &info) {
     return fit;
 }
 
-std::unique_ptr<TGraph2D> fitResultGraph(const std::vector<FitResult> &fres) {
-    std::vector<double> masses, widths, chi2s;
+shared_ptr<TGraph2D> FitResultFunc::mkGraph2D(const vector<FitResult> &fres) {
+    vector<double> masses, widths, chi2s;
     for (const auto &fr : fres) {
         masses.push_back(fr.mass());
         widths.push_back(fr.width());
         chi2s.push_back(fr.chi2());
     }
 
-    auto g2 = std::make_unique<TGraph2D>(fres.size(), masses.data(),
+    auto g2 = std::make_shared<TGraph2D>(fres.size(), masses.data(),
                                          widths.data(), chi2s.data());
     return g2;
 }
