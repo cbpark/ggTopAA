@@ -82,7 +82,7 @@ public:
         : s_(s), p_(p), b_(b), a0_(a0), a1_(a1) {}
     ~FuncBG() {}
 
-    double operator()(double *x, double *par) {
+    double operator()(double *x, double *par) const {
         ignore(par);
         return fBG(x[0], s_, p_, b_, a0_, a1_);
     }

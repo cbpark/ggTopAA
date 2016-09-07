@@ -6,12 +6,12 @@
  *  <http://www.gnu.org/licenses/> for full license details.
  */
 
+#include "gg2aa.h"
 #include <fstream>
 #include <iostream>
 #include <memory>
 #include <string>
 #include "fit.h"
-#include "gg2aa.h"
 #include "parsers.h"
 
 int main(int, char *argv[]) {
@@ -22,15 +22,7 @@ int main(int, char *argv[]) {
 
     auto fres = gg2aa::parseFitResults(std::move(infile));
     auto frfunc = gg2aa::FitResultFunc(fres);
-
-    double mass, width;
-    for (int i = 0; i != 10; ++i) {
-        for (int j = 0; j != 100; ++j) {
-            mass = 172 + i * 0.2;
-            width = 0.5 + j * 0.01;
-            double x[2] = {mass, width};
-            std::cout << "interp (mass = " << mass << ", width = " << width
-                      << ") = " << frfunc(x) << '\n';
-        }
-    }
+    auto point = gg2aa::minPoint(frfunc);
+    std::cout << "Minimum: " << point.first[0] << ", " << point.first[1] << ", "
+              << point.second << '\n';
 }

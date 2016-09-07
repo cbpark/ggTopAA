@@ -13,6 +13,7 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <utility>
 #include <vector>
 #include "TF1.h"
 #include "TGraph2D.h"
@@ -123,7 +124,7 @@ public:
         : fres_graph_(mkGraph2D(fres)) {}
     ~FitResultFunc() {}
 
-    double operator()(double *x) {
+    double operator()(const double *x) const {
         return fres_graph_->Interpolate(x[0], x[1]);
     }
 
@@ -131,6 +132,10 @@ private:
     std::shared_ptr<TGraph2D> fres_graph_;
     std::shared_ptr<TGraph2D> mkGraph2D(const std::vector<FitResult> &fres);
 };
+
+std::pair<std::array<double, 2>, double> minPoint(
+    std::function<double(const double *)> frfunc);
+
 }  // namespace gg2aa
 
 #endif  // SRC_FIT_H_

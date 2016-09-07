@@ -12,7 +12,10 @@
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <utility>
 #include <vector>
+#include "Math/Functor.h"
+#include "Math/GSLSimAnMinimizer.h"
 #include "Math/MinimizerOptions.h"
 #include "TFitResult.h"
 #include "TGraph2D.h"
@@ -196,5 +199,28 @@ shared_ptr<TGraph2D> FitResultFunc::mkGraph2D(const vector<FitResult> &fres) {
     auto g2 = std::make_shared<TGraph2D>(fres.size(), masses.data(),
                                          widths.data(), chi2s.data());
     return g2;
+}
+
+std::pair<std::array<double, 2>, double> minPoint(
+    std::function<double(const double *)> frfunc) {
+    ROOT::Math::GSLSimAnMinimizer min;
+    min.SetMaxFunctionCalls(1000000);
+    min.SetMaxIterations(100000);
+    min.SetTolerance(0.001);
+
+    const ROOT::Math::Functor f(frfunc, 2);
+    min.SetFunction(f);
+
+    const double step = 0.001;
+    // min.SetLimitedVariable(0, "mass", 173.0, step, 172.0, 174.0);
+    // min.SetLimitedVariable(1, "width", 1.5, step, 0.5, 4.0);
+    min.SetVariable(0, "mass", 173.0, step);
+    min.SetVariable(1, "width", 1.5, step);
+    min.Minimize();
+    // min.PrintResult();
+
+    const double *point = min.X();
+    return std::make_pair(std::array<double, 2>({{point[0], point[1]}}),
+                          min.MinValue());
 }
 }  // namespace gg2aa
