@@ -19,13 +19,21 @@
 #include "parsers.h"
 #include "templates.h"
 
+using std::string;
 using std::to_string;
 
 const double BINSIZE_SIG = 0.25;  // the number of bins will be 4 * (max - min).
 
 int main(int argc, char *argv[]) {
-    const std::string appname("gg2aa");
-    if (argc != 4) { return howToUse(appname); }
+    const string appname("gg2aa");
+    if (argc != 4) {
+        string usage = "Usage: " + appname + " input output fit_choice\n\n";
+        usage += "    input      - input file (yml)\n";
+        usage += "    output     - output file\n";
+        usage += "    fit_choice - choice of fit function [1, ..., 6]\n\n";
+        usage += "    ex) " + appname + " input.yml output.dat 6\n";
+        return howToUse(usage);
+    }
 
     const int fit_choice = std::atoi(argv[3]);
     if (!correctFitChoice(fit_choice)) {
@@ -68,7 +76,7 @@ int main(int argc, char *argv[]) {
     message(appname, "... done.", to_out);
 
     // Open output file.
-    const std::string outfile_name(argv[2]);
+    const string outfile_name(argv[2]);
     auto outfile = std::make_shared<std::ofstream>(outfile_name);
     if (!outfile->good()) {
         return errMsg(appname, "failed to create `" + outfile_name + "'.");

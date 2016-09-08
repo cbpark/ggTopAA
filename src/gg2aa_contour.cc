@@ -17,14 +17,16 @@
 #include "contours.h"
 #include "parsers.h"
 
+using std::string;
+
 int main(int argc, char *argv[]) {
-    const std::string appname("gg2aa_contour");
+    const string appname("gg2aa_contour");
     if (argc != 3) {
-        std::cerr << "Usage: " << appname << " input output\n\n"
-                  << "    input  - input data file\n"
-                  << "    output - output plot (pdf, png, jpg, ...)\n"
-                  << "    ex) " << appname << " fitdata.dat output.pdf\n";
-        return 1;
+        string usage = "Usage: " + appname + " input output\n\n";
+        usage += "    input  - input data file\n";
+        usage += "    output - output plot (pdf, png, jpg, ...)\n\n";
+        usage += "    ex) " + appname + " fitdata.dat output.pdf\n";
+        return howToUse(usage);
     }
 
     auto infile = std::make_unique<std::ifstream>(argv[1]);

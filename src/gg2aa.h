@@ -12,12 +12,8 @@
 #include <iostream>
 #include <string>
 
-int howToUse(const std::string &appname) {
-    std::cerr << "Usage: " << appname << " input output fit_choice\n\n"
-              << "    input      - input file\n"
-              << "    output     - output file\n"
-              << "    fit_choice - choice of fit function [1, ..., 6]\n\n"
-              << "    ex) " << appname << " input.yml output.dat 6\n";
+int howToUse(const std::string &usage) {
+    std::cerr << usage << '\n';
     return 1;
 }
 
