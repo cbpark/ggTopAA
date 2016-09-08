@@ -7,20 +7,13 @@
  */
 
 #include "fit.h"
-#include <array>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <memory>
-#include <utility>
-#include <vector>
-#include "Math/Functor.h"
-#include "Math/GSLSimAnMinimizer.h"
 #include "Math/MinimizerOptions.h"
 #include "TFitResult.h"
-#include "TGraph2D.h"
 #include "TH1D.h"
-#include "TH2D.h"
 #include "info.h"
 #include "templates.h"
 
@@ -186,69 +179,5 @@ Fit fit6(const Template &t, const Info &info) {
     fit.pfnc()->SetParLimits(4, -1, 1);    // a1
     fit.pfnc()->SetParLimits(5, 0, 1);     // kgg
     return fit;
-}
-
-shared_ptr<TGraph2D> FitResultFunc::mkGraph2D(
-    const std::vector<FitResult> &fres) {
-    auto g2 = std::make_shared<TGraph2D>();
-    int npoint = 0;
-    for (const auto &fr : fres) {
-        if (fr.status() < 3) {
-            g2->SetPoint(npoint, fr.mass(), fr.width(), fr.chi2());
-            ++npoint;
-        }
-    }
-    return g2;
-}
-
-void FitResultFunc::init_hist() {
-    auto hist = fres_graph_->GetHistogram();
-    hist->SetTitle("");
-    hist->SetTitleOffset(1.1, "xy");
-    hist->SetLineWidth(3);
-
-    const double t_size = 1.25 * hist->GetLabelSize();
-    hist->SetTitleSize(t_size, "xy");
-    hist->SetLabelSize(t_size, "xy");
-
-    const int t_font = 132;
-    hist->SetTitleFont(t_font, "xy");
-    hist->SetLabelFont(t_font, "xy");
-
-    auto xaxis = hist->GetXaxis();
-    auto yaxis = hist->GetYaxis();
-
-    xaxis->SetTitle("m_{t} (GeV)");
-    xaxis->CenterTitle();
-    xaxis->SetRangeUser(172, 174);
-    xaxis->SetNdivisions(505);
-
-    yaxis->SetTitle("#Gamma_{t} (GeV)");
-    yaxis->CenterTitle();
-    yaxis->SetRangeUser(0.5, 4);
-    yaxis->SetNdivisions(504);
-}
-
-std::pair<std::array<double, 2>, double> minPoint(
-    std::function<double(const double *)> frfunc) {
-    ROOT::Math::GSLSimAnMinimizer min;
-    min.SetMaxFunctionCalls(1000000);
-    min.SetMaxIterations(100000);
-    min.SetTolerance(0.001);
-
-    const ROOT::Math::Functor f(frfunc, 2);
-    min.SetFunction(f);
-
-    const double step = 0.001;
-    // min.SetLimitedVariable(0, "mass", 173.0, step, 172.0, 174.0);
-    // min.SetLimitedVariable(1, "width", 1.5, step, 0.5, 4.0);
-    min.SetVariable(0, "mass", 173.0, step);
-    min.SetVariable(1, "width", 1.5, step);
-    min.Minimize();
-    // min.PrintResult();
-
-    const double *point = min.X();
-    return std::make_pair(std::array<double, 2>({{point[0], point[1]}}),
-                          min.MinValue());
 }
 }  // namespace gg2aa

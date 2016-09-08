@@ -10,13 +10,9 @@
 #define SRC_FIT_H_
 
 #include <array>
-#include <functional>
 #include <iostream>
 #include <memory>
-#include <utility>
-#include <vector>
 #include "TF1.h"
-#include "TGraph2D.h"
 #include "TH1D.h"
 #include "info.h"
 #include "templates.h"
@@ -113,34 +109,6 @@ Fit fit3(const Template &t, const Info &info);
 Fit fit4(const Template &t, const Info &info);
 Fit fit5(const Template &t, const Info &info);
 Fit fit6(const Template &t, const Info &info);
-
-/**
- *  The result of fitting is stored in the function using
- *  TGraph2D::Interpolate of ROOT.
- */
-class FitResultFunc {
-public:
-    FitResultFunc() = delete;
-    explicit FitResultFunc(const std::vector<FitResult> &fres)
-        : fres_graph_(mkGraph2D(fres)) {
-        init_hist();
-    }
-    ~FitResultFunc() {}
-
-    std::shared_ptr<TGraph2D> graph() { return fres_graph_; }
-    double operator()(const double *x) const {
-        return fres_graph_->Interpolate(x[0], x[1]);
-    }
-
-private:
-    std::shared_ptr<TGraph2D> fres_graph_;
-    std::shared_ptr<TGraph2D> mkGraph2D(const std::vector<FitResult> &fres);
-    void init_hist();
-};
-
-std::pair<std::array<double, 2>, double> minPoint(
-    std::function<double(const double *)> frfunc);
-
 }  // namespace gg2aa
 
 #endif  // SRC_FIT_H_
