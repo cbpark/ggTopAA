@@ -11,4 +11,6 @@ tmp
 *.log
 *.old
 *.pdf
+*.gz
+*.tgz
 input_test.yml
