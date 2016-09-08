@@ -22,7 +22,7 @@ std::shared_ptr<TGraph2D> MassWidthCont::mkGraph2D(
     auto g2 = std::make_shared<TGraph2D>();
     int npoint = 0;
     for (const auto &fr : fres) {
-        if (fr.status() < 3) {
+        if (fr.status() < 3) { // status > 2 is invalid result.
             g2->SetPoint(npoint, fr.mass(), fr.width(), fr.chi2());
             ++npoint;
         }
