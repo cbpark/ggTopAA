@@ -61,6 +61,7 @@ public:
     double width() const { return width_; }
     double chi2() const { return chi2_; }
     FitParameters parameter() const { return par_; }
+    int status() const { return status_; }
     void set_result(const FitParameters &par, const double chi2,
                     const unsigned int ndf, const int status) {
         par_ = par;
@@ -121,9 +122,12 @@ class FitResultFunc {
 public:
     FitResultFunc() = delete;
     explicit FitResultFunc(const std::vector<FitResult> &fres)
-        : fres_graph_(mkGraph2D(fres)) {}
+        : fres_graph_(mkGraph2D(fres)) {
+        init_hist();
+    }
     ~FitResultFunc() {}
 
+    std::shared_ptr<TGraph2D> graph() { return fres_graph_; }
     double operator()(const double *x) const {
         return fres_graph_->Interpolate(x[0], x[1]);
     }
@@ -131,6 +135,7 @@ public:
 private:
     std::shared_ptr<TGraph2D> fres_graph_;
     std::shared_ptr<TGraph2D> mkGraph2D(const std::vector<FitResult> &fres);
+    void init_hist();
 };
 
 std::pair<std::array<double, 2>, double> minPoint(

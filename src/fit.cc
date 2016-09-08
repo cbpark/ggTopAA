@@ -20,11 +20,11 @@
 #include "TFitResult.h"
 #include "TGraph2D.h"
 #include "TH1D.h"
+#include "TH2D.h"
 #include "info.h"
 #include "templates.h"
 
 using std::shared_ptr;
-using std::vector;
 
 const double EPS = 1.0e-12;
 
@@ -188,17 +188,45 @@ Fit fit6(const Template &t, const Info &info) {
     return fit;
 }
 
-shared_ptr<TGraph2D> FitResultFunc::mkGraph2D(const vector<FitResult> &fres) {
-    vector<double> masses, widths, chi2s;
+shared_ptr<TGraph2D> FitResultFunc::mkGraph2D(
+    const std::vector<FitResult> &fres) {
+    auto g2 = std::make_shared<TGraph2D>();
+    int npoint = 0;
     for (const auto &fr : fres) {
-        masses.push_back(fr.mass());
-        widths.push_back(fr.width());
-        chi2s.push_back(fr.chi2());
+        if (fr.status() < 3) {
+            g2->SetPoint(npoint, fr.mass(), fr.width(), fr.chi2());
+            ++npoint;
+        }
     }
-
-    auto g2 = std::make_shared<TGraph2D>(fres.size(), masses.data(),
-                                         widths.data(), chi2s.data());
     return g2;
+}
+
+void FitResultFunc::init_hist() {
+    auto hist = fres_graph_->GetHistogram();
+    hist->SetTitle("");
+    hist->SetTitleOffset(1.1, "xy");
+    hist->SetLineWidth(3);
+
+    const double t_size = 1.25 * hist->GetLabelSize();
+    hist->SetTitleSize(t_size, "xy");
+    hist->SetLabelSize(t_size, "xy");
+
+    const int t_font = 132;
+    hist->SetTitleFont(t_font, "xy");
+    hist->SetLabelFont(t_font, "xy");
+
+    auto xaxis = hist->GetXaxis();
+    auto yaxis = hist->GetYaxis();
+
+    xaxis->SetTitle("m_{t} (GeV)");
+    xaxis->CenterTitle();
+    xaxis->SetRangeUser(172, 174);
+    xaxis->SetNdivisions(505);
+
+    yaxis->SetTitle("#Gamma_{t} (GeV)");
+    yaxis->CenterTitle();
+    yaxis->SetRangeUser(0.5, 4);
+    yaxis->SetNdivisions(504);
 }
 
 std::pair<std::array<double, 2>, double> minPoint(
