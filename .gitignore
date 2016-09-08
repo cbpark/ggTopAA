@@ -10,4 +10,5 @@ tmp
 *.root
 *.log
 *.old
+*.pdf
 input_test.yml
