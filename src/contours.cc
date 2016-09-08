@@ -54,7 +54,7 @@ void MassWidthCont::init_hist() {
 
     yaxis->SetTitle("#Gamma_{t} (GeV)");
     yaxis->CenterTitle();
-    yaxis->SetRangeUser(0.5, 4);
+    yaxis->SetRangeUser(0.5, 3.5);
     yaxis->SetNdivisions(504);
 }
 

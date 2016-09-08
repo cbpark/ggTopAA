@@ -40,12 +40,14 @@ int main(int argc, char *argv[]) {
     gg2aa::MassWidthCont mw_cont(fres);
     const auto mpoint = gg2aa::minPoint(mw_cont);
 
-    auto canvas = std::make_unique<TCanvas>("c", "", 600, 600);
+    // Create the canvas.
+    auto canvas = std::make_unique<TCanvas>("c", "", 0, 0, 600, 600);
     canvas->SetTicks();  // for ticks on both sides.
 
     TH2D *hist = mw_cont.graph()->GetHistogram();
     const double min_chi2 = mpoint.second;
-    const double contour[2] = {min_chi2 + 4.72, min_chi2 + 9.7};
+    // const double contour[2] = {min_chi2 + 4.72, min_chi2 + 9.72};
+    const double contour[2] = {min_chi2 + 2.3, min_chi2 + 6.18};
     hist->SetContour(2, contour);
     hist->Draw("CONT2");
 
