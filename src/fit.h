@@ -57,6 +57,7 @@ public:
     double width() const { return width_; }
     double chi2() const { return chi2_; }
     FitParameters parameter() const { return par_; }
+    double kappa() const { return par_[5]; }
     int status() const { return status_; }
     void set_result(const FitParameters &par, const double chi2,
                     const unsigned int ndf, const int status) {

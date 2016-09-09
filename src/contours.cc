@@ -7,31 +7,66 @@
  */
 
 #include "contours.h"
+#include <functional>
 #include <memory>
 #include <utility>
 #include <vector>
 #include "Math/Functor.h"
 #include "Math/GSLSimAnMinimizer.h"
+#include "TAxis.h"
 #include "TGraph2D.h"
 #include "TH2D.h"
 #include "fit.h"
 
+using std::shared_ptr;
+using std::vector;
+
 namespace gg2aa {
-std::shared_ptr<TGraph2D> MassWidthCont::mkGraph2D(
-    const std::vector<FitResult> &fres) {
-    auto g2 = std::make_shared<TGraph2D>();
-    int npoint = 0;
-    for (const auto &fr : fres) {
-        if (fr.status() < 3) { // status > 2 is invalid result.
-            g2->SetPoint(npoint, fr.mass(), fr.width(), fr.chi2());
-            ++npoint;
-        }
-    }
-    return g2;
+shared_ptr<TGraph> graphMinPoint(const Contour &cont) {
+    auto gr = std::make_shared<TGraph>(1);
+    const std::array<double, 2> mpoint = cont.min_point();
+    gr->SetPoint(0, mpoint[0], mpoint[1]);
+    gr->SetMarkerStyle(20);
+    return gr;
 }
 
-void MassWidthCont::init_hist() {
-    TH2D *hist = graph_->GetHistogram();
+void set_cont_levels(const double oneSigma, const double twoSigma,
+                     Contour *cont) {
+    const double min_value = cont->min_value();
+    const double contours[2] = {min_value + oneSigma, min_value + twoSigma};
+    cont->graph()->GetHistogram()->SetContour(2, contours);
+}
+
+void Contour::set_min_point(const double x, const double y, const double step,
+                            std::function<double(const double *)> func) {
+    ROOT::Math::GSLSimAnMinimizer min;
+    min.SetMaxFunctionCalls(1000000);
+    min.SetMaxIterations(100000);
+    min.SetTolerance(0.001);
+
+    const ROOT::Math::Functor f(func, 2);
+    min.SetFunction(f);
+
+    min.SetVariable(0, "x", x, step);
+    min.SetVariable(1, "y", y, step);
+    min.Minimize();
+    // min.PrintResult();
+
+    const double *point = min.X();
+    min_point_ = {{point[0], point[1]}};
+    min_value_ = min.MinValue();
+}
+
+void setAxisInfo(const ContAxisInfo &axinfo, TAxis *axis) {
+    axis->SetTitle(axinfo.title.c_str());
+    axis->CenterTitle();
+    axis->SetRangeUser(axinfo.range[0], axinfo.range[1]);
+    axis->SetNdivisions(axinfo.ndiv);
+}
+
+void Contour::set_hist(const ContAxisInfo &x_axis, const ContAxisInfo &y_axis,
+                       shared_ptr<TGraph2D> graph) {
+    TH2D *hist = graph->GetHistogram();
     hist->SetTitle("");
     hist->SetTitleOffset(0.9, "xy");
     hist->SetLineWidth(3);
@@ -45,39 +80,21 @@ void MassWidthCont::init_hist() {
     hist->SetLabelFont(t_font, "xy");
 
     auto xaxis = hist->GetXaxis();
+    setAxisInfo(x_axis, xaxis);
+
     auto yaxis = hist->GetYaxis();
-
-    xaxis->SetTitle("m_{t} (GeV)");
-    xaxis->CenterTitle();
-    xaxis->SetRangeUser(172, 174);
-    xaxis->SetNdivisions(505);
-
-    yaxis->SetTitle("#Gamma_{t} (GeV)");
-    yaxis->CenterTitle();
-    yaxis->SetRangeUser(0.5, 3.5);
-    yaxis->SetNdivisions(504);
+    setAxisInfo(y_axis, yaxis);
 }
 
-std::pair<std::array<double, 2>, double> minPoint(
-    std::function<double(const double *)> func) {
-    ROOT::Math::GSLSimAnMinimizer min;
-    min.SetMaxFunctionCalls(1000000);
-    min.SetMaxIterations(100000);
-    min.SetTolerance(0.001);
-
-    const ROOT::Math::Functor f(func, 2);
-    min.SetFunction(f);
-
-    const double step = 0.001;
-    // min.SetLimitedVariable(0, "mass", 173.0, step, 172.0, 174.0);
-    // min.SetLimitedVariable(1, "width", 1.5, step, 0.5, 4.0);
-    min.SetVariable(0, "mass", 173.0, step);
-    min.SetVariable(1, "width", 1.5, step);
-    min.Minimize();
-    // min.PrintResult();
-
-    const double *point = min.X();
-    return std::make_pair(std::array<double, 2>({{point[0], point[1]}}),
-                          min.MinValue());
+shared_ptr<TGraph2D> MassWidthCont::mkGraph2D(const vector<FitResult> &fres) {
+    auto g2 = std::make_shared<TGraph2D>();
+    int npoint = 0;
+    for (const auto &fr : fres) {
+        if (fr.status() < 3) {  // status > 2 is invalid result.
+            g2->SetPoint(npoint, fr.mass(), fr.width(), fr.chi2());
+            ++npoint;
+        }
+    }
+    return g2;
 }
 }  // namespace gg2aa

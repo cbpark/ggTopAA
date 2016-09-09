@@ -17,7 +17,7 @@ int howToUse(const std::string &usage) {
     return 1;
 }
 
-bool correctFitChoice(const int n) { return n > 0 && n < 7; }
+bool correctChoice(const int n, const int upper) { return n > 0 && n <= upper; }
 
 int failedToRead(const std::string &appname, const std::string &fname) {
     std::cerr << appname << ": failed to read `" << fname << "'.\n";

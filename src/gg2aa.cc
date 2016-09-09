@@ -36,8 +36,9 @@ int main(int argc, char *argv[]) {
     }
 
     const int fit_choice = std::atoi(argv[3]);
-    if (!correctFitChoice(fit_choice)) {
-        return errMsg(appname, "fit_choice must be in [1, ..., 6].");
+    if (!correctChoice(fit_choice, 6)) {
+        return errMsg(appname,
+                      "fit_choice must be in [1, ..., " + to_string(6) + "].");
     }
 
     auto infile = std::make_unique<std::ifstream>(argv[1]);
