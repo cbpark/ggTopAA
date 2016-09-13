@@ -71,12 +71,12 @@ shared_ptr<TH1D> HistObjs::pseudo_experiment(const Info &info) const {
     const auto r = bg_->range();
     auto h_pd = std::make_shared<TH1D>("hPD", "Pseudo data", bg_->num_bins(),
                                        r.low(), r.up());
-    // h_pd->FillRandom(sig_->hist().get(), info.n_sig());
-    // h_pd->FillRandom(bg_->hist().get(), info.n_bg());
-    const int n_bg = info.n_bg();
-    for (int i = 0; i != n_bg; ++i) { h_pd->Fill(bg_->hist()->GetRandom()); }
-    const int n_sig = info.n_sig();
-    for (int i = 0; i != n_sig; ++i) { h_pd->Fill(sig_->hist()->GetRandom()); }
+    h_pd->FillRandom(bg_->hist().get(), info.n_bg());
+    h_pd->FillRandom(sig_->hist().get(), info.n_sig());
+    // const int n_bg = info.n_bg();
+    // for (int i = 0; i != n_bg; ++i) { h_pd->Fill(bg_->hist()->GetRandom()); }
+    // const int n_sig = info.n_sig();
+    // for (int i = 0; i != n_sig; ++i) { h_pd->Fill(sig_->hist()->GetRandom()); }
     h_pd->SetMinimum(0.0);
     return h_pd;
 }
