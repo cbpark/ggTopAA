@@ -47,7 +47,11 @@ data:
   - data/Tab_172.8_0.75.dat
   - data/Tab_172.8_1.00.dat
   - data/Tab_172.8_1.25.dat
+  - data/Tab_172.8_1.30.dat
+  - data/Tab_172.8_1.40.dat
   - data/Tab_172.8_1.50.dat
+  - data/Tab_172.8_1.60.dat
+  - data/Tab_172.8_1.70.dat
   - data/Tab_172.8_1.75.dat
   - data/Tab_172.8_2.00.dat
   - data/Tab_172.8_2.25.dat
@@ -60,7 +64,11 @@ data:
   - data/Tab_172.9_0.75.dat
   - data/Tab_172.9_1.00.dat
   - data/Tab_172.9_1.25.dat
+  - data/Tab_172.9_1.30.dat
+  - data/Tab_172.9_1.40.dat
   - data/Tab_172.9_1.50.dat
+  - data/Tab_172.9_1.60.dat
+  - data/Tab_172.9_1.70.dat
   - data/Tab_172.9_1.75.dat
   - data/Tab_172.9_2.00.dat
   - data/Tab_172.9_2.25.dat
@@ -73,7 +81,11 @@ data:
   - data/Tab_173.0_0.75.dat
   - data/Tab_173.0_1.00.dat
   - data/Tab_173.0_1.25.dat
+  - data/Tab_173.0_1.30.dat
+  - data/Tab_173.0_1.40.dat
   - data/Tab_173.0_1.50.dat
+  - data/Tab_173.0_1.60.dat
+  - data/Tab_173.0_1.70.dat
   - data/Tab_173.0_1.75.dat
   - data/Tab_173.0_2.00.dat
   - data/Tab_173.0_2.25.dat
@@ -86,7 +98,11 @@ data:
   - data/Tab_173.1_0.75.dat
   - data/Tab_173.1_1.00.dat
   - data/Tab_173.1_1.25.dat
+  - data/Tab_173.1_1.30.dat
+  - data/Tab_173.1_1.40.dat
   - data/Tab_173.1_1.50.dat
+  - data/Tab_173.1_1.60.dat
+  - data/Tab_173.1_1.70.dat
   - data/Tab_173.1_1.75.dat
   - data/Tab_173.1_2.00.dat
   - data/Tab_173.1_2.25.dat
@@ -99,7 +115,11 @@ data:
   - data/Tab_173.2_0.75.dat
   - data/Tab_173.2_1.00.dat
   - data/Tab_173.2_1.25.dat
+  - data/Tab_173.2_1.30.dat
+  - data/Tab_173.2_1.40.dat
   - data/Tab_173.2_1.50.dat
+  - data/Tab_173.2_1.60.dat
+  - data/Tab_173.2_1.70.dat
   - data/Tab_173.2_1.75.dat
   - data/Tab_173.2_2.00.dat
   - data/Tab_173.2_2.25.dat
