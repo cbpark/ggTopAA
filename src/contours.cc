@@ -97,4 +97,29 @@ shared_ptr<TGraph2D> MassWidthCont::mkGraph2D(const vector<FitResult> &fres) {
     }
     return g2;
 }
+
+std::pair<double, double> chi2Interval12(const int ndf) {
+    switch(ndf) {
+    case 2:
+        return std::make_pair(2.29575, 6.18007);
+    case 3:
+        return std::make_pair(3.52674, 8.02488);
+    case 4:
+        return std::make_pair(4.71947, 9.71563);
+    case 5:
+        return std::make_pair(5.8876, 11.3139);
+    case 6:
+        return std::make_pair(7.0384, 12.8488);
+    case 7:
+        return std::make_pair(8.17624, 14.3371);
+    case 8:
+        return std::make_pair(9.30391, 15.7891);
+    case 9:
+        return std::make_pair(10.4234, 17.2118);
+    case 10:
+        return std::make_pair(11.536, 18.6103);
+    default:
+        return std::make_pair(1, 4);
+    }
+}
 }  // namespace gg2aa

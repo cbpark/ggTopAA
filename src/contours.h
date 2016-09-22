@@ -79,6 +79,8 @@ private:
     std::shared_ptr<TGraph2D> graph_;
     std::shared_ptr<TGraph2D> mkGraph2D(const std::vector<FitResult> &fres);
 };
+
+std::pair<double, double> chi2Interval12(const int ndf);
 }  // namespace gg2aa
 
 #endif  // SRC_CONTOURS_H_
