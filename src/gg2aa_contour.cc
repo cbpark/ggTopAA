@@ -7,10 +7,12 @@
  */
 
 #include "gg2aa.h"
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <memory>
 #include <string>
+#include <utility>
 #include "TCanvas.h"
 #include "contours.h"
 #include "parsers.h"
@@ -20,12 +22,19 @@ using std::to_string;
 
 int main(int argc, char *argv[]) {
     const string appname("gg2aa_contour");
-    if (argc != 3) {
-        string usage = "Usage: " + appname + " input output\n\n";
-        usage += "    input  - input data file\n";
-        usage += "    output - output plot (pdf, png, jpg, ...)\n\n";
-        usage += "    ex) " + appname + " fitdata.dat output.pdf\n";
+    if (argc != 4) {
+        string usage = "Usage: " + appname + " input output fit_choice\n\n";
+        usage += "    input      - input data file\n";
+        usage += "    output     - output plot (pdf, png, jpg, ...)\n";
+        usage += "    fit_choice - choice of fit function [1, ..., 6]\n\n";
+        usage += "    ex) " + appname + " fitdata.dat output.pdf 1\n";
         return howToUse(usage);
+    }
+
+    const int fit_choice = std::atoi(argv[3]);
+    if (!correctChoice(fit_choice, 6)) {
+        return errMsg(appname,
+                      "fit_choice must be in [1, ..., " + to_string(6) + "].");
     }
 
     auto infile = std::make_unique<std::ifstream>(argv[1]);
@@ -44,11 +53,13 @@ int main(int argc, char *argv[]) {
     canvas->SetTicks();  // for ticks on both sides.
 
     gg2aa::MassWidthCont cont(fres);
-    gg2aa::set_cont_levels(2.3, 6.18, &cont);
+
+    std::pair<double, double> chi2_int = gg2aa::chi2Interval12(fit_choice);
+    gg2aa::set_cont_levels(chi2_int.first, chi2_int.second, &cont);
     cont.hist()->Draw("CONT2");
 
-    auto mpoint = graphMinPoint(cont);
-    mpoint->Draw("P same");
+    // auto mpoint = graphMinPoint(cont);
+    // mpoint->Draw("P same");
 
     canvas->SaveAs(outfile.c_str());
     message(appname, "... gracefully done.", to_out);
