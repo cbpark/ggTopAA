@@ -13,4 +13,4 @@ tmp
 *.pdf
 *.gz
 *.tgz
-input_test.yml
+input_test*.yml
