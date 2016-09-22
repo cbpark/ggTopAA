@@ -126,10 +126,12 @@ std::pair<double, double> chi2Interval12_ndf(const int ndf) {
 std::pair<double, double> chi2Interval12(const int fit_choice) {
     if (fit_choice == 1 || fit_choice == 3) {
         return chi2Interval12_ndf(5);
-    } else if (fit_choice == 2 || fit_choice == 5 || fit_choice == 6) {
+    } else if (fit_choice == 2 || fit_choice == 5) {
         return chi2Interval12_ndf(6);
     } else if (fit_choice == 4) {
         return chi2Interval12_ndf(4);
+    } else if (fit_choice == 6) {
+        return chi2Interval12_ndf(7);
     } else {
         return chi2Interval12_ndf(1);
     }

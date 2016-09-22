@@ -26,19 +26,21 @@ const double BINSIZE_SIG = 0.25;  // the number of bins will be 4 * (max - min).
 
 int main(int argc, char *argv[]) {
     const string appname("gg2aa");
+    const int n_choice = 6;
     if (argc != 4) {
         string usage = "Usage: " + appname + " input output fit_choice\n\n";
         usage += "    input      - input file (yml)\n";
         usage += "    output     - output file\n";
-        usage += "    fit_choice - choice of fit function [1, ..., 6]\n\n";
+        usage += "    fit_choice - choice of fit function [1, ..., " +
+                 to_string(n_choice) + "]\n\n";
         usage += "    ex) " + appname + " input.yml output.dat 6\n";
         return howToUse(usage);
     }
 
     const int fit_choice = std::atoi(argv[3]);
-    if (!correctChoice(fit_choice, 6)) {
-        return errMsg(appname,
-                      "fit_choice must be in [1, ..., " + to_string(6) + "].");
+    if (!correctChoice(fit_choice, n_choice)) {
+        return errMsg(appname, "fit_choice must be in [1, ..., " +
+                                   to_string(n_choice) + "].");
     }
 
     auto infile = std::make_unique<std::ifstream>(argv[1]);
