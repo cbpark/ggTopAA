@@ -13,7 +13,6 @@
 #include <functional>
 #include <memory>
 #include <string>
-#include <utility>
 #include <vector>
 #include "TGraph.h"
 #include "TGraph2D.h"
@@ -80,7 +79,7 @@ private:
     std::shared_ptr<TGraph2D> mkGraph2D(const std::vector<FitResult> &fres);
 };
 
-std::pair<double, double> chi2Interval12(const int fit_choice);
+// std::pair<double, double> chi2Interval12(const int fit_choice);
 }  // namespace gg2aa
 
 #endif  // SRC_CONTOURS_H_

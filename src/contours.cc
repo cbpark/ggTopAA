@@ -9,7 +9,6 @@
 #include "contours.h"
 #include <functional>
 #include <memory>
-#include <utility>
 #include <vector>
 #include "Math/Functor.h"
 #include "Math/GSLSimAnMinimizer.h"
@@ -98,42 +97,42 @@ shared_ptr<TGraph2D> MassWidthCont::mkGraph2D(const vector<FitResult> &fres) {
     return g2;
 }
 
-std::pair<double, double> chi2Interval12_ndf(const int ndf) {
-    switch (ndf) {
-    case 2:
-        return std::make_pair(2.29575, 6.18007);
-    case 3:
-        return std::make_pair(3.52674, 8.02488);
-    case 4:
-        return std::make_pair(4.71947, 9.71563);
-    case 5:
-        return std::make_pair(5.8876, 11.3139);
-    case 6:
-        return std::make_pair(7.0384, 12.8488);
-    case 7:
-        return std::make_pair(8.17624, 14.3371);
-    case 8:
-        return std::make_pair(9.30391, 15.7891);
-    case 9:
-        return std::make_pair(10.4234, 17.2118);
-    case 10:
-        return std::make_pair(11.536, 18.6103);
-    default:
-        return std::make_pair(1, 4);
-    }
-}
+// std::pair<double, double> chi2Interval12_ndf(const int ndf) {
+//     switch (ndf) {
+//     case 2:
+//         return std::make_pair(2.29575, 6.18007);
+//     case 3:
+//         return std::make_pair(3.52674, 8.02488);
+//     case 4:
+//         return std::make_pair(4.71947, 9.71563);
+//     case 5:
+//         return std::make_pair(5.8876, 11.3139);
+//     case 6:
+//         return std::make_pair(7.0384, 12.8488);
+//     case 7:
+//         return std::make_pair(8.17624, 14.3371);
+//     case 8:
+//         return std::make_pair(9.30391, 15.7891);
+//     case 9:
+//         return std::make_pair(10.4234, 17.2118);
+//     case 10:
+//         return std::make_pair(11.536, 18.6103);
+//     default:
+//         return std::make_pair(1, 4);
+//     }
+// }
 
-std::pair<double, double> chi2Interval12(const int fit_choice) {
-    if (fit_choice == 1 || fit_choice == 3) {
-        return chi2Interval12_ndf(5);
-    } else if (fit_choice == 2 || fit_choice == 5) {
-        return chi2Interval12_ndf(6);
-    } else if (fit_choice == 4) {
-        return chi2Interval12_ndf(4);
-    } else if (fit_choice == 6) {
-        return chi2Interval12_ndf(7);
-    } else {
-        return chi2Interval12_ndf(1);
-    }
-}
+// std::pair<double, double> chi2Interval12(const int fit_choice) {
+//     if (fit_choice == 1 || fit_choice == 3) {
+//         return chi2Interval12_ndf(5);
+//     } else if (fit_choice == 2 || fit_choice == 5) {
+//         return chi2Interval12_ndf(6);
+//     } else if (fit_choice == 4) {
+//         return chi2Interval12_ndf(4);
+//     } else if (fit_choice == 6) {
+//         return chi2Interval12_ndf(7);
+//     } else {
+//         return chi2Interval12_ndf(1);
+//     }
+// }
 }  // namespace gg2aa

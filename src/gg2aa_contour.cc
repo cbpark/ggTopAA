@@ -54,8 +54,7 @@ int main(int argc, char *argv[]) {
     canvas->SetTicks();  // for ticks on both sides.
 
     gg2aa::MassWidthCont cont(fres);
-    const auto chi2_int = gg2aa::chi2Interval12(fit_choice);
-    gg2aa::set_cont_levels(chi2_int.first, chi2_int.second, &cont);
+    gg2aa::set_cont_levels(2.29575, 6.18007, &cont);
     cont.hist()->Draw("CONT2");
 
     // auto mpoint = graphMinPoint(cont);
