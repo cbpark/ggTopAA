@@ -21,21 +21,12 @@ using std::to_string;
 
 int main(int argc, char *argv[]) {
     const string appname("gg2aa_contour");
-    const int n_choice = 6;
-    if (argc != 4) {
-        string usage = "Usage: " + appname + " input output fit_choice\n\n";
-        usage += "    input      - input data file\n";
-        usage += "    output     - output plot (pdf, png, jpg, ...)\n";
-        usage += "    fit_choice - choice of fit function [1, ..., " +
-                 to_string(n_choice) + "]\n\n";
-        usage += "    ex) " + appname + " fitdata.dat output.pdf 1\n";
+    if (argc != 3) {
+        string usage = "Usage: " + appname + " input output\n\n";
+        usage += "    input  - input data file\n";
+        usage += "    output - output plot (pdf, png, jpg, ...)\n\n";
+        usage += "    ex) " + appname + " fitdata.dat output.pdf\n";
         return howToUse(usage);
-    }
-
-    const int fit_choice = std::atoi(argv[3]);
-    if (!correctChoice(fit_choice, n_choice)) {
-        return errMsg(appname, "fit_choice must be in [1, ..., " +
-                                   to_string(n_choice) + "].");
     }
 
     auto infile = std::make_unique<std::ifstream>(argv[1]);
