@@ -69,7 +69,8 @@ public:
     void fill(const InputData &data, std::shared_ptr<Info> info);
 
     /** Construct the histogram of the pseudo-experiment data. */
-    std::shared_ptr<TH1D> pseudo_experiment(const Info &info) const;
+    std::shared_ptr<TH1D> pseudo_experiment(const Info &info,
+                                            const bool set_seed = false) const;
 
 private:
     std::shared_ptr<Histogram> sig_;

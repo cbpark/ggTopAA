@@ -10,6 +10,7 @@
 #include <fstream>
 #include <memory>
 #include "TH1D.h"
+#include "TRandom3.h"
 #include "info.h"
 #include "inputdata.h"
 #include "utils.h"
@@ -67,16 +68,20 @@ void HistObjs::fill(const InputData &data, shared_ptr<Info> info) {
     fill_bg(data, info);
 }
 
-shared_ptr<TH1D> HistObjs::pseudo_experiment(const Info &info) const {
+shared_ptr<TH1D> HistObjs::pseudo_experiment(const Info &info,
+                                             const bool set_seed) const {
     const auto r = bg_->range();
     auto h_pd = std::make_shared<TH1D>("hPD", "Pseudo data", bg_->num_bins(),
                                        r.low(), r.up());
+    if (set_seed) { gRandom->SetSeed(0); }
+    // gRandom->Print();
     h_pd->FillRandom(bg_->hist().get(), info.n_bg());
     h_pd->FillRandom(sig_->hist().get(), info.n_sig());
     // const int n_bg = info.n_bg();
     // for (int i = 0; i != n_bg; ++i) { h_pd->Fill(bg_->hist()->GetRandom()); }
     // const int n_sig = info.n_sig();
-    // for (int i = 0; i != n_sig; ++i) { h_pd->Fill(sig_->hist()->GetRandom()); }
+    // for (int i = 0; i != n_sig; ++i) { h_pd->Fill(sig_->hist()->GetRandom());
+    // }
     h_pd->SetMinimum(0.0);
     return h_pd;
 }

@@ -75,7 +75,7 @@ void Fit::do_fit(shared_ptr<TH1D> hist, shared_ptr<FitResult> result) {
     // - "I": use integral of function in bin instead of value at bin center.
     // - "N": do not store the graphics function, do not draw.
     // - "S": the result of the fit is returned in the TFitResultPtr.
-    auto r = hist->Fit(pfnc_.get(), "INS");
+    auto r = hist->Fit(pfnc_.get(), "NS");
 
     const int npar(r->NPar());
     FitParameters par;

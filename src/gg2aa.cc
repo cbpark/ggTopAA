@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
 
     // Create the pseudo-experiment histogram.
     message(appname, "generating pseudo-experiment data ...", to_out);
-    const auto h_pseudo = hists->pseudo_experiment(*info);
+    const auto h_pseudo = hists->pseudo_experiment(*info, true);
     message(appname, "... done.", to_out);
 
     // Open output file.
