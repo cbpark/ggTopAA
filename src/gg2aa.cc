@@ -113,8 +113,8 @@ int main(int argc, char *argv[]) {
     best.show(to_out);  // the best-fit point is shown to the screen
     if (argc == 5) {    // ... and saved to a file.
         const string out_best_name(argv[4]);
-        message(appname,
-                "the best-fit point will be appended to `" + out_best_name + "'.",
+        message(appname, "the best-fit point will be appended to `" +
+                             out_best_name + "'.",
                 to_out);
         auto out_best =
             std::make_unique<std::ofstream>(out_best_name, std::ios::app);
