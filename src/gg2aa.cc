@@ -105,18 +105,16 @@ int main(int argc, char *argv[]) {
         fit.do_fit(h_pseudo, result);
         *out_fit << *result << '\n';
 
-        if (result->chi2() < best.chi2) {  // Is this the best-fit point?
-            best.set(result->mass(), result->width(), result->kappa(),
-                     result->chi2());
-        }
+        best.set_best_point(*result);  // Save the best-fit point.
     }
     out_fit->close();
 
+    *to_out << '\n';
     best.show(to_out);  // the best-fit point is shown to the screen
     if (argc == 5) {    // ... and saved to a file.
         const string out_best_name(argv[4]);
         message(appname,
-                "the best-fit point will be stored in `" + out_best_name + "'.",
+                "the best-fit point will be appended to `" + out_best_name + "'.",
                 to_out);
         auto out_best =
             std::make_unique<std::ofstream>(out_best_name, std::ios::app);

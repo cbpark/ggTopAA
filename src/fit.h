@@ -106,12 +106,14 @@ struct BestFitPoint {
     double mass, width, kgg;
     double chi2 = 1.0e+12;
 
-    void set(const double m, const double gamma, const double k,
-             const double x2) {
-        mass = m;
-        width = gamma;
-        kgg = k;
-        chi2 = x2;
+    void set_best_point(const FitResult &fres) {
+        const double chi2_value = fres.chi2();
+        if (chi2_value < chi2) {
+            chi2 = chi2_value;
+            mass = fres.mass();
+            width = fres.width();
+            kgg = fres.kappa();
+        }
     }
 
     void show(std::ostream *out);
