@@ -116,7 +116,7 @@ struct BestFitPoint {
         }
     }
 
-    void show(std::ostream *out);
+    void show(std::ostream *out) const;
 };
 
 std::ostream &operator<<(std::ostream &os, const BestFitPoint &pos);

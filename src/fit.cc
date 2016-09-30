@@ -85,7 +85,7 @@ void Fit::do_fit(shared_ptr<TH1D> hist, shared_ptr<FitResult> result) {
     result->set_result(par, r->Chi2(), r->Ndf(), r->Status());
 }
 
-void BestFitPoint::show(std::ostream *out) {
+void BestFitPoint::show(std::ostream *out) const {
     *out << "--- Best-fit point ---\n";
     *out << "  " << get_string("mass", mass) << ", "
          << get_string("width", width) << ", " << get_string("kgg", kgg) << ", "
