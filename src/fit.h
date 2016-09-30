@@ -113,6 +113,8 @@ struct BestFitPoint {
         kgg = k;
         chi2 = x2;
     }
+
+    void show(std::ostream *out);
 };
 
 std::ostream &operator<<(std::ostream &os, const BestFitPoint &pos);

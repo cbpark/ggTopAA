@@ -9,13 +9,9 @@
 #include "info.h"
 #include <ostream>
 #include <string>
+#include "utils.h"
 
 namespace gg2aa {
-template <typename T>
-std::string get_string(const std::string &name, T x) {
-    return name + " = " + std::to_string(x);
-}
-
 void Info::show(std::ostream *out) const {
     *out << "--- Input information ---\n";
     *out << "  " << get_string("Rs", rs * 1.0e-3) << " TeV, "

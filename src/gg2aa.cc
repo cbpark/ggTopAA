@@ -27,13 +27,16 @@ const double BINSIZE_SIG = 0.25;  // the number of bins will be 4 * (max - min).
 int main(int argc, char *argv[]) {
     const string appname("gg2aa");
     const int n_choice = 6;
-    if (argc != 4) {
-        string usage = "Usage: " + appname + " input output fit_choice\n\n";
+    if (argc < 4 || argc > 5) {
+        string usage =
+            "Usage: " + appname + " input output fit_choice [best_fit]\n\n";
         usage += "    input      - input file (yml)\n";
-        usage += "    output     - output file\n";
+        usage += "    output     - output file for the fit result\n";
         usage += "    fit_choice - choice of fit function [1, ..., " +
-                 to_string(n_choice) + "]\n\n";
-        usage += "    ex) " + appname + " input.yml output.dat 6\n";
+                 to_string(n_choice) + "]\n";
+        usage += "    best_fit   - output file for the best-fit point "
+                 "(optional, will be appended)\n\n";
+        usage += "    ex) " + appname + " input.yml output.dat 1 best.dat\n";
         return howToUse(usage);
     }
 
@@ -80,13 +83,14 @@ int main(int argc, char *argv[]) {
     message(appname, "... done.", to_out);
 
     // Open output file.
-    const string outfile_name(argv[2]);
-    auto outfile = std::make_shared<std::ofstream>(outfile_name);
-    if (!outfile->good()) {
-        return errMsg(appname, "failed to create `" + outfile_name + "'.");
+    const string out_fit_name(argv[2]);
+    auto out_fit = std::make_shared<std::ofstream>(out_fit_name);
+    if (!out_fit->good()) {
+        return errMsg(appname, "failed to create `" + out_fit_name + "'.");
     }
-    message(appname, "output will be saved to `" + outfile_name + "'.", to_out);
-    write_header(outfile.get());
+    message(appname, "output of fit will be saved to `" + out_fit_name + "'.",
+            to_out);
+    write_header(out_fit.get());
 
     gg2aa::BestFitPoint best;  // the best-fit point
 
@@ -99,16 +103,29 @@ int main(int argc, char *argv[]) {
         auto result = std::make_shared<gg2aa::FitResult>(t);
         auto fit = gg2aa::mkFit(t, *info, fit_choice);
         fit.do_fit(h_pseudo, result);
-        *outfile << *result << '\n';
+        *out_fit << *result << '\n';
 
         if (result->chi2() < best.chi2) {  // Is this the best-fit point?
             best.set(result->mass(), result->width(), result->kappa(),
                      result->chi2());
         }
     }
-    outfile->close();
+    out_fit->close();
 
-    std::cout << "\n-- best-fit point: " << best << '\n';
+    best.show(to_out);  // the best-fit point is shown to the screen
+    if (argc == 5) {    // ... and saved to a file.
+        const string out_best_name(argv[4]);
+        message(appname,
+                "the best-fit point will be stored in `" + out_best_name + "'.",
+                to_out);
+        auto out_best =
+            std::make_unique<std::ofstream>(out_best_name, std::ios::app);
+        if (!out_best->good()) {
+            return errMsg(appname, "failed to open `" + out_best_name + "'.");
+        }
+        *out_best << best << '\n';
+        out_best->close();
+    }
 
     message(appname, "... gracefully done.", to_out);
 }

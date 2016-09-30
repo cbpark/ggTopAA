@@ -42,6 +42,11 @@ std::vector<std::string> split(const std::string &str, char c);
 /** Deduce the mass and the width of the input data by its file name. */
 std::pair<double, double> getMassWidth(const std::string &fname);
 
+template <typename T>
+std::string get_string(const std::string &name, T x) {
+    return name + " = " + std::to_string(x);
+}
+
 /** Suppress warnings about unused variables. */
 template <typename T>
 void ignore(const T &) {}
