@@ -75,6 +75,7 @@ int main(int argc, char *argv[]) {
 
     // Create the pseudo-experiment histogram.
     message(appname, "generating pseudo-experiment data ...", to_out);
+    // The boolean parameter is to reset the random number generator.
     const auto h_pseudo = hists->pseudo_experiment(*info, true);
     message(appname, "... done.", to_out);
 
@@ -87,6 +88,8 @@ int main(int argc, char *argv[]) {
     message(appname, "output will be saved to `" + outfile_name + "'.", to_out);
     write_header(outfile.get());
 
+    gg2aa::BestFitPoint best;  // the best-fit point
+
     // Perform fitting and obtain the chi square.
     message(appname, "performing fitting ...", to_out);
     for (const auto &t : data.templates()) {
@@ -97,7 +100,15 @@ int main(int argc, char *argv[]) {
         auto fit = gg2aa::mkFit(t, *info, fit_choice);
         fit.do_fit(h_pseudo, result);
         *outfile << *result << '\n';
+
+        if (result->chi2() < best.chi2) {  // Is this the best-fit point?
+            best.set(result->mass(), result->width(), result->kappa(),
+                     result->chi2());
+        }
     }
     outfile->close();
+
+    std::cout << "\n-- best-fit point: " << best << '\n';
+
     message(appname, "... gracefully done.", to_out);
 }

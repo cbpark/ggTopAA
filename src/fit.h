@@ -102,6 +102,21 @@ private:
     void init_parameters(const Info &info);
 };
 
+struct BestFitPoint {
+    double mass, width, kgg;
+    double chi2 = 1.0e+12;
+
+    void set(const double m, const double gamma, const double k,
+             const double x2) {
+        mass = m;
+        width = gamma;
+        kgg = k;
+        chi2 = x2;
+    }
+};
+
+std::ostream &operator<<(std::ostream &os, const BestFitPoint &pos);
+
 Fit mkFit(const Template &t, const Info &info, const int fit_choice);
 
 Fit fit1(const Template &t, const Info &info);

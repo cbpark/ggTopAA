@@ -84,6 +84,15 @@ void Fit::do_fit(shared_ptr<TH1D> hist, shared_ptr<FitResult> result) {
     result->set_result(par, r->Chi2(), r->Ndf(), r->Status());
 }
 
+std::ostream &operator<<(std::ostream &os, const BestFitPoint &pos) {
+    os << std::fixed;
+    os << std::setw(9) << std::setprecision(2) << pos.mass;
+    os << std::setw(8) << std::setprecision(2) << pos.width;
+    os << std::setw(12) << std::setprecision(5) << pos.kgg;
+    os << std::setw(12) << std::setprecision(4) << pos.chi2;
+    return os;
+}
+
 Fit mkFit(const Template &t, const Info &info, const int fit_choice) {
     switch (fit_choice) {
     case 1:
