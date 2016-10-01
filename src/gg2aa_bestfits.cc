@@ -11,6 +11,8 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include "TFile.h"
+#include "TH1D.h"
 #include "parsers.h"
 
 using std::string;
@@ -30,5 +32,25 @@ int main(int argc, char *argv[]) {
     const auto to_out = &std::cout;  // information will be displayed in screen.
 
     auto bestfits = gg2aa::parseBestFitPoints(std::move(infile));
-    for (const auto &p : bestfits) { *to_out << p << '\n'; }
+    message(appname, "`" + std::string(argv[1]) + "' has been parsed.", to_out);
+
+    auto hist_mass = std::make_unique<TH1D>("mass", "", 20, 172.0, 174.0);
+    auto hist_width = std::make_unique<TH1D>("width", "", 10, 0.0, 4.0);
+    auto hist_kgg = std::make_unique<TH1D>("kgg", "", 40, 0.0, 1.0);
+    for (const auto &p : bestfits) {
+        hist_mass->Fill(p.mass);
+        hist_width->Fill(p.width);
+        hist_kgg->Fill(p.kgg);
+    }
+
+    const string outfile_name(argv[2]);
+    message(appname, "histograms will be saved to `" + outfile_name + "'.",
+            to_out);
+    auto outfile = std::make_unique<TFile>(outfile_name.c_str(), "RECREATE");
+    hist_mass->Write();
+    hist_width->Write();
+    hist_kgg->Write();
+
+    outfile->Close();
+    message(appname, "... gracefully done.", to_out);
 }
