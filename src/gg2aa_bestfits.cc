@@ -8,6 +8,7 @@
 
 #include "gg2aa.h"
 #include <fstream>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
