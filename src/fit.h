@@ -119,6 +119,7 @@ struct BestFitPoint {
     void show(std::ostream *out) const;
 };
 
+std::istream &operator>>(std::istream &is, BestFitPoint &pos);
 std::ostream &operator<<(std::ostream &os, const BestFitPoint &pos);
 
 Fit mkFit(const Template &t, const Info &info, const int fit_choice);

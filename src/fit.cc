@@ -92,6 +92,11 @@ void BestFitPoint::show(std::ostream *out) const {
          << get_string("chi2", chi2) << '\n';
 }
 
+std::istream &operator>>(std::istream &is, BestFitPoint &pos) {
+    is >> pos.mass >> pos.width >> pos.kgg >> pos.chi2;
+    return is;
+}
+
 std::ostream &operator<<(std::ostream &os, const BestFitPoint &pos) {
     os << std::fixed;
     os << std::setw(9) << std::setprecision(2) << pos.mass;

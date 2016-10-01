@@ -22,6 +22,8 @@ InputData parseInputData(std::unique_ptr<std::ifstream> is);
 Info getInfo(const InputData &data);
 
 std::vector<FitResult> parseFitResults(std::unique_ptr<std::ifstream> is);
+
+std::vector<BestFitPoint> parseBestFitPoints(std::unique_ptr<std::ifstream> is);
 }  // namespace gg2aa
 
 #endif  // SRC_PARSERS_H_

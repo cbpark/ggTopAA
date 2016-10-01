@@ -137,4 +137,18 @@ std::vector<FitResult> parseFitResults(std::unique_ptr<std::ifstream> is) {
     is->close();
     return fres;
 }
+
+std::vector<BestFitPoint> parseBestFitPoints(
+    std::unique_ptr<std::ifstream> is) {
+    string line;
+    BestFitPoint pos;
+    std::vector<BestFitPoint> poss;
+    while (getline(*is, line)) {
+        std::istringstream iss(line);
+        iss >> pos;
+        poss.push_back(pos);
+    }
+    is->close();
+    return poss;
+}
 }  // namespace gg2aa
