@@ -13,6 +13,7 @@
 #include <string>
 #include <utility>
 #include "TFile.h"
+#include "TF1.h"
 #include "TH1D.h"
 #include "parsers.h"
 
@@ -35,14 +36,24 @@ int main(int argc, char *argv[]) {
     auto bestfits = gg2aa::parseBestFitPoints(std::move(infile));
     message(appname, "`" + std::string(argv[1]) + "' has been parsed.", to_out);
 
+    // Create and fill histograms.
     auto hist_mass = std::make_unique<TH1D>("mass", "", 20, 172.0, 174.0);
-    auto hist_width = std::make_unique<TH1D>("width", "", 10, 0.0, 4.0);
-    auto hist_kgg = std::make_unique<TH1D>("kgg", "", 40, 0.0, 1.0);
+    auto hist_width = std::make_unique<TH1D>("width", "", 16, 0.0, 4.0);
+    auto hist_kgg = std::make_unique<TH1D>("kgg", "", 100, 0, 1);
     for (const auto &p : bestfits) {
         hist_mass->Fill(p.mass);
         hist_width->Fill(p.width);
         hist_kgg->Fill(p.kgg);
     }
+
+    // Fit histogram: mass.
+    hist_mass->Fit("gaus");
+    // Fit histogram: width.
+    auto cb_func = std::make_shared<TF1>("f1", "crystalball", 0, 4);
+    cb_func->SetParameters(1, 0, 1, 2, 0.5);
+    hist_width->Fit(cb_func.get());
+    // Fit histogram: k_{gg}.
+    hist_kgg->Fit("gaus");
 
     const string outfile_name(argv[2]);
     message(appname, "histograms will be saved to `" + outfile_name + "'.",
