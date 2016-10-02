@@ -11,22 +11,34 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <utility>
+// #include "TF1.h"
 #include "TFile.h"
-#include "TF1.h"
 #include "TH1D.h"
 #include "parsers.h"
 
 using std::string;
+using std::get;
+
+struct HistBins {
+    std::tuple<int, double, double> mass, width, kgg;
+};
 
 int main(int argc, char *argv[]) {
     const string appname("gg2aa_bestfits");
-    if (argc != 3) {
-        string usage = "Usage: " + appname + " input output\n\n";
+    if (argc != 4) {
+        string usage = "Usage: " + appname + " input output sqrt_s\n\n";
         usage += "    input  - input data file\n";
-        usage += "    output - output file in the root format\n\n";
-        usage += "    ex) " + appname + " bestfit.dat output.root\n";
+        usage += "    output - output file in the root format\n";
+        usage += "    sqrt_s - center-of-mass energy (13, 100)\n\n";
+        usage += "    ex) " + appname + " bestfit.dat output.root 13\n";
         return howToUse(usage);
+    }
+
+    const int sqrt_s = std::atoi(argv[3]);
+    if (sqrt_s != 13 && sqrt_s != 100) {
+        return errMsg(appname, "sqrt_s must be 13 or 100.");
     }
 
     auto infile = std::make_unique<std::ifstream>(argv[1]);
@@ -36,10 +48,24 @@ int main(int argc, char *argv[]) {
     auto bestfits = gg2aa::parseBestFitPoints(std::move(infile));
     message(appname, "`" + std::string(argv[1]) + "' has been parsed.", to_out);
 
+    // Set bins of hitograms.
+    HistBins bins;
+    if (sqrt_s == 100) {
+        bins.mass = std::make_tuple(20, 172, 174);
+    } else {
+        bins.mass = std::make_tuple(20, 170, 180);
+    }
+    bins.width = std::make_tuple(16, 0, 4);
+    bins.kgg = std::make_tuple(100, 0, 1);
+
     // Create and fill histograms.
-    auto hist_mass = std::make_unique<TH1D>("mass", "", 20, 172.0, 174.0);
-    auto hist_width = std::make_unique<TH1D>("width", "", 16, 0.0, 4.0);
-    auto hist_kgg = std::make_unique<TH1D>("kgg", "", 100, 0, 1);
+    auto hist_mass = std::make_unique<TH1D>(
+        "mass", "", get<0>(bins.mass), get<1>(bins.mass), get<2>(bins.mass));
+    auto hist_width =
+        std::make_unique<TH1D>("width", "", get<0>(bins.width),
+                               get<1>(bins.width), get<2>(bins.width));
+    auto hist_kgg = std::make_unique<TH1D>("kgg", "", get<0>(bins.kgg),
+                                           get<1>(bins.kgg), get<2>(bins.kgg));
     for (const auto &p : bestfits) {
         hist_mass->Fill(p.mass);
         hist_width->Fill(p.width);
@@ -49,9 +75,10 @@ int main(int argc, char *argv[]) {
     // Fit histogram: mass.
     hist_mass->Fit("gaus");
     // Fit histogram: width.
-    auto cb_func = std::make_shared<TF1>("f1", "crystalball", 0, 4);
-    cb_func->SetParameters(1, 0, 1, 2, 0.5);
-    hist_width->Fit(cb_func.get());
+    // auto cb_func = std::make_shared<TF1>("f1", "crystalball", 0, 4);
+    // cb_func->SetParameters(1, 0, 1, 2, 0.5);
+    // hist_width->Fit(cb_func.get());
+    hist_width->Fit("landau");
     // Fit histogram: k_{gg}.
     hist_kgg->Fit("gaus");
 
