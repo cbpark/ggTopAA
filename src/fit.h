@@ -108,7 +108,7 @@ struct BestFitPoint {
 
     void set_best_point(const FitResult &fres) {
         const double chi2_value = fres.chi2();
-        if (chi2_value < chi2) {
+        if (fres.status() < 3 && chi2_value < chi2) {
             chi2 = chi2_value;
             mass = fres.mass();
             width = fres.width();
