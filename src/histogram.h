@@ -56,7 +56,7 @@ private:
 class HistObjs {
 public:
     HistObjs() = delete;
-    explicit HistObjs(const Info &info, double bin_size_signal = 0.25)
+    explicit HistObjs(const Info &info, double bin_size_signal = 0.1)
         : sig_(std::make_shared<Histogram>(
               bin_size_signal, Range(info.xlow, info.xup), "signal")),
           bg_(std::make_shared<Histogram>(info, "background")) {}

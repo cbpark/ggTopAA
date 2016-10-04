@@ -22,7 +22,7 @@
 using std::string;
 using std::to_string;
 
-const double BINSIZE_SIG = 0.25;  // the number of bins will be 4 * (max - min).
+const double BINSIZE_SIG = 0.1;
 
 int main(int argc, char *argv[]) {
     const string appname("gg2aa");
