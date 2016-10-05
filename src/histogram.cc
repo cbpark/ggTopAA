@@ -22,7 +22,10 @@ void HistObjs::fill_sig(const InputData &data) {
     double x, y, z;
     for (const auto &s : data.signal()) {
         auto f = std::make_unique<std::ifstream>(s);
-        while (*f >> x >> y >> z) { sig_->hist()->Fill(x, y); }
+        while (*f >> x >> y >> z) {
+            // This causes 0.05 GeV shift in the m_{aa} distribution.
+            sig_->hist()->Fill(x + 0.01, y);
+        }
         f->close();
     }
 }
@@ -82,7 +85,7 @@ shared_ptr<TH1D> HistObjs::pseudo_experiment(const Info &info,
     // const int n_sig = info.n_sig();
     // for (int i = 0; i != n_sig; ++i) { h_pd->Fill(sig_->hist()->GetRandom());
     // }
-    h_pd->SetMinimum(0.0);
+    // h_pd->SetMinimum(0.0);
     return h_pd;
 }
 }  // namespace gg2aa
