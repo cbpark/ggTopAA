@@ -35,7 +35,7 @@ void HistObjs::fill_bg(const InputData &data, shared_ptr<Info> info) {
     auto hist = std::make_unique<TH1D>("hist", "", r.width() / info->bin_size,
                                        r.low(), r.up());
     double content;
-    int n = 0, n_entries = 0;
+    int n = 0;
     for (const auto &bg : data.background()) {
         if (bg.first == "info") { continue; }
 
@@ -43,11 +43,12 @@ void HistObjs::fill_bg(const InputData &data, shared_ptr<Info> info) {
             auto f = std::make_unique<std::ifstream>(b);
             while (*f >> content) {
                 hist->Fill(content);
-                ++n_entries;
-                if (content > r.low() && content < r.up()) { ++n; }
+                if (content >= r.low() && content < r.up()) { ++n; }
             }
             f->close();
         }
+
+        const int n_entries = hist->GetEntries();
         if (bg.first == "direct") {
             info->sig_direct *= static_cast<double>(n) / n_entries;
             hist->Scale(info->sig_direct / n_entries);
@@ -61,7 +62,8 @@ void HistObjs::fill_bg(const InputData &data, shared_ptr<Info> info) {
             hist->Scale(info->sig_two_frag / n_entries);
             bg_->hist()->Add(hist.get());
         }
-        n = n_entries = 0;
+
+        n = 0;
         hist->Reset();
     }
 }

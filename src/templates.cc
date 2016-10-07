@@ -43,21 +43,21 @@ double Template::f_maa(double x) const {
     return maa_[pos];
 }
 
-double simpson(std::function<double(double)> func, double xlow, double xup,
-               double delta) {
-    int n = (xup - xlow) / delta;
-    if (n % 2 == 1) {
-        --n;
-        xup -= delta;
-    }
-    double norm = func(xlow) + 4.0 * func(xup - delta) + func(xup);
-    n /= 2;
-    for (int i = 0; i != n; ++i) {
-        norm += 4.0 * func(xlow + (2 * i + 1) * delta) +
-                2.0 * func(xlow + (2 * i + 2) * delta);
-    }
-    return norm * delta / 3.0;
-}
+// double simpson(std::function<double(double)> func, double xlow, double xup,
+//                double delta) {
+//     int n = (xup - xlow) / delta;
+//     if (n % 2 == 1) {
+//         --n;
+//         xup -= delta;
+//     }
+//     double norm = func(xlow) + 4.0 * func(xup - delta) + func(xup);
+//     n /= 2;
+//     for (int i = 0; i != n; ++i) {
+//         norm += 4.0 * func(xlow + (2 * i + 1) * delta) +
+//                 2.0 * func(xlow + (2 * i + 2) * delta);
+//     }
+//     return norm * delta / 3.0;
+// }
 
 double Template::norm_sig() const {
     // return simpson(std::bind(&Template::f_maa, this, std::placeholders::_1),
@@ -165,7 +165,7 @@ double fit_func_bg4(const Template &t, const double x, const double s,
     ignore(a1);
     const double sqrt_s = t.sqrt_s_;
     const double x0 = t.range_.low() / sqrt_s, x1 = t.range_.up() / sqrt_s;
-    const double z0 = cbrt(x0), z1 = cbrt(x1);
+    const double z0 = std::cbrt(x0), z1 = std::cbrt(x1);
     const double b1 = b + 1;
     const double b2 = b1 + 1;
     auto func = [](const double y, const double b) {
