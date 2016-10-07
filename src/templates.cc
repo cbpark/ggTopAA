@@ -50,8 +50,8 @@ double simpson(std::function<double(double)> func, double xlow, double xup,
         --n;
         xup -= delta;
     }
-    n /= 2;
     double norm = func(xlow) + 4.0 * func(xup - delta) + func(xup);
+    n /= 2;
     for (int i = 0; i != n; ++i) {
         norm += 4.0 * func(xlow + (2 * i + 1) * delta) +
                 2.0 * func(xlow + (2 * i + 2) * delta);
@@ -60,8 +60,15 @@ double simpson(std::function<double(double)> func, double xlow, double xup,
 }
 
 double Template::norm_sig() const {
-    return simpson(std::bind(&Template::f_maa, this, std::placeholders::_1),
-                   range_.low(), range_.up(), maa_interval_);
+    // return simpson(std::bind(&Template::f_maa, this, std::placeholders::_1),
+    //                range_.low(), range_.up(), maa_interval_);
+    TF1 f("f", [&](double *x, double *) { return f_maa(x[0]); }, range_.low(),
+          range_.up(), 1);
+    ROOT::Math::WrappedTF1 wf(f);
+    ROOT::Math::GSLIntegrator ig(ROOT::Math::IntegrationOneDim::kADAPTIVE);
+    ig.SetFunction(wf);
+    ig.SetRelTolerance(0.001);
+    return ig.Integral(range_.low(), range_.up());
 }
 
 // Eq.(2) in https://cds.cern.ch/record/2114853/files/ATLAS-CONF-2015-081.pdf
