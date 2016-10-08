@@ -23,7 +23,7 @@ using std::shared_ptr;
 const double EPS = 1.0e-12;
 
 namespace gg2aa {
-double FitFunction::operator()(double *x, double *p) const {
+double FitFunction::operator()(const double *x, const double *p) const {
     if (std::fabs(p[0]) < EPS || std::fabs(p[1]) < EPS ||
         std::fabs(p[3] + 1) < EPS) {  // if s -> or p -> 0 or a0 + 1 -> 0
         TF1::RejectPoint();
@@ -76,7 +76,7 @@ void Fit::do_fit(shared_ptr<TH1D> hist, shared_ptr<FitResult> result) {
     // - "I": use integral of function in bin instead of value at bin center.
     // - "N": do not store the graphics function, do not draw.
     // - "S": the result of the fit is returned in the TFitResultPtr.
-    auto r = hist->Fit(pfnc_.get(), "LNS", "", 330, 360);
+    auto r = hist->Fit(pfnc_.get(), "LNS");
 
     const int npar(r->NPar());
     FitParameters par;
@@ -134,8 +134,8 @@ Fit fit1(const Template &t, const Info &info) {
 #elif defined(__linux__)
     fit.pfnc()->SetParLimits(3, -10, 0);  // a0
 #endif
-    fit.pfnc()->FixParameter(4, 0);     // a1
-    fit.pfnc()->SetParLimits(5, 0, 1);  // kgg
+    fit.pfnc()->FixParameter(4, 0);       // a1
+    fit.pfnc()->SetParLimits(5, 0, 0.5);  // kgg
     return fit;
 }
 
@@ -172,10 +172,10 @@ Fit fit4(const Template &t, const Info &info) {
     auto fit = Fit(ffnc);
     fit.pfnc()->FixParameter(0, 1);        // s
     fit.pfnc()->FixParameter(1, 1.0 / 3);  // p
-    fit.pfnc()->SetParLimits(2, 0, 1000);  // b
+    fit.pfnc()->SetParLimits(2, 0, 100);   // b
     fit.pfnc()->FixParameter(3, 0);        // a0
     fit.pfnc()->FixParameter(4, 0);        // a1
-    fit.pfnc()->SetParLimits(5, 0, 1);     // kgg
+    fit.pfnc()->SetParLimits(5, 0, 0.5);   // kgg
     return fit;
 }
 
@@ -184,10 +184,10 @@ Fit fit5(const Template &t, const Info &info) {
     auto fit = Fit(ffnc);
     fit.pfnc()->FixParameter(0, 1);        // s
     fit.pfnc()->FixParameter(1, 1.0 / 3);  // p
-    fit.pfnc()->SetParLimits(2, 0, 1000);  // b
+    fit.pfnc()->SetParLimits(2, 0, 100);   // b
     fit.pfnc()->SetParLimits(3, -1, 1);    // a0
     fit.pfnc()->SetParLimits(4, -1, 1);    // a1
-    fit.pfnc()->SetParLimits(5, 0, 1);     // kgg
+    fit.pfnc()->SetParLimits(5, 0, 0.5);   // kgg
     return fit;
 }
 

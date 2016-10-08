@@ -35,7 +35,7 @@ public:
     Info info() const { return info_; }
     Range range() const { return Range(info_.xlow, info_.xup); }
     // The histogram fit will call this.
-    double operator()(double *x, double *p) const;
+    double operator()(const double *x, const double *p) const;
 
 private:
     const Template template_;
