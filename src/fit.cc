@@ -76,7 +76,7 @@ void Fit::do_fit(shared_ptr<TH1D> hist, shared_ptr<FitResult> result) {
     // - "I": use integral of function in bin instead of value at bin center.
     // - "N": do not store the graphics function, do not draw.
     // - "S": the result of the fit is returned in the TFitResultPtr.
-    auto r = hist->Fit(pfnc_.get(), "LNS");
+    auto r = hist->Fit(pfnc_.get(), "NS");
 
     const int npar(r->NPar());
     FitParameters par;
@@ -175,7 +175,7 @@ Fit fit4(const Template &t, const Info &info) {
     fit.pfnc()->SetParLimits(2, 0, 100);   // b
     fit.pfnc()->FixParameter(3, 0);        // a0
     fit.pfnc()->FixParameter(4, 0);        // a1
-    fit.pfnc()->SetParLimits(5, 0, 0.5);   // kgg
+    fit.pfnc()->SetParLimits(5, 0, 1);     // kgg
     return fit;
 }
 
@@ -187,7 +187,7 @@ Fit fit5(const Template &t, const Info &info) {
     fit.pfnc()->SetParLimits(2, 0, 100);   // b
     fit.pfnc()->SetParLimits(3, -1, 1);    // a0
     fit.pfnc()->SetParLimits(4, -1, 1);    // a1
-    fit.pfnc()->SetParLimits(5, 0, 0.5);   // kgg
+    fit.pfnc()->SetParLimits(5, 0, 1);     // kgg
     return fit;
 }
 
