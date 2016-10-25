@@ -14,8 +14,10 @@
 #include <tuple>
 #include <utility>
 // #include "TF1.h"
+#include "TCanvas.h"
 #include "TFile.h"
 #include "TH1D.h"
+#include "TStyle.h"
 #include "parsers.h"
 
 using std::string;
@@ -23,6 +25,25 @@ using std::get;
 
 struct HistBins {
     std::tuple<int, double, double> mass, width, kgg;
+};
+
+class Canvas {
+public:
+    Canvas() = delete;
+    Canvas(const std::string &name)
+        : canvas_(std::make_shared<TCanvas>(name.c_str())) {
+        canvas_->SetTicks();
+    }
+    ~Canvas() {}
+
+    void write_hist(std::unique_ptr<TH1D> hist) {
+        canvas_->cd();
+        hist->Draw();
+        canvas_->Write();
+    }
+
+private:
+    std::shared_ptr<TCanvas> canvas_;
 };
 
 int main(int argc, char *argv[]) {
@@ -58,14 +79,47 @@ int main(int argc, char *argv[]) {
     bins.width = std::make_tuple(16, 0, 4);
     bins.kgg = std::make_tuple(100, 0, 1);
 
+    gStyle->SetOptStat(0);
+
+    // Open a canvas.
+    auto canvas_mass = Canvas("mass");
+    auto canvas_width = Canvas("width");
+    auto canvas_kgg = Canvas("kgg");
+
+    const int t_font = 132;
+    const int line_width = 3;
+
     // Create and fill histograms.
     auto hist_mass = std::make_unique<TH1D>(
         "mass", "", get<0>(bins.mass), get<1>(bins.mass), get<2>(bins.mass));
+    hist_mass->GetXaxis()->SetTitle("m_{t} (GeV)");
+    hist_mass->GetXaxis()->CenterTitle();
+    hist_mass->SetTitleFont(t_font, "xy");
+    hist_mass->SetLabelFont(t_font, "xy");
+    hist_mass->SetTitleSize(1.4 * hist_mass->GetLabelSize(), "xy");
+    hist_mass->SetLineWidth(line_width);
+    hist_mass->SetNdivisions(505);
+
     auto hist_width =
         std::make_unique<TH1D>("width", "", get<0>(bins.width),
                                get<1>(bins.width), get<2>(bins.width));
+    hist_width->GetXaxis()->SetTitle("#Gamma_{t} (GeV)");
+    hist_width->GetXaxis()->CenterTitle();
+    hist_width->SetTitleFont(t_font, "xy");
+    hist_width->SetLabelFont(t_font, "xy");
+    hist_width->SetTitleSize(1.4 * hist_width->GetLabelSize(), "xy");
+    hist_width->SetLineWidth(line_width);
+
     auto hist_kgg = std::make_unique<TH1D>("kgg", "", get<0>(bins.kgg),
                                            get<1>(bins.kgg), get<2>(bins.kgg));
+    hist_kgg->GetXaxis()->SetTitle("#kappa");
+    hist_kgg->GetXaxis()->CenterTitle();
+    hist_kgg->SetTitleFont(t_font, "xy");
+    hist_kgg->SetLabelFont(t_font, "xy");
+    hist_kgg->SetTitleSize(1.4 * hist_kgg->GetLabelSize(), "xy");
+    hist_kgg->SetTitleFont(t_font);
+    hist_kgg->SetLineWidth(line_width);
+
     for (const auto &p : bestfits) {
         hist_mass->Fill(p.mass);
         hist_width->Fill(p.width);
@@ -78,7 +132,8 @@ int main(int argc, char *argv[]) {
     // auto cb_func = std::make_shared<TF1>("f1", "crystalball", 0, 4);
     // cb_func->SetParameters(1, 0, 1, 2, 0.5);
     // hist_width->Fit(cb_func.get());
-    hist_width->Fit("landau");
+    // hist_width->Fit("landau");
+    hist_width->Fit("gaus", "", "", 0.5, 2.0);
     // Fit histogram: k_{gg}.
     hist_kgg->Fit("gaus");
 
@@ -86,9 +141,10 @@ int main(int argc, char *argv[]) {
     message(appname, "histograms will be saved to `" + outfile_name + "'.",
             to_out);
     auto outfile = std::make_unique<TFile>(outfile_name.c_str(), "RECREATE");
-    hist_mass->Write();
-    hist_width->Write();
-    hist_kgg->Write();
+
+    canvas_mass.write_hist(std::move(hist_mass));
+    canvas_width.write_hist(std::move(hist_width));
+    canvas_kgg.write_hist(std::move(hist_kgg));
 
     outfile->Close();
     message(appname, "... gracefully done.", to_out);

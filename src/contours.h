@@ -67,7 +67,7 @@ public:
         set_min_point(173, 1.5, 0.0001, *this);
 
         const ContAxisInfo x_axis("m_{t} (GeV)", {{172, 174}}, 505);
-        const ContAxisInfo y_axis("#Gamma_{t} (GeV)", {{0.5, 3.5}}, 504);
+        const ContAxisInfo y_axis("#Gamma_{t} (GeV)", {{0.5, 2.8}}, 504);
         set_hist(x_axis, y_axis, graph_);
     }
     ~MassWidthCont() {}
