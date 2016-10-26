@@ -118,8 +118,10 @@ Fit mkFit(const Template &t, const Info &info, const int fit_choice) {
         return fit4(t, info);
     case 5:
         return fit5(t, info);
-    default:
+    case 6:
         return fit6(t, info);
+    default:
+        return fit7(t, info);
     }
 }
 
@@ -199,6 +201,18 @@ Fit fit6(const Template &t, const Info &info) {
     fit.pfnc()->SetParLimits(2, 0, 1000);  // b
     fit.pfnc()->SetParLimits(3, -1, 1);    // a0
     fit.pfnc()->SetParLimits(4, -1, 1);    // a1
+    fit.pfnc()->SetParLimits(5, 0, 1);     // kgg
+    return fit;
+}
+
+Fit fit7(const Template &t, const Info &info) {
+    const FitFunction ffnc(t, info, fit_func_bg7);
+    auto fit = Fit(ffnc);
+    fit.pfnc()->FixParameter(0, 1);        // s
+    fit.pfnc()->FixParameter(1, 1.0 / 3);  // p
+    fit.pfnc()->SetParLimits(2, 0, 100);   // b
+    fit.pfnc()->SetParLimits(3, -1, 1);    // a0
+    fit.pfnc()->FixParameter(4, 0);        // a1
     fit.pfnc()->SetParLimits(5, 0, 1);     // kgg
     return fit;
 }

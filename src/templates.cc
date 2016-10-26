@@ -196,4 +196,16 @@ double fit_func_bg6(const Template &t, const double x, const double s,
     ignore(p);
     return fBG(x, s, 1.0 / 3, b, a0, a1);
 }
+
+double fit_func_bg7(const Template &t, const double x, const double s,
+                    const double p, const double b, const double a0,
+                    const double a1) {
+    ignore(s);
+    ignore(p);
+    ignore(a1);
+    const double sqrt_s = t.sqrt_s_;
+    const double x0 = t.range_.low() / sqrt_s, x1 = t.range_.up() / sqrt_s;
+    const double scale = integralNormBG(x0, x1, 1.0 / 3, b, a0, 0);
+    return fBG(x, scale * sqrt_s, 1.0 / 3, b, a0, 0);
+}
 }  // namespace gg2aa

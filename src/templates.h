@@ -52,6 +52,9 @@ public:
     friend double fit_func_bg6(const Template &, const double, const double,
                                const double, const double, const double,
                                const double);
+    friend double fit_func_bg7(const Template &, const double, const double,
+                               const double, const double, const double,
+                               const double);
 
 private:
     const std::string fname_;
@@ -90,6 +93,10 @@ double fit_func_bg5(const Template &, const double, const double, const double,
 
 /** The same as fit_func_bg5(), but s is a free parameter. */
 double fit_func_bg6(const Template &, const double, const double, const double,
+                    const double, const double, const double);
+
+/** The same as fit_func_bg1(), but s is numerically calculated. */
+double fit_func_bg7(const Template &, const double, const double, const double,
                     const double, const double, const double);
 }  // namespace gg2aa
 

@@ -26,7 +26,7 @@ const double BINSIZE_SIG = 0.1;
 
 int main(int argc, char *argv[]) {
     const string appname("gg2aa");
-    const int n_choice = 6;
+    const int n_choice = 7;
     if (argc < 4 || argc > 5) {
         string usage =
             "Usage: " + appname + " input output fit_choice [best_fit]\n\n";
