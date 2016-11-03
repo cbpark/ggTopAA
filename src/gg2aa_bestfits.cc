@@ -39,6 +39,7 @@ public:
     void write_hist(std::unique_ptr<TH1D> hist) {
         canvas_->cd();
         hist->Draw();
+        canvas_->Update();
         canvas_->Write();
     }
 
@@ -79,7 +80,8 @@ int main(int argc, char *argv[]) {
     bins.width = std::make_tuple(16, 0, 4);
     bins.kgg = std::make_tuple(100, 0, 1);
 
-    gStyle->SetOptStat(0);
+    gStyle->SetOptStat(1110);
+    gStyle->SetOptFit(1);
 
     // Open a canvas.
     auto canvas_mass = Canvas("mass");
