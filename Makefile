@@ -30,9 +30,9 @@ HEAD    := $(filter-out $(EXESRC:.cc=.h),$(wildcard $(SRCDIR)/*.h))
 # ROOT (https://root.cern.ch)
 CXXFLAGS += $(shell root-config --cflags)
 ## for the old ABI of GCC.
-ifeq ($(UNAME), Linux)
-	CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
-endif
+# ifeq ($(UNAME), Linux)
+# 	CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
+# endif
 CXXFLAGS += -std=c++14 -pedantic
 LDFLAGS  += $(shell root-config --ldflags)
 LIBS     += $(shell root-config --libs)
