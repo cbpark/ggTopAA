@@ -3,9 +3,7 @@ VERSION     := 0.1.0
 SRCDIR      := src
 BINDIR      := bin
 LIBDIR      := lib
-CXX         := c++
 CXXFLAGS    := -g -O3 -m64 -march=native -Wall -Wextra -pipe -I$(SRCDIR)
-CC          := cc
 CFLAGS      := -g -O3 -m64 -march=native -Wall -Wextra -pipe
 LDFLAGS     := -O3 -m64
 LIBS        :=
